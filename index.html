@@ -1223,7 +1223,6 @@
             <div class="brand-divider"></div>
             <div class="brand-title-wrap">
                 <span class="brand-title">CONTENT MACHINE</span>
-                <span class="brand-subtitle">TerraViva V2 Strategy</span>
             </div>
         </div>
         <nav id="view-mode-nav">
@@ -1712,7 +1711,7 @@
 
     <!-- BOTTOM BAR (SLIDE DECK CONTROLS) -->
     <div class="bottom-bar" id="presentation-controls">
-        <div class="slide-counter" id="slide-counter-text" style="text-align: left;">Copertina</div>
+        <div class="slide-counter" style="text-align: left; width: 80px;"></div>
         <div class="slide-progress-wrapper">
             <div class="slide-progress-bar" id="slide-progress-bar"></div>
         </div>
@@ -3067,7 +3066,6 @@
             bar.style.width = `${percent}%`;
             
             document.getElementById('slide-counter-num').innerText = `${currentSlide + 1} / ${totalSlides}`;
-            document.getElementById('slide-counter-text').innerText = slideNames[currentSlide];
         }
 
         // Switch View Modes
