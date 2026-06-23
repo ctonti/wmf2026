@@ -892,7 +892,7 @@ export default function App() {
                 Matrice dei Risultati Generati (30 Varianti)
               </h2>
               
-              <div className="wall-dense-grid-container" style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+              <div className="wall-dense-grid-container">
                 <div 
                   ref={gridRef}
                   className={`wall-dense-grid ${focusedCampaign ? 'zoomed' : ''}`}
@@ -907,23 +907,37 @@ export default function App() {
                         className={`wall-card-thumb ${isFocused ? 'focused' : ''} ${focusedCampaign ? (isFocused ? '' : 'not-focused') : ''}`}
                         id={`campaign-card-${camp.order}`}
                         onClick={() => {
-                          const featuredIndex = featuredCampaignOrders.indexOf(camp.order);
-                          if (featuredIndex !== -1) {
-                            setWallStep(featuredIndex * 3 + 1); // Jump to zoom-in step
-                          } else {
-                            setManualActiveCampaign(camp); // Normal click opens drawer
-                          }
+                          setManualActiveCampaign(camp);
+                          setManualActiveView('assets');
                         }}
                       >
                         <div className="wall-card-thumb-img">
                           <LazyImage src={camp.img_feed_1x1} alt="" className="thumb-lazy-image" />
                         </div>
                         <div className="wall-card-thumb-info">
-                          <div className="wall-card-thumb-header">
-                            <span className="wall-card-thumb-index">#{orderNum}</span>
-                            <span className="wall-card-thumb-breed">{camp.razza}</span>
+                          <div className="wall-card-thumb-title">
+                            CAMPAGNA #{orderNum}
                           </div>
-                          <div className="wall-card-thumb-persona">{camp.angle_persona}</div>
+                          <div className="wall-card-thumb-angles">
+                            <div className="mini-angle-cell" title={`Valore: ${camp.angle_value}`}>
+                              <span className="mac-lbl">VAL:</span> <span className="mac-val">{camp.angle_value}</span>
+                            </div>
+                            <div className="mini-angle-cell" title={`Beneficio: ${camp.angle_benefit}`}>
+                              <span className="mac-lbl">BEN:</span> <span className="mac-val">{camp.angle_benefit}</span>
+                            </div>
+                            <div className="mini-angle-cell" title={`Persona: ${camp.angle_persona}`}>
+                              <span className="mac-lbl">TAR:</span> <span className="mac-val">{camp.angle_persona}</span>
+                            </div>
+                            <div className="mini-angle-cell" title={`Contesto: ${camp.angle_contesto}`}>
+                              <span className="mac-lbl">CON:</span> <span className="mac-val">{camp.angle_contesto}</span>
+                            </div>
+                            <div className="mini-angle-cell" title={`Geo: ${camp.angle_geo}`}>
+                              <span className="mac-lbl">GEO:</span> <span className="mac-val">{camp.angle_geo}</span>
+                            </div>
+                            <div className="mini-angle-cell" title={`Razza: ${camp.razza}`}>
+                              <span className="mac-lbl">RAZ:</span> <span className="mac-val">{camp.razza}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
@@ -963,166 +977,200 @@ export default function App() {
         )}
       </div>
 
-      {/* DRAWER OVERLAY */}
-      <div 
-        className={`drawer-overlay ${activeCampaign ? 'active' : ''}`} 
-        onClick={() => setActiveCampaign(null)}
-      ></div>
-
-      {/* DRAWER DETAIL PANEL */}
-      <div className={`drawer ${activeCampaign ? 'active' : ''}`} id="detail-drawer">
-        {activeCampaign && (
-          <>
-            <div className="drawer-header">
-              <div className="drawer-title">
-                Dettaglio Strategico: Variante #{(activeCampaign.order + 1).toString().padStart(2, '0')}
+      {/* ASSET DASHBOARD OVERLAY */}
+      {showAssetsDashboard && focusedCampaign && (
+        <div className="dashboard-overlay active">
+          <div className="dashboard-container">
+            <div className="db-header">
+              <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                <div>
+                  <span className="db-tag">CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')}</span>
+                  <h2 className="db-title">{focusedCampaign.razza} — {focusedCampaign.angle_persona}</h2>
+                </div>
+                <div className="db-toggle-tabs">
+                  <button 
+                    className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      if (manualActiveCampaign) setManualActiveView('assets');
+                    }}
+                  >
+                    🖼️ Visual Assets
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      if (manualActiveCampaign) setManualActiveView('texts');
+                    }}
+                  >
+                    ✍️ Strategia & Copy
+                  </button>
+                </div>
               </div>
-              <button className="btn-close-drawer" onClick={() => setActiveCampaign(null)}>
-                <svg style={{ width: '20px', height: '20px', fill: 'currentColor' }} viewBox="0 0 24 24">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                </svg>
+              <button className="db-close-btn" onClick={() => setManualActiveCampaign(null)}>
+                &times;
               </button>
             </div>
-            
-            <div className="drawer-content">
-              {/* Strategic Mix info */}
-              <div className="drawer-meta-section">
-                <h4>Incrocio Angoli Strategici</h4>
-                <div className="drawer-meta-grid">
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Valore di Comunicazione</div>
-                    <div className="meta-val">{activeCampaign.angle_value}</div>
-                  </div>
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Beneficio Funzionale</div>
-                    <div className="meta-val">{activeCampaign.angle_benefit}</div>
-                  </div>
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Target Persona</div>
-                    <div className="meta-val">{activeCampaign.angle_persona}</div>
-                  </div>
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Contesto / Momento</div>
-                    <div className="meta-val">{activeCampaign.angle_contesto}</div>
-                  </div>
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Area Geografica (Geo)</div>
-                    <div className="meta-val">{activeCampaign.angle_geo}</div>
-                  </div>
-                  <div className="drawer-meta-card">
-                    <div className="meta-label">Razza Di Riferimento</div>
-                    <div className="meta-val">{activeCampaign.razza}</div>
-                  </div>
+
+            <div className="db-angles-row">
+              <div className="db-angle-badge"><strong>Valore:</strong> {focusedCampaign.angle_value}</div>
+              <div className="db-angle-badge"><strong>Beneficio:</strong> {focusedCampaign.angle_benefit}</div>
+              <div className="db-angle-badge"><strong>Persona:</strong> {focusedCampaign.angle_persona}</div>
+              <div className="db-angle-badge"><strong>Contesto:</strong> {focusedCampaign.angle_contesto}</div>
+              <div className="db-angle-badge"><strong>Geo:</strong> {focusedCampaign.angle_geo}</div>
+              <div className="db-angle-badge"><strong>Hook:</strong> {focusedCampaign.angle_hook}</div>
+            </div>
+
+            <div className="db-assets-grid">
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">1:1 Feed Image</div>
+                <div className="db-asset-media-container aspect-1-1">
+                  <LazyImage src={focusedCampaign.img_feed_1x1} alt="" className="db-lazy-media" />
                 </div>
               </div>
-
-              {/* Prodotto */}
-              <div className="drawer-meta-section">
-                <h4>Prodotto Abbinato</h4>
-                <div className="drawer-meta-card" style={{ background: 'none' }}>
-                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '0.95rem', fontWeight: 600 }}>
-                    {activeCampaign.prodotto}
-                  </p>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">1:1 Feed Video</div>
+                <div className="db-asset-media-container aspect-1-1">
+                  <LazyVideo src={focusedCampaign.video_feed_1x1} className="db-lazy-media" />
                 </div>
               </div>
-
-              {/* Creative Brief */}
-              <div className="drawer-brief-section">
-                <div className="drawer-section-title">
-                  <span>🎯 Creative Brief Strategico</span>
-                  <span className="drawer-section-badge">DIREZIONE CREATIVA AI</span>
-                </div>
-                <div className="brief-block">
-                  <div className="brief-item">
-                    <div className="brief-label">Messaggio Chiave (Key Message)</div>
-                    <div className="brief-value" style={{ fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.35, color: 'var(--text-main)' }}>
-                      {getBriefSection(activeCampaign.creative_brief, 'KEY MESSAGE') || 'Non specificato'}
-                    </div>
-                  </div>
-                  <div className="brief-item">
-                    <div className="brief-label">Target Insight</div>
-                    <div className="brief-value">
-                      {getBriefSection(activeCampaign.creative_brief, 'TARGET INSIGHT') || 'Non specificato'}
-                    </div>
-                  </div>
-                  <div className="brief-item">
-                    <div className="brief-label">Direzione Visiva (Visual Direction)</div>
-                    <div className="brief-value">
-                      {getBriefSection(activeCampaign.creative_brief, 'VISUAL DIRECTION') || 'Non specificato'}
-                    </div>
-                  </div>
-                  <div className="brief-item">
-                    <div className="brief-label">Tono di Voce (Tone)</div>
-                    <div className="brief-value">
-                      {getBriefSection(activeCampaign.creative_brief, 'TONE') || 'Non specificato'}
-                    </div>
-                  </div>
-                  <div className="brief-item">
-                    <div className="brief-label">Differenziatore Strategico</div>
-                    <div className="brief-value">
-                      {getBriefSection(activeCampaign.creative_brief, 'DIFFERENTIATOR') || 'Non specificato'}
-                    </div>
-                  </div>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">4:5 Mobile Feed</div>
+                <div className="db-asset-media-container aspect-4-5">
+                  <LazyImage src={focusedCampaign.img_feed_4x5} alt="" className="db-lazy-media" />
                 </div>
               </div>
-
-              {/* Copy Previews */}
-              <div>
-                <div className="drawer-section-title">
-                  <span>✍️ Copy Pubblicitario Declinato</span>
-                  <span className="drawer-section-badge">Ad Copy / Hooks</span>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">9:16 Story Image</div>
+                <div className="db-asset-media-container aspect-9-16">
+                  <LazyImage src={focusedCampaign.img_story_9x16} alt="" className="db-lazy-media" />
                 </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                  <div>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>
-                      Meta Feed Ad Preview
-                    </h4>
-                    <div className="preview-box">
-                      <div className="preview-headline">"{activeCampaign.headline}"</div>
-                      <div className="preview-body">{activeCampaign.body_copy}</div>
-                      <div className="preview-cta">{activeCampaign.cta}</div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between' }}>
-                      <span>Hook d'apertura (Reels/Stories)</span>
-                      <span style={{ fontWeight: 600, fontFamily: 'Roboto' }}>Tipo: {activeCampaign.angle_hook}</span>
-                    </h4>
-                    <div className="preview-box">
-                      <div className="preview-script">"{activeCampaign.hook_script}"</div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>
-                      Testo Carousel Narrativo (3 Card)
-                    </h4>
-                    <div className="carousel-slides-wrapper">
-                      {parseCarousel(activeCampaign.carousel_narrative).map((slide) => (
-                        <div key={slide.num || Math.random()} className="carousel-slide-box">
-                          <div className="carousel-slide-title">Card {slide.num}: {slide.title}</div>
-                          <div className="carousel-slide-desc">{slide.text}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>
-                      Social Hashtags
-                    </h4>
-                    <div className="preview-box" style={{ fontSize: '0.85rem', color: '#4ade80', fontWeight: 600, wordSpacing: '4px' }}>
-                      {activeCampaign.hashtags}
-                    </div>
-                  </div>
+              </div>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">9:16 Story Video</div>
+                <div className="db-asset-media-container aspect-9-16">
+                  <LazyVideo src={focusedCampaign.video_story_9x16} className="db-lazy-media" />
+                </div>
+              </div>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">16:9 Display Banner</div>
+                <div className="db-asset-media-container aspect-16-9">
+                  <LazyImage src={focusedCampaign.img_banner_16x9} alt="" className="db-lazy-media" />
                 </div>
               </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
+
+      {/* STRATEGIA & TESTI DASHBOARD OVERLAY */}
+      {showTextsDashboard && focusedCampaign && (
+        <div className="dashboard-overlay active">
+          <div className="dashboard-container">
+            <div className="db-header">
+              <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                <div>
+                  <span className="db-tag">STRATEGIA & AD COPY: CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')}</span>
+                  <h2 className="db-title">{focusedCampaign.razza} — {focusedCampaign.angle_persona}</h2>
+                </div>
+                <div className="db-toggle-tabs">
+                  <button 
+                    className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      if (manualActiveCampaign) setManualActiveView('assets');
+                    }}
+                  >
+                    🖼️ Visual Assets
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      if (manualActiveCampaign) setManualActiveView('texts');
+                    }}
+                  >
+                    ✍️ Strategia & Copy
+                  </button>
+                </div>
+              </div>
+              <button className="db-close-btn" onClick={() => setManualActiveCampaign(null)}>
+                &times;
+              </button>
+            </div>
+
+            <div className="db-texts-columns">
+              <div className="db-text-col">
+                <h3 className="db-col-title">🎯 Creative Brief</h3>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Messaggio Chiave</div>
+                  <div className="db-card-section-val highlight">{getBriefSection(focusedCampaign.creative_brief, 'KEY MESSAGE')}</div>
+                </div>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Target Insight</div>
+                  <div className="db-card-section-val">{getBriefSection(focusedCampaign.creative_brief, 'TARGET INSIGHT')}</div>
+                </div>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Direzione Visiva</div>
+                  <div className="db-card-section-val">{getBriefSection(focusedCampaign.creative_brief, 'VISUAL DIRECTION')}</div>
+                </div>
+                <div className="db-card-section-split">
+                  <div className="db-card-section">
+                    <div className="db-card-section-lbl">Tono di Voce</div>
+                    <div className="db-card-section-val">{getBriefSection(focusedCampaign.creative_brief, 'TONE')}</div>
+                  </div>
+                  <div className="db-card-section">
+                    <div className="db-card-section-lbl">Differenziatore</div>
+                    <div className="db-card-section-val">{getBriefSection(focusedCampaign.creative_brief, 'DIFFERENTIATOR')}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="db-text-col">
+                <h3 className="db-col-title">✍️ Ad Copy Pubblicitario</h3>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Headline</div>
+                  <div className="db-card-section-val copy-quote">"{focusedCampaign.headline}"</div>
+                </div>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Body Copy</div>
+                  <div className="db-card-section-val pre-wrap">{focusedCampaign.body_copy}</div>
+                </div>
+                <div className="db-card-section-split">
+                  <div className="db-card-section" style={{ flex: 1 }}>
+                    <div className="db-card-section-lbl">Call to Action (CTA)</div>
+                    <div className="db-card-section-val cta-badge">{focusedCampaign.cta}</div>
+                  </div>
+                  <div className="db-card-section" style={{ flex: 1.5 }}>
+                    <div className="db-card-section-lbl">Tipo di Hook</div>
+                    <div className="db-card-section-val">{focusedCampaign.angle_hook}</div>
+                  </div>
+                </div>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Script Hook d'Apertura (Reels/Stories)</div>
+                  <div className="db-card-section-val copy-quote">"{focusedCampaign.hook_script}"</div>
+                </div>
+              </div>
+
+              <div className="db-text-col">
+                <h3 className="db-col-title">🎠 Carousel & Hashtags</h3>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Narrativa Carousel Social</div>
+                  <div className="db-carousel-slides">
+                    {parseCarousel(focusedCampaign.carousel_narrative).map((slide, sIdx) => (
+                      <div key={sIdx} className="db-carousel-slide-box">
+                        <div className="db-carousel-slide-title">Card {slide.num}: {slide.title}</div>
+                        <div className="db-carousel-slide-text">{slide.text}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="db-card-section">
+                  <div className="db-card-section-lbl">Hashtags Consigliati</div>
+                  <div className="db-hashtags-box">{focusedCampaign.hashtags}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Agentation Root */}
       <div id="agentation-root"></div>
