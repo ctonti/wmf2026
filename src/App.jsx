@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import campaigns from './data.json';
+import campaignData from './data.json';
+const campaigns = (campaignData.dataset || []).map(item => ({
+  order: item.order,
+  ...(item.data?.it || {})
+}));
 import IntegrationFlow from './components/IntegrationFlow';
+
 
 // Helper component for lazy-loaded images
 function LazyImage({ src, alt, className, style }) {
