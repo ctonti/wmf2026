@@ -77,12 +77,13 @@ export default function App() {
   const [benFilter, setBenFilter] = useState('');
   const [perFilter, setPerFilter] = useState('');
 
-  const totalSlides = 15;
+  const totalSlides = 16;
   const featuredCampaignOrders = [0, 1, 2, 4, 5, 11, 13, 8];
 
   // Slide Names mapping for future use/nav
   const slideNames = [
     "Copertina",
+    "websolute",
     "Artigiani vs Architetti",
     "Il Problema Reale",
     "Iper-Personalizzazione & KB",
@@ -105,7 +106,7 @@ export default function App() {
   let showAssetsDashboard = false;
   let showTextsDashboard = false;
 
-  if (currentSlide === 13 && wallStep > 0 && wallStep <= 32) {
+  if (currentSlide === 14 && wallStep > 0 && wallStep <= 32) {
     const index = Math.floor((wallStep - 1) / 4);
     const subStep = (wallStep - 1) % 4;
     if (index < featuredCampaignOrders.length) {
@@ -169,7 +170,7 @@ export default function App() {
 
   useEffect(() => {
     const updateTransform = () => {
-      if (currentSlide === 13 && focusedCampaign) {
+      if (currentSlide === 14 && focusedCampaign) {
         const card = document.getElementById(`campaign-card-${focusedCampaign.order}`);
         const grid = gridRef.current;
         if (card && grid) {
@@ -241,12 +242,12 @@ export default function App() {
   }, [currentSlide, wallStep, manualActiveCampaign]);
 
   const handleNext = () => {
-    if (currentSlide === 13) {
+    if (currentSlide === 14) {
       if (wallStep < 32) {
         setWallStep(prev => prev + 1);
       } else {
         setWallStep(0);
-        setCurrentSlide(14);
+        setCurrentSlide(15);
       }
     } else if (currentSlide < totalSlides - 1) {
       setCurrentSlide(prev => prev + 1);
@@ -254,14 +255,14 @@ export default function App() {
   };
 
   const handlePrev = () => {
-    if (currentSlide === 13) {
+    if (currentSlide === 14) {
       if (wallStep > 0) {
         setWallStep(prev => prev - 1);
       } else {
-        setCurrentSlide(12);
+        setCurrentSlide(13);
       }
-    } else if (currentSlide === 14) {
-      setCurrentSlide(13);
+    } else if (currentSlide === 15) {
+      setCurrentSlide(14);
       setWallStep(32);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
@@ -393,16 +394,16 @@ export default function App() {
         <nav id="view-mode-nav">
           <button 
             id="nav-btn-slides" 
-            className={`nav-mode-btn ${currentSlide !== 13 ? 'active' : ''}`}
+            className={`nav-mode-btn ${currentSlide !== 14 ? 'active' : ''}`}
             onClick={() => setCurrentSlide(0)}
           >
             Slide Deck
           </button>
           <button 
             id="nav-btn-wall" 
-            className={`nav-mode-btn ${currentSlide === 13 ? 'active' : ''}`}
+            className={`nav-mode-btn ${currentSlide === 14 ? 'active' : ''}`}
             onClick={() => {
-              setCurrentSlide(13);
+              setCurrentSlide(14);
               setWallStep(0);
             }}
           >
@@ -596,8 +597,24 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 1: Da Artigiani a Architetti */}
-            <section className={`slide ${currentSlide === 1 ? 'active' : ''}`} id="slide-1">
+            {/* SLIDE 1: websolute video */}
+            <section className={`slide ${currentSlide === 1 ? 'active' : ''}`} id="slide-1" style={{ padding: 0, position: 'relative', overflow: 'hidden', background: '#000' }}>
+              <video autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 1, opacity: 0.65 }}>
+                <source src="https://www.websolute.com/oven/media/AI-first%20Digital%20Agency%20-%20Vision%20to%20Growth%20-%20cut.webm" type="video/webm" />
+              </video>
+              <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', textAlign: 'center', background: 'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(5,5,5,0.7) 100%)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                  <span className="brand-logo-dot" style={{ width: '28px', height: '28px', backgroundColor: '#00aeff', borderRadius: '50%', boxShadow: '0 0 30px rgba(0, 174, 255, 0.6)' }}></span>
+                  <h2 style={{ fontFamily: 'Figtree, sans-serif', fontSize: 'clamp(3rem, 6vw, 6rem)', fontWeight: 800, textTransform: 'lowercase', color: '#ffffff', letterSpacing: '-0.04em', margin: 0, lineHeight: 1 }}>websolute</h2>
+                </div>
+                <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.8rem', color: '#00aeff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, textShadow: '0 4px 10px rgba(0,0,0,0.8)' }}>
+                  AI-First Digital Agency
+                </p>
+              </div>
+            </section>
+
+            {/* SLIDE 2: Da Artigiani a Architetti */}
+            <section className={`slide ${currentSlide === 2 ? 'active' : ''}`} id="slide-2">
               <span className="slide-tag">La Rivoluzione del Contenuto</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
@@ -622,8 +639,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 2: Il Problema Reale */}
-            <section className={`slide ${currentSlide === 2 ? 'active' : ''}`} id="slide-2">
+            {/* SLIDE 3: Il Problema Reale */}
+            <section className={`slide ${currentSlide === 3 ? 'active' : ''}`} id="slide-3">
               <span className="slide-tag">La Quantità Mancante</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
@@ -662,8 +679,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 3: Iper-Personalizzazione & Knowledge Base */}
-            <section className={`slide ${currentSlide === 3 ? 'active' : ''}`} id="slide-3">
+            {/* SLIDE 4: Iper-Personalizzazione & Knowledge Base */}
+            <section className={`slide ${currentSlide === 4 ? 'active' : ''}`} id="slide-4">
               <span className="slide-tag">Personalizzazione & Proprietary DNA</span>
               <div className="slide-layout-split">
                 <div className="slide-content-left">
@@ -673,7 +690,7 @@ export default function App() {
                   <p className="concept-intro">Iper-personalizzazione sistematica basata sul vostro DNA aziendale proprietario.</p>
                   <ul className="bullet-list">
                     <li><strong>Targetizzazione totale:</strong> Contenuti ad-hoc per mercato, lingua, target, canale fino al singolo rivenditore locale.</li>
-                    <li><strong>Apprendimento proprietario:</strong> L'AI impara dai vostri contenuti esistenti (tone of voice, terminologia tecnica, stile visivo), non da Internet.</li>
+                    <li><strong>Appenedimento proprietario:</strong> L'AI impara dai vostri contenuti esistenti (tone of voice, terminologia tecnica, stile visivo), non da Internet.</li>
                   </ul>
                   <div className="takeaway-box">
                     La vostra knowledge base proprietaria diventa il DNA di ogni contenuto generato. È la vostra intelligenza, amplificata.
@@ -690,7 +707,7 @@ export default function App() {
                       <div className="browser-address">contentmachine.websolute.it/knowledge-base</div>
                     </div>
                     <div className="browser-body">
-                      {currentSlide === 3 ? (
+                      {currentSlide === 4 ? (
                         <LazyVideo src="assets/videos/screen_kb.mp4" className="lazy-video" />
                       ) : (
                         <div className="browser-fallback">
@@ -709,8 +726,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 4: Time to Content & Sistemi */}
-            <section className={`slide ${currentSlide === 4 ? 'active' : ''}`} id="slide-4">
+            {/* SLIDE 5: Time to Content & Sistemi */}
+            <section className={`slide ${currentSlide === 5 ? 'active' : ''}`} id="slide-5">
               <span className="slide-tag">Time to Market & Integrazione</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1.4fr' }}>
                 <div className="slide-content-left">
@@ -727,13 +744,13 @@ export default function App() {
                   </div>
                 </div>
                 <div className="slide-media-right" style={{ border: 'none', background: 'transparent', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                  <IntegrationFlow active={currentSlide === 4} />
+                  <IntegrationFlow active={currentSlide === 5} />
                 </div>
               </div>
             </section>
 
-            {/* SLIDE 5: Controllo, Compliance & ROI */}
-            <section className={`slide ${currentSlide === 5 ? 'active' : ''}`} id="slide-5">
+            {/* SLIDE 6: Controllo, Compliance & ROI */}
+            <section className={`slide ${currentSlide === 6 ? 'active' : ''}`} id="slide-6">
               <span className="slide-tag">Sicurezza, Garanzia & ROI</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
@@ -772,8 +789,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 6: A Chi Serve in Azienda */}
-            <section className={`slide ${currentSlide === 6 ? 'active' : ''}`} id="slide-6">
+            {/* SLIDE 7: A Chi Serve in Azienda */}
+            <section className={`slide ${currentSlide === 7 ? 'active' : ''}`} id="slide-7">
               <span className="slide-tag">Adozione Trasversale</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(1.8rem, 3.2vw, 3.2rem)', marginBottom: '10px' }}>
                 A Chi Serve in Azienda
@@ -821,8 +838,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 7: Il Dataset: L'Unità di Valore */}
-            <section className={`slide ${currentSlide === 7 ? 'active' : ''}`} id="slide-7">
+            {/* SLIDE 8: Progetto & Knowledge Base */}
+            <section className={`slide ${currentSlide === 8 ? 'active' : ''}`} id="slide-8">
               <span className="slide-tag">Architettura e Valore</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.8vw, 3.8rem)', marginBottom: '20px' }}>
                 Il Dataset: L'Unità di Valore
@@ -863,8 +880,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 8: Traduzione, Vision & Intelligence */}
-            <section className={`slide ${currentSlide === 8 ? 'active' : ''}`} id="slide-8">
+            {/* SLIDE 9: Traduzione, Vision & Intelligence */}
+            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9">
               <span className="slide-tag">Funzionalità Avanzate</span>
               <div className="slide-layout-split">
                 <div className="slide-content-left">
@@ -889,7 +906,7 @@ export default function App() {
                       <div className="browser-address">contentmachine.websolute.it/document-intelligence</div>
                     </div>
                     <div className="browser-body">
-                      {currentSlide === 8 ? (
+                      {currentSlide === 9 ? (
                         <LazyVideo src="assets/videos/screen_vision.mp4" className="lazy-video" />
                       ) : (
                         <div className="browser-fallback">
@@ -908,8 +925,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 9: Caso di Studio: La Matrice */}
-            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9">
+            {/* SLIDE 10: Caso di Studio: La Matrice */}
+            <section className={`slide ${currentSlide === 10 ? 'active' : ''}`} id="slide-10">
               <span className="slide-tag">Caso Studio — ADV Angles Matrice</span>
               <div className="grid-matrix">
                 <div className="matrix-left">
@@ -947,8 +964,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 10: Il Processo Operativo */}
-            <section className={`slide ${currentSlide === 10 ? 'active' : ''}`} id="slide-10">
+            {/* SLIDE 11: Il Processo Operativo */}
+            <section className={`slide ${currentSlide === 11 ? 'active' : ''}`} id="slide-11">
               <span className="slide-tag">Caso Studio — ADV Angles Flusso</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '4vh' }}>
                 Il Processo ADV Angles
@@ -1008,8 +1025,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 11: La Forza dei Numeri */}
-            <section className={`slide ${currentSlide === 11 ? 'active' : ''}`} id="slide-11">
+            {/* SLIDE 12: La Forza dei Numeri */}
+            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
               <span className="slide-tag">Caso Studio — ADV Angles Numeri</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '4vh' }}>
                 La Forza dei Numeri (Singolo Run)
@@ -1049,8 +1066,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 12: Futuri Workflow & Altri Esempi */}
-            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
+            {/* SLIDE 13: Futuri Workflow & Altri Esempi */}
+            <section className={`slide ${currentSlide === 13 ? 'active' : ''}`} id="slide-13">
               <span className="slide-tag">Piattaforma Estensibile</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '20px' }}>
                 Futuri Workflow & Altri Esempi
@@ -1087,8 +1104,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 13: Visual Wall (Case Study Grid) */}
-            <section className={`slide ${currentSlide === 13 ? 'active' : ''} slide-visual-wall`} id="slide-13">
+            {/* SLIDE 14: Visual Wall (Case Study Grid) */}
+            <section className={`slide ${currentSlide === 14 ? 'active' : ''} slide-visual-wall`} id="slide-14">
               <span className="slide-tag">Visual Wall — Database delle Campagne</span>
               <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
                 Matrice dei Risultati Generati (30 Varianti)
@@ -1126,8 +1143,8 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 14: Grazie per l'attenzione */}
-            <section className={`slide ${currentSlide === 14 ? 'active' : ''}`} id="slide-14" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            {/* SLIDE 15: Grazie per l'attenzione */}
+            <section className={`slide ${currentSlide === 15 ? 'active' : ''}`} id="slide-15" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <span className="slide-tag" style={{ marginBottom: '20px' }}>Websolute Content Machine</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', textAlign: 'center', maxWidth: '100%' }}>
                 Grazie per l'attenzione
