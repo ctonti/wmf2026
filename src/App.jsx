@@ -599,18 +599,9 @@ export default function App() {
 
             {/* SLIDE 1: websolute video */}
             <section className={`slide ${currentSlide === 1 ? 'active' : ''}`} id="slide-1" style={{ padding: 0, position: 'relative', overflow: 'hidden', background: '#000' }}>
-              <video autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 1, opacity: 0.65 }}>
+              <video autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
                 <source src="https://www.websolute.com/oven/media/AI-first%20Digital%20Agency%20-%20Vision%20to%20Growth%20-%20cut.webm" type="video/webm" />
               </video>
-              <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', textAlign: 'center', background: 'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(5,5,5,0.7) 100%)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                  <span className="brand-logo-dot" style={{ width: '28px', height: '28px', backgroundColor: '#00aeff', borderRadius: '50%', boxShadow: '0 0 30px rgba(0, 174, 255, 0.6)' }}></span>
-                  <h2 style={{ fontFamily: 'Figtree, sans-serif', fontSize: 'clamp(3rem, 6vw, 6rem)', fontWeight: 800, textTransform: 'lowercase', color: '#ffffff', letterSpacing: '-0.04em', margin: 0, lineHeight: 1 }}>websolute</h2>
-                </div>
-                <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.8rem', color: '#00aeff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, textShadow: '0 4px 10px rgba(0,0,0,0.8)' }}>
-                  AI-First Digital Agency
-                </p>
-              </div>
             </section>
 
             {/* SLIDE 2: Da Artigiani a Architetti */}
