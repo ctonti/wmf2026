@@ -460,23 +460,24 @@ export default function App() {
                     background: 'rgba(15, 15, 15, 0.75)',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '20px',
-                    padding: '28px',
+                    padding: '36px 28px',
                     width: '100%',
                     maxWidth: '480px',
                     backdropFilter: 'blur(20px)',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     gap: '24px'
                   }}>
                     <div className="speaker-photo-container" style={{
                       position: 'relative',
-                      width: '110px',
-                      height: '110px',
+                      width: '170px',
+                      height: '170px',
                       borderRadius: '50%',
                       padding: '4px',
                       background: 'linear-gradient(135deg, var(--accent) 0%, rgba(0, 174, 255, 0.2) 100%)',
-                      boxShadow: '0 0 20px var(--accent-glow)',
+                      boxShadow: '0 0 25px var(--accent-glow)',
                       overflow: 'hidden',
                       flexShrink: 0
                     }}>
@@ -488,7 +489,7 @@ export default function App() {
                         display: 'block'
                       }} />
                     </div>
-                    <div style={{ textAlign: 'left' }}>
+                    <div style={{ textAlign: 'center' }}>
                       <span className="speaker-label" style={{
                         fontFamily: 'Roboto',
                         fontSize: '0.85rem',
@@ -497,11 +498,11 @@ export default function App() {
                         fontWeight: 700,
                         letterSpacing: '0.15em',
                         display: 'block',
-                        marginBottom: '4px'
+                        marginBottom: '6px'
                       }}>Relatore</span>
                       <h3 className="speaker-name" style={{
                         fontFamily: 'Figtree',
-                        fontSize: '2.1rem',
+                        fontSize: '2.4rem',
                         fontWeight: 900,
                         color: '#ffffff',
                         margin: '0',
@@ -510,14 +511,14 @@ export default function App() {
                       }}>Claudio Tonti</h3>
                       <p className="speaker-title" style={{
                         fontFamily: 'Roboto',
-                        fontSize: '1.05rem',
+                        fontSize: '1.1rem',
                         color: 'var(--text-sec)',
                         fontWeight: 500,
-                        marginTop: '8px',
+                        marginTop: '10px',
                         lineHeight: 1.3
                       }}>
                         Chief AI Officer & Board Member<br />
-                        <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.15rem' }}>websolute</span>
+                        <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.25rem' }}>websolute</span>
                       </p>
                     </div>
                   </div>
