@@ -1155,7 +1155,7 @@ export default function App() {
               <div className="db-angle-badge"><strong>Hook:</strong> {focusedCampaign.angle_hook}</div>
             </div>
 
-            <div className="db-assets-grid-5">
+            <div className="db-assets-grid-4">
               <div className="db-asset-card">
                 <div className="db-asset-lbl">4:5 Mobile Feed</div>
                 <div className="db-asset-media-container aspect-4-5">
@@ -1174,16 +1174,18 @@ export default function App() {
                   <LazyVideo src={focusedCampaign.video_story_9x16} className="db-lazy-media" />
                 </div>
               </div>
-              <div className="db-asset-card">
-                <div className="db-asset-lbl">1:1 Feed Video</div>
-                <div className="db-asset-media-container aspect-1-1">
-                  <LazyVideo src={focusedCampaign.video_feed_1x1} className="db-lazy-media" />
+              <div className="db-asset-column-stacked">
+                <div className="db-asset-card stacked">
+                  <div className="db-asset-lbl">1:1 Feed Video</div>
+                  <div className="db-asset-media-container aspect-1-1">
+                    <LazyVideo src={focusedCampaign.video_feed_1x1} className="db-lazy-media" />
+                  </div>
                 </div>
-              </div>
-              <div className="db-asset-card">
-                <div className="db-asset-lbl">16:9 Display Banner</div>
-                <div className="db-asset-media-container aspect-16-9">
-                  <LazyImage src={focusedCampaign.img_banner_16x9} alt="" className="db-lazy-media" />
+                <div className="db-asset-card stacked">
+                  <div className="db-asset-lbl">16:9 Display Banner</div>
+                  <div className="db-asset-media-container aspect-16-9">
+                    <LazyImage src={focusedCampaign.img_banner_16x9} alt="" className="db-lazy-media" />
+                  </div>
                 </div>
               </div>
             </div>

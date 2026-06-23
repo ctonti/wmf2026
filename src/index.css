@@ -1851,3 +1851,27 @@
             word-break: break-word;
             text-align: left;
         }
+
+        /* 4 COLUMN ASSET GRID ABOVE THE FOLD */
+        .db-assets-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            flex: 1;
+            min-height: 0;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .db-asset-column-stacked {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .db-asset-card.stacked {
+            flex: 1;
+            min-height: 0;
+        }
