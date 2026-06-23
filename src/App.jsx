@@ -1052,9 +1052,32 @@ export default function App() {
               <div className="db-concept-operator">+</div>
 
               <div className="db-concept-card">
-                <div className="db-asset-lbl">2. Prodotto (Product Bag)</div>
-                <div className="db-concept-media-container">
-                  <LazyImage src={productBagAsset} alt="Product Bag" className="db-lazy-media" />
+                <div className="db-asset-lbl">2. ADV Angles (Angoli Strategici)</div>
+                <div className="db-concept-angles-container">
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">VAL:</span>
+                    <span className="c-angle-val">{focusedCampaign.angle_value}</span>
+                  </div>
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">BEN:</span>
+                    <span className="c-angle-val">{focusedCampaign.angle_benefit}</span>
+                  </div>
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">TAR:</span>
+                    <span className="c-angle-val">{focusedCampaign.angle_persona}</span>
+                  </div>
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">CON:</span>
+                    <span className="c-angle-val">{focusedCampaign.angle_contesto}</span>
+                  </div>
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">GEO:</span>
+                    <span className="c-angle-val">{focusedCampaign.angle_geo}</span>
+                  </div>
+                  <div className="concept-angle-item">
+                    <span className="c-angle-lbl">RAZ:</span>
+                    <span className="c-angle-val">{focusedCampaign.razza}</span>
+                  </div>
                 </div>
               </div>
 
