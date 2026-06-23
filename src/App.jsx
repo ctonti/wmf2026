@@ -4,6 +4,8 @@ const campaigns = (campaignData.dataset || []).map(item => ({
   order: item.order,
   ...(item.data?.it || {})
 }));
+const masterRefAsset = (campaignData.assets || []).find(a => a.tagName === '##master_adv_reference##')?.value || '';
+const productBagAsset = (campaignData.assets || []).find(a => a.tagName === '##product_bag##')?.value || '';
 import IntegrationFlow from './components/IntegrationFlow';
 
 
@@ -64,9 +66,9 @@ function LazyVideo({ src, className, style }) {
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [wallStep, setWallStep] = useState(0); // 0 to 24
+  const [wallStep, setWallStep] = useState(0); // 0 to 32
   const [manualActiveCampaign, setManualActiveCampaign] = useState(null);
-  const [manualActiveView, setManualActiveView] = useState('assets'); // 'assets' | 'texts'
+  const [manualActiveView, setManualActiveView] = useState('concept'); // 'concept' | 'assets' | 'texts'
   
   // Wall Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -98,21 +100,27 @@ export default function App() {
 
   // Derive focused and active dashboards based on wallStep
   let focusedCampaign = null;
+  let showConceptDashboard = false;
   let showAssetsDashboard = false;
   let showTextsDashboard = false;
 
-  if (currentSlide === 13 && wallStep > 0 && wallStep <= 24) {
-    const index = Math.floor((wallStep - 1) / 3);
-    const subStep = (wallStep - 1) % 3;
+  if (currentSlide === 13 && wallStep > 0 && wallStep <= 32) {
+    const index = Math.floor((wallStep - 1) / 4);
+    const subStep = (wallStep - 1) % 4;
     if (index < featuredCampaignOrders.length) {
       const featuredOrder = featuredCampaignOrders[index];
       const camp = campaigns.find(c => c.order === featuredOrder) || null;
       if (subStep === 0) {
         focusedCampaign = camp;
-        showAssetsDashboard = true;
+        showConceptDashboard = true;
       } else if (subStep === 1) {
         focusedCampaign = camp;
+        showAssetsDashboard = true;
+      } else if (subStep === 2) {
+        focusedCampaign = camp;
         showTextsDashboard = true;
+      } else if (subStep === 3) {
+        focusedCampaign = null; // zoom out (full grid)
       }
     }
   }
@@ -120,7 +128,9 @@ export default function App() {
   // Handle manual clicks
   if (manualActiveCampaign) {
     focusedCampaign = manualActiveCampaign;
-    if (manualActiveView === 'assets') {
+    if (manualActiveView === 'concept') {
+      showConceptDashboard = true;
+    } else if (manualActiveView === 'assets') {
       showAssetsDashboard = true;
     } else {
       showTextsDashboard = true;
@@ -206,7 +216,7 @@ export default function App() {
 
   const handleNext = () => {
     if (currentSlide === 13) {
-      if (wallStep < 24) {
+      if (wallStep < 32) {
         setWallStep(prev => prev + 1);
       } else {
         setWallStep(0);
@@ -226,7 +236,7 @@ export default function App() {
       }
     } else if (currentSlide === 14) {
       setCurrentSlide(13);
-      setWallStep(24);
+      setWallStep(32);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
     }
@@ -923,35 +933,13 @@ export default function App() {
                         id={`campaign-card-${camp.order}`}
                         onClick={() => {
                           setManualActiveCampaign(camp);
-                          setManualActiveView('assets');
+                          setManualActiveView('concept');
                         }}
                       >
-                        <div className="wall-card-thumb-img">
+                        <div className="wall-card-thumb-img-wrapper">
                           <LazyImage src={camp.img_feed_1x1} alt="" className="thumb-lazy-image" />
-                        </div>
-                        <div className="wall-card-thumb-info">
-                          <div className="wall-card-thumb-title">
-                            CAMPAGNA #{orderNum}
-                          </div>
-                          <div className="wall-card-thumb-angles">
-                            <div className="mini-angle-cell" title={`Valore: ${camp.angle_value}`}>
-                              <span className="mac-lbl">VAL:</span> <span className="mac-val">{camp.angle_value}</span>
-                            </div>
-                            <div className="mini-angle-cell" title={`Beneficio: ${camp.angle_benefit}`}>
-                              <span className="mac-lbl">BEN:</span> <span className="mac-val">{camp.angle_benefit}</span>
-                            </div>
-                            <div className="mini-angle-cell" title={`Persona: ${camp.angle_persona}`}>
-                              <span className="mac-lbl">TAR:</span> <span className="mac-val">{camp.angle_persona}</span>
-                            </div>
-                            <div className="mini-angle-cell" title={`Contesto: ${camp.angle_contesto}`}>
-                              <span className="mac-lbl">CON:</span> <span className="mac-val">{camp.angle_contesto}</span>
-                            </div>
-                            <div className="mini-angle-cell" title={`Geo: ${camp.angle_geo}`}>
-                              <span className="mac-lbl">GEO:</span> <span className="mac-val">{camp.angle_geo}</span>
-                            </div>
-                            <div className="mini-angle-cell" title={`Razza: ${camp.razza}`}>
-                              <span className="mac-lbl">RAZ:</span> <span className="mac-val">{camp.razza}</span>
-                            </div>
+                          <div className="wall-card-thumb-badge">
+                            #{orderNum}
                           </div>
                         </div>
                       </div>
@@ -992,17 +980,26 @@ export default function App() {
         )}
       </div>
 
-      {/* ASSET DASHBOARD OVERLAY */}
-      {showAssetsDashboard && focusedCampaign && (
+      {/* CONCEPT DASHBOARD OVERLAY */}
+      {showConceptDashboard && focusedCampaign && (
         <div className="dashboard-overlay active">
           <div className="dashboard-container">
             <div className="db-header">
               <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
                 <div>
-                  <span className="db-tag">CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')}</span>
+                  <span className="db-tag">CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')} — CONCEPT & CONIUGAZIONE</span>
                   <h2 className="db-title">{focusedCampaign.razza} — {focusedCampaign.angle_persona}</h2>
                 </div>
                 <div className="db-toggle-tabs">
+                  <button 
+                    className={`db-tab-btn ${showConceptDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('concept');
+                    }}
+                  >
+                    🎯 Concept
+                  </button>
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
                     onClick={() => {
@@ -1010,7 +1007,7 @@ export default function App() {
                       setManualActiveView('assets');
                     }}
                   >
-                    🖼️ Visual Assets
+                    🖼️ Declinazioni
                   </button>
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
@@ -1027,8 +1024,8 @@ export default function App() {
                 if (manualActiveCampaign) {
                   setManualActiveCampaign(null);
                 } else {
-                  const index = Math.floor((wallStep - 1) / 3);
-                  setWallStep(index * 3 + 3);
+                  const index = Math.floor((wallStep - 1) / 4);
+                  setWallStep(index * 4 + 4);
                 }
               }}>
                 &times;
@@ -1044,19 +1041,98 @@ export default function App() {
               <div className="db-angle-badge"><strong>Hook:</strong> {focusedCampaign.angle_hook}</div>
             </div>
 
-            <div className="db-assets-grid">
-              <div className="db-asset-card">
-                <div className="db-asset-lbl">1:1 Feed Image</div>
-                <div className="db-asset-media-container aspect-1-1">
-                  <LazyImage src={focusedCampaign.img_feed_1x1} alt="" className="db-lazy-media" />
+            <div className="db-concept-grid">
+              <div className="db-concept-card">
+                <div className="db-asset-lbl">1. Creatività di Riferimento (Master Reference)</div>
+                <div className="db-concept-media-container">
+                  <LazyImage src={masterRefAsset} alt="Style Reference" className="db-lazy-media" />
                 </div>
               </div>
-              <div className="db-asset-card">
-                <div className="db-asset-lbl">1:1 Feed Video</div>
-                <div className="db-asset-media-container aspect-1-1">
-                  <LazyVideo src={focusedCampaign.video_feed_1x1} className="db-lazy-media" />
+              
+              <div className="db-concept-operator">+</div>
+
+              <div className="db-concept-card">
+                <div className="db-asset-lbl">2. Prodotto (Product Bag)</div>
+                <div className="db-concept-media-container">
+                  <LazyImage src={productBagAsset} alt="Product Bag" className="db-lazy-media" />
                 </div>
               </div>
+
+              <div className="db-concept-operator">=</div>
+
+              <div className="db-concept-card highlighted">
+                <div className="db-asset-lbl">3. Campagna Coniugata (1:1 Feed Image)</div>
+                <div className="db-concept-media-container">
+                  <LazyImage src={focusedCampaign.img_feed_1x1} alt="Generated 1:1 Feed" className="db-lazy-media" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ASSET DASHBOARD OVERLAY */}
+      {showAssetsDashboard && focusedCampaign && (
+        <div className="dashboard-overlay active">
+          <div className="dashboard-container">
+            <div className="db-header">
+              <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                <div>
+                  <span className="db-tag">CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')} — DECLINAZIONI FORMATI</span>
+                  <h2 className="db-title">{focusedCampaign.razza} — {focusedCampaign.angle_persona}</h2>
+                </div>
+                <div className="db-toggle-tabs">
+                  <button 
+                    className={`db-tab-btn ${showConceptDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('concept');
+                    }}
+                  >
+                    🎯 Concept
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('assets');
+                    }}
+                  >
+                    🖼️ Declinazioni
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('texts');
+                    }}
+                  >
+                    ✍️ Strategia & Copy
+                  </button>
+                </div>
+              </div>
+              <button className="db-close-btn" onClick={() => {
+                if (manualActiveCampaign) {
+                  setManualActiveCampaign(null);
+                } else {
+                  const index = Math.floor((wallStep - 1) / 4);
+                  setWallStep(index * 4 + 4);
+                }
+              }}>
+                &times;
+              </button>
+            </div>
+
+            <div className="db-angles-row">
+              <div className="db-angle-badge"><strong>Valore:</strong> {focusedCampaign.angle_value}</div>
+              <div className="db-angle-badge"><strong>Beneficio:</strong> {focusedCampaign.angle_benefit}</div>
+              <div className="db-angle-badge"><strong>Persona:</strong> {focusedCampaign.angle_persona}</div>
+              <div className="db-angle-badge"><strong>Contesto:</strong> {focusedCampaign.angle_contesto}</div>
+              <div className="db-angle-badge"><strong>Geo:</strong> {focusedCampaign.angle_geo}</div>
+              <div className="db-angle-badge"><strong>Hook:</strong> {focusedCampaign.angle_hook}</div>
+            </div>
+
+            <div className="db-assets-grid-5">
               <div className="db-asset-card">
                 <div className="db-asset-lbl">4:5 Mobile Feed</div>
                 <div className="db-asset-media-container aspect-4-5">
@@ -1073,6 +1149,12 @@ export default function App() {
                 <div className="db-asset-lbl">9:16 Story Video</div>
                 <div className="db-asset-media-container aspect-9-16">
                   <LazyVideo src={focusedCampaign.video_story_9x16} className="db-lazy-media" />
+                </div>
+              </div>
+              <div className="db-asset-card">
+                <div className="db-asset-lbl">1:1 Feed Video</div>
+                <div className="db-asset-media-container aspect-1-1">
+                  <LazyVideo src={focusedCampaign.video_feed_1x1} className="db-lazy-media" />
                 </div>
               </div>
               <div className="db-asset-card">
@@ -1093,10 +1175,19 @@ export default function App() {
             <div className="db-header">
               <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
                 <div>
-                  <span className="db-tag">STRATEGIA & AD COPY: CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')}</span>
+                  <span className="db-tag">CAMPAGNA #{(focusedCampaign.order + 1).toString().padStart(2, '0')} — STRATEGIA & COPY</span>
                   <h2 className="db-title">{focusedCampaign.razza} — {focusedCampaign.angle_persona}</h2>
                 </div>
                 <div className="db-toggle-tabs">
+                  <button 
+                    className={`db-tab-btn ${showConceptDashboard ? 'active' : ''}`}
+                    onClick={() => {
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('concept');
+                    }}
+                  >
+                    🎯 Concept
+                  </button>
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
                     onClick={() => {
@@ -1104,7 +1195,7 @@ export default function App() {
                       setManualActiveView('assets');
                     }}
                   >
-                    🖼️ Visual Assets
+                    🖼️ Declinazioni
                   </button>
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
@@ -1121,8 +1212,8 @@ export default function App() {
                 if (manualActiveCampaign) {
                   setManualActiveCampaign(null);
                 } else {
-                  const index = Math.floor((wallStep - 1) / 3);
-                  setWallStep(index * 3 + 3);
+                  const index = Math.floor((wallStep - 1) / 4);
+                  setWallStep(index * 4 + 4);
                 }
               }}>
                 &times;
