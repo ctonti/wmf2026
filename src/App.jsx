@@ -63,9 +63,9 @@ function LazyVideo({ src, className, style }) {
 }
 
 export default function App() {
-  const [viewMode, setViewMode] = useState('slides'); // slides | wall
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeCampaign, setActiveCampaign] = useState(null);
+  const [wallStep, setWallStep] = useState(0); // 0 to 24
+  const [manualActiveCampaign, setManualActiveCampaign] = useState(null);
   
   // Wall Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +73,8 @@ export default function App() {
   const [benFilter, setBenFilter] = useState('');
   const [perFilter, setPerFilter] = useState('');
 
-  const totalSlides = 14;
+  const totalSlides = 15;
+  const featuredCampaignOrders = [0, 1, 2, 4, 5, 11, 13, 8];
 
   // Slide Names mapping for future use/nav
   const slideNames = [
@@ -90,8 +91,71 @@ export default function App() {
     "Il Processo ADV",
     "La Forza dei Numeri",
     "Futuri Workflow",
+    "Visual Wall Case Study",
     "Grazie"
   ];
+
+  // Derive focused and active campaign based on wallStep
+  let focusedCampaign = null;
+  let derivedActiveCampaign = null;
+
+  if (currentSlide === 13 && wallStep > 0 && wallStep <= 24) {
+    const index = Math.floor((wallStep - 1) / 3);
+    const subStep = (wallStep - 1) % 3;
+    if (index < featuredCampaignOrders.length) {
+      const featuredOrder = featuredCampaignOrders[index];
+      focusedCampaign = campaigns.find(c => c.order === featuredOrder) || null;
+      if (subStep === 1) {
+        derivedActiveCampaign = focusedCampaign;
+      }
+    }
+  }
+
+  const activeCampaign = manualActiveCampaign || derivedActiveCampaign;
+
+  const gridRef = useRef(null);
+  const [gridTransform, setGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
+
+  useEffect(() => {
+    const updateTransform = () => {
+      if (currentSlide === 13 && focusedCampaign) {
+        const card = document.getElementById(`campaign-card-${focusedCampaign.order}`);
+        const grid = gridRef.current;
+        if (card && grid) {
+          const gridRect = grid.getBoundingClientRect();
+          const cardRect = card.getBoundingClientRect();
+          
+          // Card center relative to grid origin
+          const cardCenterX = cardRect.left + cardRect.width / 2 - gridRect.left;
+          const cardCenterY = cardRect.top + cardRect.height / 2 - gridRect.top;
+          
+          // Grid center relative to grid origin
+          const gridCenterX = gridRect.width / 2;
+          const gridCenterY = gridRect.height / 2;
+          
+          const translateX = gridCenterX - cardCenterX;
+          const translateY = gridCenterY - cardCenterY;
+          
+          const scaleFactor = 2.8;
+          
+          setGridTransform({
+            transform: `translate(${translateX}px, ${translateY}px) scale(${scaleFactor})`
+          });
+        }
+      } else {
+        setGridTransform({ transform: 'translate(0px, 0px) scale(1)' });
+      }
+    };
+
+    updateTransform();
+    const timer = setTimeout(updateTransform, 50);
+
+    window.addEventListener('resize', updateTransform);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateTransform);
+    };
+  }, [currentSlide, wallStep, focusedCampaign]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -104,11 +168,10 @@ export default function App() {
       const isNextKey = ['ArrowRight', 'ArrowDown', 'PageDown', 'Space', 'Enter'].includes(e.key) || e.code === 'Space';
       const isPrevKey = ['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key);
 
-      if (activeCampaign !== null) {
-        // If drawer is open, any navigation key or Escape will close it
+      if (manualActiveCampaign !== null) {
         if (isNextKey || isPrevKey || e.key === 'Escape') {
           e.preventDefault();
-          setActiveCampaign(null);
+          setManualActiveCampaign(null);
         }
         return;
       }
@@ -124,26 +187,36 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide, viewMode, activeCampaign]);
+  }, [currentSlide, wallStep, manualActiveCampaign]);
 
   const handleNext = () => {
-    if (viewMode === 'slides') {
-      if (currentSlide < totalSlides - 1) {
-        setCurrentSlide(prev => prev + 1);
+    if (currentSlide === 13) {
+      if (wallStep < 24) {
+        setWallStep(prev => prev + 1);
       } else {
-        setViewMode('wall');
+        setWallStep(0);
+        setCurrentSlide(14);
       }
+    } else if (currentSlide < totalSlides - 1) {
+      setCurrentSlide(prev => prev + 1);
     }
   };
 
   const handlePrev = () => {
-    if (viewMode === 'wall') {
-      setViewMode('slides');
-      setCurrentSlide(totalSlides - 1);
+    if (currentSlide === 13) {
+      if (wallStep > 0) {
+        setWallStep(prev => prev - 1);
+      } else {
+        setCurrentSlide(12);
+      }
+    } else if (currentSlide === 14) {
+      setCurrentSlide(13);
+      setWallStep(24);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
     }
   };
+
 
   // Brief text parser
   const getBriefSection = (briefText, sectionName) => {
@@ -269,15 +342,18 @@ export default function App() {
         <nav id="view-mode-nav">
           <button 
             id="nav-btn-slides" 
-            className={`nav-mode-btn ${viewMode === 'slides' ? 'active' : ''}`}
-            onClick={() => setViewMode('slides')}
+            className={`nav-mode-btn ${currentSlide !== 13 ? 'active' : ''}`}
+            onClick={() => setCurrentSlide(0)}
           >
             Slide Deck
           </button>
           <button 
             id="nav-btn-wall" 
-            className={`nav-mode-btn ${viewMode === 'wall' ? 'active' : ''}`}
-            onClick={() => setViewMode('wall')}
+            className={`nav-mode-btn ${currentSlide === 13 ? 'active' : ''}`}
+            onClick={() => {
+              setCurrentSlide(13);
+              setWallStep(0);
+            }}
           >
             Visual Wall
           </button>
@@ -286,7 +362,7 @@ export default function App() {
 
       <div id="app">
         {/* SLIDES CONTAINER */}
-        {viewMode === 'slides' && (
+        {true && (
           <div className="slides-container" id="slides-view">
             
             {/* SLIDE 0: Cover */}
@@ -809,8 +885,55 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 13: Grazie per l'attenzione */}
-            <section className={`slide ${currentSlide === 13 ? 'active' : ''}`} id="slide-13" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            {/* SLIDE 13: Visual Wall (Case Study Grid) */}
+            <section className={`slide ${currentSlide === 13 ? 'active' : ''} slide-visual-wall`} id="slide-13">
+              <span className="slide-tag">Visual Wall — Database delle Campagne</span>
+              <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
+                Matrice dei Risultati Generati (30 Varianti)
+              </h2>
+              
+              <div className="wall-dense-grid-container" style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+                <div 
+                  ref={gridRef}
+                  className={`wall-dense-grid ${focusedCampaign ? 'zoomed' : ''}`}
+                  style={gridTransform}
+                >
+                  {campaigns.map((camp) => {
+                    const orderNum = (camp.order + 1).toString().padStart(2, '0');
+                    const isFocused = focusedCampaign?.order === camp.order;
+                    return (
+                      <div 
+                        key={camp.order} 
+                        className={`wall-card-thumb ${isFocused ? 'focused' : ''} ${focusedCampaign ? (isFocused ? '' : 'not-focused') : ''}`}
+                        id={`campaign-card-${camp.order}`}
+                        onClick={() => {
+                          const featuredIndex = featuredCampaignOrders.indexOf(camp.order);
+                          if (featuredIndex !== -1) {
+                            setWallStep(featuredIndex * 3 + 1); // Jump to zoom-in step
+                          } else {
+                            setManualActiveCampaign(camp); // Normal click opens drawer
+                          }
+                        }}
+                      >
+                        <div className="wall-card-thumb-img">
+                          <LazyImage src={camp.img_feed_1x1} alt="" className="thumb-lazy-image" />
+                        </div>
+                        <div className="wall-card-thumb-info">
+                          <div className="wall-card-thumb-header">
+                            <span className="wall-card-thumb-index">#{orderNum}</span>
+                            <span className="wall-card-thumb-breed">{camp.razza}</span>
+                          </div>
+                          <div className="wall-card-thumb-persona">{camp.angle_persona}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+
+            {/* SLIDE 14: Grazie per l'attenzione */}
+            <section className={`slide ${currentSlide === 14 ? 'active' : ''}`} id="slide-14" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <span className="slide-tag" style={{ marginBottom: '20px' }}>Websolute Content Machine</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', textAlign: 'center', maxWidth: '100%' }}>
                 Grazie per l'attenzione
@@ -836,189 +959,6 @@ export default function App() {
               </div>
             </div>
 
-          </div>
-        )}
-
-        {/* VISUAL WALL VIEW */}
-        {viewMode === 'wall' && (
-          <div id="wall-view" style={{ display: 'block' }}>
-            {/* Filter toolbar */}
-            <div className="wall-filters-bar">
-              <div className="filtered-count-label" id="filtered-count">
-                Mostrando {filteredCampaigns.length} di {campaigns.length} Varianti
-              </div>
-              
-              <div className="filter-group">
-                <input 
-                  type="text" 
-                  className="search-input" 
-                  placeholder="Cerca per angoli, copy, razza..." 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              
-              <div className="filter-group">
-                <select className="filter-select" value={valFilter} onChange={(e) => setValFilter(e.target.value)}>
-                  <option value="">Tutti i Valori</option>
-                  <option value="Made in Italy">Made in Italy</option>
-                  <option value="Naturalità">Naturalità</option>
-                  <option value="Risultati visibili">Risultati visibili</option>
-                  <option value="Scienza">Scienza</option>
-                  <option value="Sostenibilità">Sostenibilità</option>
-                  <option value="Trasparenza">Trasparenza</option>
-                </select>
-              </div>
-              
-              <div className="filter-group">
-                <select className="filter-select" value={benFilter} onChange={(e) => setBenFilter(e.target.value)}>
-                  <option value="">Tutti i Benefici</option>
-                  <option value="Articolazioni">Articolazioni</option>
-                  <option value="Controllo Peso">Controllo Peso</option>
-                  <option value="Digestione">Digestione</option>
-                  <option value="Energia & Vitalità">Energia & Vitalità</option>
-                  <option value="Intolleranze">Intolleranze</option>
-                  <option value="Pelo & Cute">Pelo & Cute</option>
-                </select>
-              </div>
-              
-              <div className="filter-group">
-                <select className="filter-select" value={perFilter} onChange={(e) => setPerFilter(e.target.value)}>
-                  <option value="">Tutte le Persone</option>
-                  <option value="Dog Sportivo">Dog Sportivo</option>
-                  <option value="Eco-Consapevole">Eco-Consapevole</option>
-                  <option value="Famiglia Multi-Pet">Famiglia Multi-Pet</option>
-                  <option value="Giovane Adottante">Giovane Adottante</option>
-                  <option value="Pet Parent Attento">Pet Parent Attento</option>
-                  <option value="Senior Owner">Senior Owner</option>
-                </select>
-              </div>
-
-              <button className="btn-reset-filters" onClick={() => {
-                setSearchQuery('');
-                setValFilter('');
-                setBenFilter('');
-                setPerFilter('');
-              }}>
-                Reset
-              </button>
-            </div>
-
-            {/* Wall Columns - Feed */}
-            <div className="wall-wrapper">
-              <main className="wall-feed" id="wall-campaigns-feed">
-                {filteredCampaigns.length === 0 ? (
-                  <div className="empty-state">
-                    <h3>Nessuna variante corrisponde ai filtri selezionati</h3>
-                    <p>Prova a modificare i filtri o la query di ricerca.</p>
-                  </div>
-                ) : (
-                  filteredCampaigns.map((camp) => {
-                    const orderNum = (camp.order + 1).toString().padStart(2, '0');
-                    return (
-                      <section key={camp.order} className="wall-campaign-block" id={`campaign-sec-${camp.order}`}>
-                        <div className="wall-campaign-header">
-                          <h3 className="wall-campaign-title">CAMPAGNA #{orderNum}</h3>
-                          <div className="wall-campaign-index">#{orderNum}</div>
-                        </div>
-
-                        {/* 3x2 Strategic Angles Grid */}
-                        <div className="angles-grid">
-                          <div className="angle-cell">
-                            <span className="angle-label">Valore di Comunicazione</span>
-                            <span className="angle-value">{camp.angle_value}</span>
-                          </div>
-                          <div className="angle-cell">
-                            <span className="angle-label">Beneficio Funzionale</span>
-                            <span className="angle-value">{camp.angle_benefit}</span>
-                          </div>
-                          <div className="angle-cell">
-                            <span className="angle-label">Target Persona</span>
-                            <span className="angle-value">{camp.angle_persona}</span>
-                          </div>
-                          <div className="angle-cell">
-                            <span className="angle-label">Contesto / Momento</span>
-                            <span className="angle-value">{camp.angle_contesto}</span>
-                          </div>
-                          <div className="angle-cell">
-                            <span className="angle-label">Area Geografica (Geo)</span>
-                            <span className="angle-value">{camp.angle_geo}</span>
-                          </div>
-                          <div className="angle-cell">
-                            <span className="angle-label">Hook d'Apertura</span>
-                            <span className="angle-value">{camp.angle_hook}</span>
-                          </div>
-                        </div>
-
-                        {/* Media Columns */}
-                        <div className="media-columns">
-                          {/* Column 1: Static Feed */}
-                          <div className="media-column">
-                            <div className="media-item">
-                              {getChannelHeader('img_feed_1x1')}
-                              <div className="media-container aspect-1-1">
-                                <LazyImage src={camp.img_feed_1x1} alt="Ad Feed 1:1" className="lazy-image" />
-                              </div>
-                            </div>
-                            <div className="media-item">
-                              {getChannelHeader('img_feed_4x5')}
-                              <div className="media-container aspect-4-5">
-                                <LazyImage src={camp.img_feed_4x5} alt="Ad Mobile Feed 4:5" className="lazy-image" />
-                              </div>
-                            </div>
-                            <div className="media-item">
-                              {getChannelHeader('img_banner_16x9')}
-                              <div className="media-container aspect-16-9">
-                                <LazyImage src={camp.img_banner_16x9} alt="Ad Banner 16:9" className="lazy-image" />
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Column 2: Stories & Reels */}
-                          <div className="media-column">
-                            <div className="media-item">
-                              {getChannelHeader('img_story_9x16')}
-                              <div className="media-container aspect-9-16">
-                                <LazyImage src={camp.img_story_9x16} alt="Ad Story Image 9:16" className="lazy-image" />
-                              </div>
-                            </div>
-                            <div className="media-item">
-                              {getChannelHeader('video_story_9x16')}
-                              <div className="media-container aspect-9-16">
-                                <LazyVideo src={camp.video_story_9x16} className="lazy-video" />
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Column 3: Video Feed */}
-                          <div className="media-column">
-                            <div className="media-item">
-                              {getChannelHeader('video_feed_1x1')}
-                              <div className="media-container aspect-1-1">
-                                <LazyVideo src={camp.video_feed_1x1} className="lazy-video" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Strategia copy trigger */}
-                        <div>
-                          <button className="btn-open-strategy" onClick={() => setActiveCampaign(camp)}>
-                            <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'currentColor' }}>
-                              <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-                            </svg>
-                            Leggi Strategia & Ad Copy
-                          </button>
-                          <div className="campaign-footer-meta">
-                            <strong>Razza di riferimento:</strong> {camp.razza} | <strong>Prodotto:</strong> {camp.prodotto}
-                          </div>
-                        </div>
-                      </section>
-                    );
-                  })
-                )}
-              </main>
-            </div>
           </div>
         )}
       </div>
