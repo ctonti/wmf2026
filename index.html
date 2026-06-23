@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WMF 2026 — La Content Machine</title>
+    <title>WMF 2026 — Content Machine</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1222,7 +1222,7 @@
             </div>
             <div class="brand-divider"></div>
             <div class="brand-title-wrap">
-                <span class="brand-title">LA CONTENT MACHINE</span>
+                <span class="brand-title">CONTENT MACHINE</span>
                 <span class="brand-subtitle">TerraViva V2 Strategy</span>
             </div>
         </div>
@@ -1240,7 +1240,7 @@
             <!-- SLIDE 1: Cover -->
             <section class="slide active" id="slide-0">
                 <span class="slide-tag">WMF 2026 Speech Presentation</span>
-                <h1 class="slide-title">LA CONTENT MACHINE</h1>
+                <h1 class="slide-title">CONTENT MACHINE</h1>
                 <p class="slide-subtitle" style="font-size: 1.8rem; margin-top: 15px;">Tutti i contenuti che servono. Non solo quelli che riesci a fare.</p>
                 <p style="font-family:'Figtree', sans-serif; font-size: 1.1rem; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-top: 10px; letter-spacing: 0.1em;">On scale. On demand. On brand. On Knowledge.</p>
                 
@@ -1268,7 +1268,7 @@
                 <div class="slide-layout-split">
                     <div class="slide-content-left">
                         <h2 class="slide-title" style="font-size: clamp(2rem, 3.8vw, 3.8rem); margin-bottom: 20px;">Da Artigiani a Architetti di Contenuti</h2>
-                        <p class="concept-intro">La Content Machine trasforma radicalmente il modo in cui le aziende producono contenuti.</p>
+                        <p class="concept-intro">Content Machine trasforma radicalmente il modo in cui le aziende producono contenuti.</p>
                         <p class="matrix-intro" style="font-size: clamp(0.95rem, 1.4vw, 1.25rem); font-weight: 300;">Non più creazione manuale, uno per uno, ma progettazione di sistemi intelligenti che generano migliaia di contenuti di qualità, iper-personalizzati, on demand.</p>
                         <div class="takeaway-box">
                             È il passaggio dall'artigianato del singolo contenuto all'architettura scalabile di ecosistemi di contenuti.
@@ -1372,7 +1372,7 @@
             <section class="slide" id="slide-6">
                 <span class="slide-tag">Adozione Trasversale</span>
                 <h2 class="slide-title" style="font-size: clamp(1.8rem, 3.2vw, 3.2rem); margin-bottom: 10px;">A Chi Serve in Azienda</h2>
-                <p style="color: var(--text-sec); font-size: 1rem; max-width: 80%; margin-bottom: 10px;">La Content Machine automatizza la creazione, il controllo e l'aggiornamento di testi, immagini e HTML.</p>
+                <p style="color: var(--text-sec); font-size: 1rem; max-width: 80%; margin-bottom: 10px;">Content Machine automatizza la creazione, il controllo e l'aggiornamento di testi, immagini e HTML.</p>
                 
                 <div class="slide-grid-5">
                     <div class="dept-card">
@@ -3502,28 +3502,6 @@
     
     <!-- Agentation Root -->
     <div id="agentation-root"></div>
-
-    <!-- Agentation Imports & Bootstrapper -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom": "https://esm.sh/react-dom@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "agentation": "https://esm.sh/agentation@3.0.2"
-        }
-      }
-    </script>
-    <script type="module">
-      import React from 'react';
-      import ReactDOM from 'react-dom/client';
-      import { Agentation } from 'agentation';
-
-      const container = document.getElementById('agentation-root');
-      if (container) {
-          const root = ReactDOM.createRoot(container);
-          root.render(React.createElement(Agentation));
-      }
-    </script>
+    <script src="assets/agentation-bundle.js"></script>
 </body>
 </html>
