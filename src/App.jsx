@@ -66,6 +66,7 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [wallStep, setWallStep] = useState(0); // 0 to 24
   const [manualActiveCampaign, setManualActiveCampaign] = useState(null);
+  const [manualActiveView, setManualActiveView] = useState('assets'); // 'assets' | 'texts'
   
   // Wall Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,23 +96,37 @@ export default function App() {
     "Grazie"
   ];
 
-  // Derive focused and active campaign based on wallStep
+  // Derive focused and active dashboards based on wallStep
   let focusedCampaign = null;
-  let derivedActiveCampaign = null;
+  let showAssetsDashboard = false;
+  let showTextsDashboard = false;
 
   if (currentSlide === 13 && wallStep > 0 && wallStep <= 24) {
     const index = Math.floor((wallStep - 1) / 3);
     const subStep = (wallStep - 1) % 3;
     if (index < featuredCampaignOrders.length) {
       const featuredOrder = featuredCampaignOrders[index];
-      focusedCampaign = campaigns.find(c => c.order === featuredOrder) || null;
-      if (subStep === 1) {
-        derivedActiveCampaign = focusedCampaign;
+      const camp = campaigns.find(c => c.order === featuredOrder) || null;
+      if (subStep === 0) {
+        focusedCampaign = camp;
+        showAssetsDashboard = true;
+      } else if (subStep === 1) {
+        focusedCampaign = camp;
+        showTextsDashboard = true;
       }
     }
   }
 
-  const activeCampaign = manualActiveCampaign || derivedActiveCampaign;
+  // Handle manual clicks
+  if (manualActiveCampaign) {
+    focusedCampaign = manualActiveCampaign;
+    if (manualActiveView === 'assets') {
+      showAssetsDashboard = true;
+    } else {
+      showTextsDashboard = true;
+    }
+  }
+
 
   const gridRef = useRef(null);
   const [gridTransform, setGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
@@ -991,7 +1006,8 @@ export default function App() {
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
                     onClick={() => {
-                      if (manualActiveCampaign) setManualActiveView('assets');
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('assets');
                     }}
                   >
                     🖼️ Visual Assets
@@ -999,14 +1015,22 @@ export default function App() {
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
                     onClick={() => {
-                      if (manualActiveCampaign) setManualActiveView('texts');
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('texts');
                     }}
                   >
                     ✍️ Strategia & Copy
                   </button>
                 </div>
               </div>
-              <button className="db-close-btn" onClick={() => setManualActiveCampaign(null)}>
+              <button className="db-close-btn" onClick={() => {
+                if (manualActiveCampaign) {
+                  setManualActiveCampaign(null);
+                } else {
+                  const index = Math.floor((wallStep - 1) / 3);
+                  setWallStep(index * 3 + 3);
+                }
+              }}>
                 &times;
               </button>
             </div>
@@ -1076,7 +1100,8 @@ export default function App() {
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
                     onClick={() => {
-                      if (manualActiveCampaign) setManualActiveView('assets');
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('assets');
                     }}
                   >
                     🖼️ Visual Assets
@@ -1084,14 +1109,22 @@ export default function App() {
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
                     onClick={() => {
-                      if (manualActiveCampaign) setManualActiveView('texts');
+                      setManualActiveCampaign(focusedCampaign);
+                      setManualActiveView('texts');
                     }}
                   >
                     ✍️ Strategia & Copy
                   </button>
                 </div>
               </div>
-              <button className="db-close-btn" onClick={() => setManualActiveCampaign(null)}>
+              <button className="db-close-btn" onClick={() => {
+                if (manualActiveCampaign) {
+                  setManualActiveCampaign(null);
+                } else {
+                  const index = Math.floor((wallStep - 1) / 3);
+                  setWallStep(index * 3 + 3);
+                }
+              }}>
                 &times;
               </button>
             </div>
