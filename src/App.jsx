@@ -7,6 +7,7 @@ const campaigns = (campaignData.dataset || []).map(item => ({
 const masterRefAsset = (campaignData.assets || []).find(a => a.tagName === '##master_adv_reference##')?.value || '';
 const productBagAsset = (campaignData.assets || []).find(a => a.tagName === '##product_bag##')?.value || '';
 import IntegrationFlow from './components/IntegrationFlow';
+import KnowledgeGraph from './components/KnowledgeGraph';
 
 
 // Helper component for lazy-loaded images
@@ -618,21 +619,21 @@ export default function App() {
               <span className="slide-tag">La Rivoluzione del Contenuto</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4.5rem)', lineHeight: 1.1, marginBottom: '20px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
                     Da Artigiani a Architetti di Contenuti
                   </h2>
-                  <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.2rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '10px' }}>
+                  <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.6rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '10px' }}>
                     Il nuovo paradigma per la produzione di contenuti aziendali.
                   </p>
                 </div>
-                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
-                  <p className="concept-intro" style={{ borderLeft: 'none', paddingLeft: 0, fontSize: '1.45rem', lineHeight: 1.4, color: '#ffffff', fontWeight: 400 }}>
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '30px' }}>
+                  <p className="concept-intro" style={{ borderLeft: 'none', paddingLeft: 0, fontSize: '2rem', lineHeight: 1.4, color: '#ffffff', fontWeight: 400 }}>
                     Content Machine trasforma radicalmente il modo in cui le aziende producono contenuti.
                   </p>
-                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.1rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.45rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.6 }}>
                     Non più creazione manuale, uno per uno, ma progettazione di sistemi intelligenti che generano migliaia di contenuti di qualità, iper-personalizzati, on demand.
                   </p>
-                  <div className="takeaway-box" style={{ marginTop: '10px' }}>
+                  <div className="takeaway-box" style={{ marginTop: '15px', fontSize: '1.5rem', padding: '16px 20px' }}>
                     È il passaggio dall'artigianato del singolo contenuto all'architettura scalabile di ecosistemi di contenuti.
                   </div>
                 </div>
@@ -644,35 +645,35 @@ export default function App() {
               <span className="slide-tag">La Quantità Mancante</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4.5rem)', lineHeight: 1.1, marginBottom: '20px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
                     Il Problema Reale
                   </h2>
-                  <p className="concept-intro" style={{ fontSize: '1.6rem', color: '#ffffff', borderLeft: '3px solid var(--accent)', paddingLeft: '20px' }}>
+                  <p className="concept-intro" style={{ fontSize: '2.1rem', color: '#ffffff', borderLeft: '3px solid var(--accent)', paddingLeft: '20px', lineHeight: 1.4 }}>
                     Le aziende oggi producono solo una frazione del contenuto che sarebbe realmente utile.
                   </p>
                 </div>
-                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '30px' }}>
                   <ul className="bullet-list" style={{ marginTop: 0, paddingLeft: 0, listStyle: 'none' }}>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         Limitazioni linguistiche
                       </strong> 
                       Descrizioni prodotto tradotte solo in 3 lingue invece di 15.
                     </li>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         Campagne generiche
                       </strong> 
                       Nessuna declinazione locale o contestuale per i diversi dealer o aree.
                     </li>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         Visual standard
                       </strong> 
                       Nessuna personalizzazione per mercati, opzioni o varianti di prodotto.
                     </li>
                   </ul>
-                  <div className="takeaway-box" style={{ borderLeft: '3px solid #ff4a4a', marginTop: '10px' }}>
+                  <div className="takeaway-box" style={{ borderLeft: '3px solid #ff4a4a', marginTop: '15px', fontSize: '1.5rem', padding: '16px 20px' }}>
                     Il problema non è la qualità di ciò che fate, ma la quantità di ciò che non riuscite a fare.
                   </div>
                 </div>
@@ -684,44 +685,20 @@ export default function App() {
               <span className="slide-tag">Personalizzazione & Proprietary DNA</span>
               <div className="slide-layout-split">
                 <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.8vw, 3.8rem)', marginBottom: '20px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
                     Ogni Contenuto al Posto Giusto
                   </h2>
-                  <p className="concept-intro">Iper-personalizzazione sistematica basata sul vostro DNA aziendale proprietario.</p>
-                  <ul className="bullet-list">
-                    <li><strong>Targetizzazione totale:</strong> Contenuti ad-hoc per mercato, lingua, target, canale fino al singolo rivenditore locale.</li>
-                    <li><strong>Appenedimento proprietario:</strong> L'AI impara dai vostri contenuti esistenti (tone of voice, terminologia tecnica, stile visivo), non da Internet.</li>
+                  <p className="concept-intro" style={{ fontSize: '1.8rem', color: '#ffffff', lineHeight: 1.4 }}>Iper-personalizzazione sistematica basata sul vostro DNA aziendale proprietario.</p>
+                  <ul className="bullet-list" style={{ marginTop: '20px' }}>
+                    <li style={{ fontSize: '1.35rem', marginBottom: '15px' }}><strong>Targetizzazione totale:</strong> Contenuti ad-hoc per mercato, lingua, target, canale fino al singolo rivenditore locale.</li>
+                    <li style={{ fontSize: '1.35rem', marginBottom: '15px' }}><strong>Apprendimento proprietario:</strong> L'AI impara dai vostri contenuti esistenti (tone of voice, terminologia tecnica, stile visivo), non da Internet.</li>
                   </ul>
-                  <div className="takeaway-box">
+                  <div className="takeaway-box" style={{ marginTop: '20px', fontSize: '1.5rem', padding: '16px 20px' }}>
                     La vostra knowledge base proprietaria diventa il DNA di ogni contenuto generato. È la vostra intelligenza, amplificata.
                   </div>
                 </div>
-                <div className="slide-media-right" style={{ border: 'none', background: 'transparent', boxShadow: 'none', padding: 0 }}>
-                  <div className="browser-mockup">
-                    <div className="browser-header">
-                      <div className="browser-dots">
-                        <span className="browser-dot red"></span>
-                        <span className="browser-dot yellow"></span>
-                        <span className="browser-dot green"></span>
-                      </div>
-                      <div className="browser-address">contentmachine.websolute.it/knowledge-base</div>
-                    </div>
-                    <div className="browser-body">
-                      {currentSlide === 4 ? (
-                        <LazyVideo src="assets/videos/screen_kb.mp4" className="lazy-video" />
-                      ) : (
-                        <div className="browser-fallback">
-                          <div className="fallback-logo">Knowledge Base</div>
-                          <p className="fallback-text">Ospita la registrazione dello schermo salvando il video come <strong>screen_kb.mp4</strong> in assets/videos/.</p>
-                          <div className="fallback-grid">
-                            <div className="fallback-grid-cell">DATA.PDF</div>
-                            <div className="fallback-grid-cell">BRAND.TXT</div>
-                            <div className="fallback-grid-cell">TONE.CSV</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                <div className="slide-media-right" style={{ border: 'none', background: 'transparent', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                  <KnowledgeGraph active={currentSlide === 4} />
                 </div>
               </div>
             </section>
@@ -754,35 +731,35 @@ export default function App() {
               <span className="slide-tag">Sicurezza, Garanzia & ROI</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4.5rem)', lineHeight: 1.1, marginBottom: '20px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
                     Compliance & ROI Concreto
                   </h2>
-                  <p className="concept-intro" style={{ fontSize: '1.6rem', color: '#ffffff', borderLeft: '3px solid var(--accent)', paddingLeft: '20px' }}>
+                  <p className="concept-intro" style={{ fontSize: '2.1rem', color: '#ffffff', borderLeft: '3px solid var(--accent)', paddingLeft: '20px', lineHeight: 1.4 }}>
                     Scalabilità sicura nel pieno rispetto dei regolamenti e della privacy.
                   </p>
                 </div>
-                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px' }}>
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '30px' }}>
                   <ul className="bullet-list" style={{ marginTop: 0, paddingLeft: 0, listStyle: 'none' }}>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         AI Act Compliant
                       </strong> 
                       Dati proprietari isolati e mai condivisi con LLM pubblici.
                     </li>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         Osservabilità & Audit
                       </strong> 
                       Tracciabilità completa con reasoning e log di approvazione per ciascun run.
                     </li>
-                    <li style={{ marginBottom: '16px' }}>
-                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.1rem', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    <li style={{ marginBottom: '20px', fontSize: '1.35rem' }}>
+                      <strong style={{ color: 'var(--accent)', display: 'block', fontSize: '1.5rem', textTransform: 'uppercase', marginBottom: '4px' }}>
                         Efficienza ROI
                       </strong> 
                       Riduzione dei costi operativi e sblocco del backlog di contenuti.
                     </li>
                   </ul>
-                  <div className="takeaway-box" style={{ marginTop: '10px' }}>
+                  <div className="takeaway-box" style={{ marginTop: '15px', fontSize: '1.5rem', padding: '16px 20px' }}>
                     Svolgere 100x the volume di contenuti con lo stesso budget o ridurre gli investimenti a parità di output.
                   </div>
                 </div>
@@ -841,86 +818,88 @@ export default function App() {
             {/* SLIDE 8: Progetto & Knowledge Base */}
             <section className={`slide ${currentSlide === 8 ? 'active' : ''}`} id="slide-8">
               <span className="slide-tag">Architettura e Valore</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.8vw, 3.8rem)', marginBottom: '20px' }}>
+              <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '15px' }}>
                 Il Dataset: L'Unità di Valore
               </h2>
-              <p style={{ color: 'var(--text-sec)', fontSize: '1.1rem', marginBottom: '30px' }}>
+              <p style={{ color: 'var(--text-sec)', fontSize: '1.45rem', marginBottom: '20px' }}>
                 Il dataset è la "struttura di contenuto" configurabile da cui nascono output coerenti e ripetibili.
               </p>
               
-              <div className="workflow-grid" style={{ marginTop: '10px' }}>
-                <div className="workflow-card" style={{ minHeight: '240px', padding: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '15px', marginTop: '2vh' }}>
+                
+                {/* 01. Input */}
+                <div className="workflow-card" style={{ flex: 1, minHeight: '280px', padding: '30px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <div className="step-num">01</div>
-                    <h3 className="step-title">Input</h3>
-                    <p className="step-desc">Testi, numeri, immagini, PDF, tabelle e flag, con analisi AI vision e comprensione documenti.</p>
+                    <div className="step-num" style={{ fontSize: '3.5rem', color: 'var(--accent)', opacity: 0.8, marginBottom: '15px' }}>01</div>
+                    <h3 className="step-title" style={{ fontSize: '1.6rem', marginBottom: '12px' }}>Input</h3>
+                    <p className="step-desc" style={{ fontSize: '1.15rem', color: 'var(--text-sec)', lineHeight: 1.45 }}>
+                      Testi, numeri, immagini, PDF, tabelle e flag, con analisi AI vision e comprensione documenti.
+                    </p>
                   </div>
                 </div>
-                <div className="workflow-card" style={{ minHeight: '240px', padding: '24px' }}>
+
+                <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--accent)', padding: '0 10px' }}>+</div>
+
+                {/* 02. Mental Model */}
+                <div className="workflow-card" style={{ flex: 1, minHeight: '280px', padding: '30px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <div className="step-num">02</div>
-                    <h3 className="step-title">Output</h3>
-                    <p className="step-desc">Testi, HTML, immagini generate, calcoli numerici, flag booleani con dipendenze tra campi.</p>
+                    <div className="step-num" style={{ fontSize: '3.5rem', color: 'var(--accent)', opacity: 0.8, marginBottom: '15px' }}>02</div>
+                    <h3 className="step-title" style={{ fontSize: '1.6rem', marginBottom: '12px' }}>Mental Model</h3>
+                    <p className="step-desc" style={{ fontSize: '1.15rem', color: 'var(--text-sec)', lineHeight: 1.45 }}>
+                      Prompting parametrico, regole, dipendenze logiche e sequenze di round che definiscono il ragionamento.
+                    </p>
                   </div>
                 </div>
-                <div className="workflow-card" style={{ minHeight: '240px', padding: '24px' }}>
+
+                <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--accent)', padding: '0 10px' }}>+</div>
+
+                {/* 03. Knowledge Base */}
+                <div className="workflow-card" style={{ flex: 1, minHeight: '280px', padding: '30px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <div className="step-num">03</div>
-                    <h3 className="step-title">Mental Model</h3>
-                    <p className="step-desc">Prompting parametrico, regole, dipendenze logiche e sequenze di round che definiscono il ragionamento.</p>
+                    <div className="step-num" style={{ fontSize: '3.5rem', color: 'var(--accent)', opacity: 0.8, marginBottom: '15px' }}>03</div>
+                    <h3 className="step-title" style={{ fontSize: '1.6rem', marginBottom: '12px' }}>Knowledge Base</h3>
+                    <p className="step-desc" style={{ fontSize: '1.15rem', color: 'var(--text-sec)', lineHeight: 1.45 }}>
+                      Manuali, schede storiche, cataloghi, dati PIM, asset DAM e policy commerciali e di brand.
+                    </p>
                   </div>
                 </div>
-                <div className="workflow-card" style={{ minHeight: '240px', padding: '24px' }}>
+
+                <div style={{ fontSize: '3.5rem', fontWeight: 800, color: '#00ffaa', padding: '0 10px' }}>=</div>
+
+                {/* 04. Output */}
+                <div className="workflow-card" style={{ flex: 1, minHeight: '280px', padding: '30px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '2px solid #00ffaa', boxShadow: '0 0 20px rgba(0, 255, 170, 0.15)' }}>
                   <div>
-                    <div className="step-num">04</div>
-                    <h3 className="step-title">Knowledge Base</h3>
-                    <p className="step-desc">Manuali, schede storiche, cataloghi, dati PIM, asset DAM e policy commerciali e di brand.</p>
+                    <div className="step-num" style={{ fontSize: '3.5rem', color: '#00ffaa', opacity: 0.8, marginBottom: '15px' }}>04</div>
+                    <h3 className="step-title" style={{ fontSize: '1.6rem', marginBottom: '12px', color: '#00ffaa' }}>Output</h3>
+                    <p className="step-desc" style={{ fontSize: '1.15rem', color: 'var(--text-sec)', lineHeight: 1.45 }}>
+                      Testi, HTML, immagini generate, calcoli numerici, flag booleani con dipendenze tra campi.
+                    </p>
                   </div>
                 </div>
+
               </div>
             </section>
 
             {/* SLIDE 9: Traduzione, Vision & Intelligence */}
-            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9">
+            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9" style={{ textAlign: 'center' }}>
               <span className="slide-tag">Funzionalità Avanzate</span>
-              <div className="slide-layout-split">
-                <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.8vw, 3.8rem)', marginBottom: '20px' }}>
-                    Multilingue Aware & Vision
-                  </h2>
-                  <p className="concept-intro">Elaborazione intelligente di testi, lingue e asset visivi integrata.</p>
-                  <ul className="bullet-list">
-                    <li><strong>Localizzazione Aware:</strong> La traduzione rispetta tono, stile, terminologia specifica (glossario) e convenzioni locali del brand.</li>
-                    <li><strong>Vision Specializzata:</strong> Analisi di immagini con prompt per materiali, finiture, colori, guidando descrizioni e copy coerenti.</li>
-                    <li><strong>PDF & Document Intelligence:</strong> Estrazione automatica di testi, numeri e tabelle da manuali e schede tecniche complesse.</li>
-                  </ul>
+              <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '15px', maxWidth: '100%', margin: '0 auto' }}>
+                Multilingue Aware & Vision
+              </h2>
+              <p className="concept-intro" style={{ fontSize: '1.8rem', color: 'var(--text-sec)', marginBottom: '30px' }}>Elaborazione intelligente di testi, lingue e asset visivi integrata.</p>
+              
+              <div style={{ display: 'flex', gap: '30px', marginTop: '2vh', width: '100%', justifyContent: 'center' }}>
+                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>Localizzazione Aware</h3>
+                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>La traduzione rispetta tono, stile, terminologia specifica (glossario) e convenzioni locali del brand.</p>
                 </div>
-                <div className="slide-media-right" style={{ border: 'none', background: 'transparent', boxShadow: 'none', padding: 0 }}>
-                  <div className="browser-mockup">
-                    <div className="browser-header">
-                      <div className="browser-dots">
-                        <span className="browser-dot red"></span>
-                        <span className="browser-dot yellow"></span>
-                        <span className="browser-dot green"></span>
-                      </div>
-                      <div className="browser-address">contentmachine.websolute.it/document-intelligence</div>
-                    </div>
-                    <div className="browser-body">
-                      {currentSlide === 9 ? (
-                        <LazyVideo src="assets/videos/screen_vision.mp4" className="lazy-video" />
-                      ) : (
-                        <div className="browser-fallback">
-                          <div className="fallback-logo">Vision & Docs</div>
-                          <p className="fallback-text">Ospita la registrazione dello schermo salvando il video come <strong>screen_vision.mp4</strong> in assets/videos/.</p>
-                          <div className="fallback-grid">
-                            <div className="fallback-grid-cell">VISION</div>
-                            <div className="fallback-grid-cell">OCR</div>
-                            <div className="fallback-grid-cell">GLOSSARY</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>Vision Specializzata</h3>
+                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>Analisi di immagini con prompt per materiali, finiture, colori, guidando descrizioni e copy coerenti.</p>
+                </div>
+                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>PDF & Docs</h3>
+                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>Estrazione automatica di testi, numeri e tabelle da manuali e schede tecniche complesse.</p>
                 </div>
               </div>
             </section>
@@ -957,7 +936,7 @@ export default function App() {
                     <div className="matrix-desc">Combinazioni creative potenziali</div>
                   </div>
                   <div className="matrix-stat" style={{ borderTop: '1px solid var(--border-light)', paddingTop: '20px' }}>
-                    <div className="matrix-number" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)' }}>3 minuti</div>
+                    <div className="matrix-number" style={{ fontSize: 'clamp(3.5rem, 6.5vw, 6.5rem)', color: 'var(--accent)' }}>45 minuti</div>
                     <div className="matrix-desc">Tempo di esecuzione per 30 campagne multicanale complete</div>
                   </div>
                 </div>

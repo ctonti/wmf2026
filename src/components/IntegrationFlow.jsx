@@ -54,7 +54,7 @@ export default function IntegrationFlow({ active }) {
         from: fromNode,
         to: toNode,
         progress: 0,
-        speed: 0.005 + Math.random() * 0.004,
+        speed: 0.004 + Math.random() * 0.003,
         color: color || '#00aeff',
         bidirectionalDir
       });
@@ -119,11 +119,11 @@ export default function IntegrationFlow({ active }) {
       }
 
       const coreCoords = getCoords(nodes.core);
-      const coreW = 160;
-      const coreH = 80;
+      const coreW = 280;
+      const coreH = 130;
 
-      // Draw connection lines
-      ctx.lineWidth = 1.5;
+      // Draw connection lines (Thicker for remote screen)
+      ctx.lineWidth = 3.0;
 
       // Inputs connections
       nodes.inputs.forEach(input => {
@@ -145,7 +145,7 @@ export default function IntegrationFlow({ active }) {
         ctx.stroke();
       });
 
-      // Draw pulses
+      // Draw pulses (Larger for visibility)
       state.pulses.forEach(p => {
         let startCoords, endCoords;
         if (p.from === 'core') {
@@ -164,65 +164,65 @@ export default function IntegrationFlow({ active }) {
 
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 10;
         ctx.beginPath();
-        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+        ctx.arc(px, py, 6.0, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
         // Trail
         ctx.strokeStyle = p.color;
-        ctx.lineWidth = 1.5;
-        ctx.globalAlpha = 0.25;
+        ctx.lineWidth = 3.0;
+        ctx.globalAlpha = 0.3;
         ctx.beginPath();
-        ctx.moveTo(px - (endCoords.x - startCoords.x) * 0.06, py - (endCoords.y - startCoords.y) * 0.06);
+        ctx.moveTo(px - (endCoords.x - startCoords.x) * 0.08, py - (endCoords.y - startCoords.y) * 0.08);
         ctx.lineTo(px, py);
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       });
 
-      // Central Core Box
+      // Central Core Box (Larger for remote screen)
       const coreX = coreCoords.x - coreW / 2;
       const coreY = coreCoords.y - coreH / 2;
 
       ctx.fillStyle = '#121212';
       ctx.fillRect(coreX, coreY, coreW, coreH);
       ctx.strokeStyle = '#222222';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2;
       ctx.strokeRect(coreX, coreY, coreW, coreH);
 
       if (state.corePulseVal > 0) {
         ctx.strokeStyle = `rgba(0, 174, 255, ${state.corePulseVal})`;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 3;
         ctx.shadowColor = '#00aeff';
-        ctx.shadowBlur = 10 * state.corePulseVal;
+        ctx.shadowBlur = 15 * state.corePulseVal;
         ctx.strokeRect(coreX, coreY, coreW, coreH);
         ctx.shadowBlur = 0;
       }
 
-      ctx.font = '800 10px Figtree, sans-serif';
+      ctx.font = '800 18px Figtree, sans-serif';
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
-      ctx.fillText('CONTENT MACHINE', coreCoords.x, coreCoords.y - 10);
+      ctx.fillText('CONTENT MACHINE', coreCoords.x, coreCoords.y - 15);
 
-      ctx.font = '800 7px Figtree, sans-serif';
+      ctx.font = '800 12px Figtree, sans-serif';
       ctx.fillStyle = '#00aeff';
-      ctx.fillText('CORE ENGINE', coreCoords.x, coreCoords.y + 2);
+      ctx.fillText('CORE ENGINE', coreCoords.x, coreCoords.y + 8);
 
       const statusColor = state.corePulseVal > 0.2 ? '#00aeff' : '#333333';
       ctx.fillStyle = statusColor;
       ctx.beginPath();
-      ctx.arc(coreCoords.x - 38, coreCoords.y + 16, 2.5, 0, Math.PI * 2);
+      ctx.arc(coreCoords.x - 55, coreCoords.y + 35, 4.0, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.font = '400 7px monospace';
+      ctx.font = '400 11px monospace';
       ctx.fillStyle = state.corePulseVal > 0.2 ? '#ffffff' : '#71717a';
       ctx.textAlign = 'left';
-      ctx.fillText(state.corePulseVal > 0.2 ? 'PROCESSING' : 'SYSTEM IDLE', coreCoords.x - 30, coreCoords.y + 18);
+      ctx.fillText(state.corePulseVal > 0.2 ? 'PROCESSING' : 'SYSTEM IDLE', coreCoords.x - 45, coreCoords.y + 38);
 
-      // Input Boxes
-      const boxW = 100;
-      const boxH = 40;
+      // Input / Output Boxes (Larger and centered texts)
+      const boxW = 180;
+      const boxH = 65;
       ctx.textAlign = 'center';
 
       nodes.inputs.forEach(input => {
@@ -233,19 +233,18 @@ export default function IntegrationFlow({ active }) {
         ctx.fillStyle = '#121212';
         ctx.fillRect(bx, by, boxW, boxH);
         ctx.strokeStyle = '#222222';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1.5;
         ctx.strokeRect(bx, by, boxW, boxH);
 
-        ctx.font = '800 9px Figtree, sans-serif';
+        ctx.font = '800 16px Figtree, sans-serif';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(input.label, coords.x, coords.y - 3);
 
-        ctx.font = '400 7px Figtree, sans-serif';
+        ctx.font = '400 11px Figtree, sans-serif';
         ctx.fillStyle = 'rgba(0, 174, 255, 0.7)';
-        ctx.fillText(input.desc, coords.x, coords.y + 7);
+        ctx.fillText(input.desc, coords.x, coords.y + 13);
       });
 
-      // Output Boxes
       nodes.outputs.forEach(output => {
         const coords = getCoords(output);
         const bx = coords.x - boxW / 2;
@@ -254,16 +253,16 @@ export default function IntegrationFlow({ active }) {
         ctx.fillStyle = '#121212';
         ctx.fillRect(bx, by, boxW, boxH);
         ctx.strokeStyle = '#222222';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1.5;
         ctx.strokeRect(bx, by, boxW, boxH);
 
-        ctx.font = '800 9px Figtree, sans-serif';
+        ctx.font = '800 16px Figtree, sans-serif';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(output.label, coords.x, coords.y - 3);
 
-        ctx.font = '400 7px Figtree, sans-serif';
+        ctx.font = '400 11px Figtree, sans-serif';
         ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.fillText(output.desc, coords.x, coords.y + 7);
+        ctx.fillText(output.desc, coords.x, coords.y + 13);
       });
     }
 
@@ -296,7 +295,7 @@ export default function IntegrationFlow({ active }) {
   return (
     <canvas
       ref={canvasRef}
-      style={{ width: '100%', height: '450px', display: 'block' }}
+      style={{ width: '100%', height: '520px', display: 'block' }}
     />
   );
 }
