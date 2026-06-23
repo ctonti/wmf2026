@@ -101,20 +101,30 @@ export default function App() {
         return;
       }
 
-      if (e.key === 'ArrowRight' || e.key === 'Space' || e.code === 'Space') {
+      const isNextKey = ['ArrowRight', 'ArrowDown', 'PageDown', 'Space', 'Enter'].includes(e.key) || e.code === 'Space';
+      const isPrevKey = ['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key);
+
+      if (activeCampaign !== null) {
+        // If drawer is open, any navigation key or Escape will close it
+        if (isNextKey || isPrevKey || e.key === 'Escape') {
+          e.preventDefault();
+          setActiveCampaign(null);
+        }
+        return;
+      }
+
+      if (isNextKey) {
         e.preventDefault();
         handleNext();
-      } else if (e.key === 'ArrowLeft') {
+      } else if (isPrevKey) {
         e.preventDefault();
         handlePrev();
-      } else if (e.key === 'Escape') {
-        setActiveCampaign(null);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide, viewMode]);
+  }, [currentSlide, viewMode, activeCampaign]);
 
   const handleNext = () => {
     if (viewMode === 'slides') {
