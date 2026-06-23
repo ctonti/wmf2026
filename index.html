@@ -3520,6 +3520,15 @@
             
             currentSlide = index;
             updateBottomBar();
+
+            // Restart Slide 1 video if active
+            if (index === 1) {
+                const video = document.querySelector('#slide-1 video');
+                if (video) {
+                    video.currentTime = 0;
+                    video.play().catch(function() {});
+                }
+            }
         }
 
         function nextSlide() {

@@ -166,7 +166,15 @@ export default function App() {
   }, []);
 
   const gridRef = useRef(null);
+  const slide1VideoRef = useRef(null);
   const [gridTransform, setGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
+
+  useEffect(() => {
+    if (currentSlide === 1 && slide1VideoRef.current) {
+      slide1VideoRef.current.currentTime = 0;
+      slide1VideoRef.current.play().catch(() => {});
+    }
+  }, [currentSlide]);
 
   useEffect(() => {
     const updateTransform = () => {
@@ -599,7 +607,7 @@ export default function App() {
 
             {/* SLIDE 1: websolute video */}
             <section className={`slide ${currentSlide === 1 ? 'active' : ''}`} id="slide-1" style={{ padding: 0, position: 'relative', overflow: 'hidden', background: '#000' }}>
-              <video autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
+              <video ref={slide1VideoRef} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
                 <source src="https://www.websolute.com/oven/media/AI-first%20Digital%20Agency%20-%20Vision%20to%20Growth%20-%20cut.webm" type="video/webm" />
               </video>
             </section>
