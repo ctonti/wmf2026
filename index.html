@@ -1481,7 +1481,7 @@
             <!-- SLIDE 5: Time to Content & Sistemi -->
             <section class="slide" id="slide-4">
                 <span class="slide-tag">Time to Market & Integrazione</span>
-                <div class="slide-layout-split">
+                <div class="slide-layout-split" style="grid-template-columns: 1fr 1.4fr;">
                     <div class="slide-content-left">
                         <h2 class="slide-title" style="font-size: clamp(2rem, 3.8vw, 3.8rem); margin-bottom: 20px;">Da Settimane a Minuti</h2>
                         <p class="concept-intro">Abbattimento radicale del tempo di rilascio e integrazione profonda.</p>
@@ -1493,325 +1493,284 @@
                             Non un tool isolato, ma il motore di contenuti della vostra infrastruttura digitale.
                         </div>
                     </div>
-                    <div class="slide-media-right" style="border: none; background: transparent; box-shadow: none; padding: 0;">
-                        <div class="browser-mockup">
-                            <div class="browser-header">
-                                <div class="browser-dots">
-                                    <span class="browser-dot red"></span>
-                                    <span class="browser-dot yellow"></span>
-                                    <span class="browser-dot green"></span>
-                                </div>
-                                <div class="browser-address">contentmachine.websolute.it/integrations</div>
-                            </div>
-                            <div class="browser-body" style="background: #050505; overflow: hidden; position: relative;">
-                                <canvas id="integration-3d-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"></canvas>
-                                <script>
-                                    (function() {
-                                        const canvas = document.getElementById('integration-3d-canvas');
-                                        if (!canvas) return;
-                                        const ctx = canvas.getContext('2d');
-                                        const slide = document.getElementById('slide-4');
+                    <div class="slide-media-right" style="border: none; background: transparent; box-shadow: none; padding: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <canvas id="integration-flow-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"></canvas>
+                        <script>
+                            (function() {
+                                const canvas = document.getElementById('integration-flow-canvas');
+                                if (!canvas) return;
+                                const ctx = canvas.getContext('2d');
+                                const slide = document.getElementById('slide-4');
+                                
+                                let width = 0, height = 0;
+                                let centerX = 0, centerY = 0;
+                                
+                                function resize() {
+                                    const rect = canvas.getBoundingClientRect();
+                                    if (rect.width === 0 || rect.height === 0) return;
+                                    width = rect.width;
+                                    height = rect.height;
+                                    const dpr = window.devicePixelRatio || 1;
+                                    canvas.width = width * dpr;
+                                    canvas.height = height * dpr;
+                                    ctx.scale(dpr, dpr);
+                                    centerX = width / 2;
+                                    centerY = height / 2;
+                                }
+                                
+                                window.addEventListener('resize', resize);
+                                
+                                const nodes = {
+                                    inputs: [
+                                        { id: 'pim', label: 'PIM', desc: 'Dati Tecnici', xPct: 0.15, yPct: 0.22 },
+                                        { id: 'dam', label: 'DAM', desc: 'Asset Visual', xPct: 0.15, yPct: 0.50 },
+                                        { id: 'erp', label: 'ERP / CRM', desc: 'Listini & Stock', xPct: 0.15, yPct: 0.78 }
+                                    ],
+                                    core: { id: 'core', label: 'CONTENT MACHINE', desc: 'CORE ENGINE', xPct: 0.5, yPct: 0.5 },
+                                    outputs: [
+                                        { id: 'ecom', label: 'E-COMMERCE', desc: 'Shopify / Magento', xPct: 0.85, yPct: 0.22 },
+                                        { id: 'wall', label: 'VISUAL WALL', desc: 'Proiezione WMF', xPct: 0.85, yPct: 0.50 },
+                                        { id: 'api', label: 'API GATEWAY', desc: 'Headless Delivery', xPct: 0.85, yPct: 0.78 }
+                                    ]
+                                };
+                                
+                                const pulses = [];
+                                
+                                function spawnPulse(fromNode, toNode, color, bidirectionalDir = 1) {
+                                    pulses.push({
+                                        from: fromNode,
+                                        to: toNode,
+                                        progress: 0,
+                                        speed: 0.005 + Math.random() * 0.004,
+                                        color: color || '#00aeff',
+                                        bidirectionalDir: bidirectionalDir
+                                    });
+                                }
+                                
+                                let lastTime = 0;
+                                let corePulseVal = 0;
+                                
+                                function update(time) {
+                                    if (!lastTime || (time - lastTime > 100)) lastTime = time;
+                                    const dt = time - lastTime;
+                                    lastTime = time;
+                                    
+                                    if (corePulseVal > 0) {
+                                        corePulseVal -= 0.002 * dt;
+                                        if (corePulseVal < 0) corePulseVal = 0;
+                                    }
+                                    
+                                    for (let i = pulses.length - 1; i >= 0; i--) {
+                                        const p = pulses[i];
+                                        p.progress += p.speed * (dt / 16.67);
                                         
-                                        let width = 0, height = 0;
-                                        let centerX = 0, centerY = 0;
-                                        
-                                        function resize() {
-                                            const rect = canvas.getBoundingClientRect();
-                                            if (rect.width === 0 || rect.height === 0) return;
-                                            width = rect.width;
-                                            height = rect.height;
-                                            const dpr = window.devicePixelRatio || 1;
-                                            canvas.width = width * dpr;
-                                            canvas.height = height * dpr;
-                                            ctx.scale(dpr, dpr);
-                                            centerX = width / 2;
-                                            centerY = height / 2;
-                                        }
-                                        
-                                        window.addEventListener('resize', resize);
-                                        resize();
-                                        
-                                        // Core central nodes in 3D
-                                        const nodes = [];
-                                        const numNodes = 30;
-                                        const sphereRadius = 75;
-                                        
-                                        for (let i = 0; i < numNodes; i++) {
-                                            const theta = Math.acos(Math.random() * 2 - 1);
-                                            const phi = Math.random() * Math.PI * 2;
-                                            nodes.push({
-                                                x: sphereRadius * Math.sin(theta) * Math.cos(phi),
-                                                y: sphereRadius * Math.sin(theta) * Math.sin(phi),
-                                                z: sphereRadius * Math.cos(theta),
-                                                color: 'rgba(0, 174, 255, 0.8)'
-                                            });
-                                        }
-                                        
-                                        const leftGateway = { x: -160, y: 0, z: 0, label: 'INPUT: PIM / DAM / ERP' };
-                                        const rightGateway = { x: 160, y: 0, z: 0, label: 'OUTPUT: API / MCP OUT' };
-                                        
-                                        const packets = [];
-                                        const maxPackets = 12;
-                                        
-                                        function spawnPacket(direction) {
-                                            const start = direction === 1 ? leftGateway : rightGateway;
-                                            const end = direction === 1 ? rightGateway : leftGateway;
-                                            const intermediate = nodes[Math.floor(Math.random() * nodes.length)];
-                                            
-                                            packets.push({
-                                                stage: 0, 
-                                                x: start.x,
-                                                y: start.y,
-                                                z: start.z,
-                                                startX: start.x,
-                                                startY: start.y,
-                                                startZ: start.z,
-                                                midX: intermediate.x,
-                                                midY: intermediate.y,
-                                                midZ: intermediate.z,
-                                                endX: end.x,
-                                                endY: end.y,
-                                                endZ: end.z,
-                                                progress: 0,
-                                                speed: 0.008 + Math.random() * 0.012,
-                                                size: 2 + Math.random() * 2.5,
-                                                color: direction === 1 ? '#00aeff' : '#ffffff',
-                                                trail: []
-                                            });
-                                        }
-                                        
-                                        let lastTime = 0;
-                                        const focalLength = 220;
-                                        
-                                        function update(time) {
-                                            if (!lastTime || (time - lastTime > 100)) {
-                                                lastTime = time;
-                                            }
-                                            const dt = time - lastTime;
-                                            lastTime = time;
-                                            
-                                            const rx = 0.0003 * dt;
-                                            const ry = 0.0005 * dt;
-                                            
-                                            const cosX = Math.cos(rx), sinX = Math.sin(rx);
-                                            const cosY = Math.cos(ry), sinY = Math.sin(ry);
-                                            
-                                            nodes.forEach(n => {
-                                                let x1 = n.x * cosY - n.z * sinY;
-                                                let z1 = n.z * cosY + n.x * sinY;
-                                                let y2 = n.y * cosX - z1 * sinX;
-                                                let z2 = z1 * cosX + n.y * sinX;
+                                        if (p.progress >= 1) {
+                                            if (p.to === 'core') {
+                                                corePulseVal = 1.0;
                                                 
-                                                n.x = x1;
-                                                n.y = y2;
-                                                n.z = z2;
-                                            });
-                                            
-                                            // Update packet position targeting intermediate node's current pos
-                                            for (let i = packets.length - 1; i >= 0; i--) {
-                                                const p = packets[i];
-                                                
-                                                p.trail.push({ x: p.x, y: p.y, z: p.z });
-                                                if (p.trail.length > 6) p.trail.shift();
-                                                
-                                                p.progress += p.speed;
-                                                if (p.progress >= 1) {
-                                                    if (p.stage === 0) {
-                                                        p.stage = 1;
-                                                        p.progress = 0;
-                                                        p.startX = p.x;
-                                                        p.startY = p.y;
-                                                        p.startZ = p.z;
-                                                    } else {
-                                                        packets.splice(i, 1);
-                                                        continue;
+                                                setTimeout(() => {
+                                                    if (slide && slide.classList.contains('active') && Math.random() < 0.75) {
+                                                        const outNodes = ['ecom', 'wall', 'api'];
+                                                        const target = outNodes[Math.floor(Math.random() * outNodes.length)];
+                                                        spawnPulse('core', target, '#00aeff');
                                                     }
-                                                }
-                                                
-                                                const t = p.progress;
-                                                const smoothT = t * t * (3 - 2 * t);
-                                                
-                                                if (p.stage === 0) {
-                                                    // Follow the rotating node current coords
-                                                    p.x = p.startX + (p.midX - p.startX) * smoothT;
-                                                    p.y = p.startY + (p.midY - p.startY) * smoothT;
-                                                    p.z = p.startZ + (p.midZ - p.startZ) * smoothT;
-                                                } else {
-                                                    p.x = p.startX + (p.endX - p.startX) * smoothT;
-                                                    p.y = p.startY + (p.endY - p.startY) * smoothT;
-                                                    p.z = p.startZ + (p.endZ - p.startZ) * smoothT;
-                                                }
+                                                }, 150);
                                             }
-                                            
-                                            if (packets.length < maxPackets && Math.random() < 0.06) {
-                                                const direction = Math.random() > 0.3 ? 1 : -1;
-                                                spawnPacket(direction);
+                                            pulses.splice(i, 1);
+                                        }
+                                    }
+                                    
+                                    if (Math.random() < 0.025) {
+                                        const inputs = ['pim', 'dam', 'erp'];
+                                        const source = inputs[Math.floor(Math.random() * inputs.length)];
+                                        
+                                        if (source === 'erp') {
+                                            const dir = Math.random() > 0.4 ? 1 : -1;
+                                            if (dir === 1) {
+                                                spawnPulse('erp', 'core', '#00aeff');
+                                            } else {
+                                                spawnPulse('core', 'erp', '#ffffff', -1);
                                             }
+                                        } else {
+                                            spawnPulse(source, 'core', '#00aeff');
+                                        }
+                                    }
+                                }
+                                
+                                function draw() {
+                                    ctx.fillStyle = '#050505';
+                                    ctx.fillRect(0, 0, width, height);
+                                    
+                                    function getCoords(nodeSpec) {
+                                        return {
+                                            x: nodeSpec.xPct * width,
+                                            y: nodeSpec.yPct * height
+                                        };
+                                    }
+                                    
+                                    const coreCoords = getCoords(nodes.core);
+                                    const coreW = 160;
+                                    const coreH = 80;
+                                    
+                                    // Draw connection lines
+                                    ctx.lineWidth = 1.5;
+                                    
+                                    // Inputs connections
+                                    nodes.inputs.forEach(input => {
+                                        const start = getCoords(input);
+                                        ctx.beginPath();
+                                        ctx.moveTo(start.x, start.y);
+                                        ctx.lineTo(coreCoords.x, coreCoords.y);
+                                        ctx.strokeStyle = '#222222';
+                                        ctx.stroke();
+                                    });
+                                    
+                                    // Outputs connections
+                                    nodes.outputs.forEach(output => {
+                                        const end = getCoords(output);
+                                        ctx.beginPath();
+                                        ctx.moveTo(coreCoords.x, coreCoords.y);
+                                        ctx.lineTo(end.x, end.y);
+                                        ctx.strokeStyle = '#222222';
+                                        ctx.stroke();
+                                    });
+                                    
+                                    // Draw pulses
+                                    pulses.forEach(p => {
+                                        let startCoords, endCoords;
+                                        if (p.from === 'core') {
+                                            startCoords = coreCoords;
+                                            const destNode = nodes.outputs.find(n => n.id === p.to) || nodes.inputs.find(n => n.id === p.to);
+                                            endCoords = getCoords(destNode);
+                                        } else {
+                                            const srcNode = nodes.inputs.find(n => n.id === p.from);
+                                            startCoords = getCoords(srcNode);
+                                            endCoords = coreCoords;
                                         }
                                         
-                                        function draw() {
-                                            ctx.fillStyle = '#050505';
-                                            ctx.fillRect(0, 0, width, height);
-                                            
-                                            function project(x, y, z) {
-                                                const scale = focalLength / (focalLength + z);
-                                                return {
-                                                    x: centerX + x * scale,
-                                                    y: centerY + y * scale,
-                                                    scale: scale
-                                                };
-                                            }
-                                            
-                                            const renderList = [];
-                                            nodes.forEach((n, idx) => {
-                                                renderList.push({ type: 'node', z: n.z, obj: n, id: idx });
-                                            });
-                                            packets.forEach(p => {
-                                                renderList.push({ type: 'packet', z: p.z, obj: p });
-                                            });
-                                            
-                                            renderList.sort((a, b) => b.z - a.z);
-                                            
-                                            ctx.lineWidth = 0.5;
-                                            for (let i = 0; i < nodes.length; i++) {
-                                                for (let j = i + 1; j < nodes.length; j++) {
-                                                    const dx = nodes[i].x - nodes[j].x;
-                                                    const dy = nodes[i].y - nodes[j].y;
-                                                    const dz = nodes[i].z - nodes[j].z;
-                                                    const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                                                    
-                                                    if (dist < 75) {
-                                                        const p1 = project(nodes[i].x, nodes[i].y, nodes[i].z);
-                                                        const p2 = project(nodes[j].x, nodes[j].y, nodes[j].z);
-                                                        const alpha = (1 - dist / 75) * 0.12 * Math.min(p1.scale, p2.scale);
-                                                        ctx.strokeStyle = `rgba(0, 174, 255, ${alpha})`;
-                                                        ctx.beginPath();
-                                                        ctx.moveTo(p1.x, p1.y);
-                                                        ctx.lineTo(p2.x, p2.y);
-                                                        ctx.stroke();
-                                                    }
-                                                }
-                                            }
-                                            
-                                            const pLeft = project(leftGateway.x, leftGateway.y, leftGateway.z);
-                                            const pRight = project(rightGateway.x, rightGateway.y, rightGateway.z);
-                                            
-                                            // Left gateway
-                                            ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-                                            ctx.strokeStyle = '#00aeff';
-                                            ctx.lineWidth = 1;
-                                            ctx.beginPath();
-                                            ctx.arc(pLeft.x, pLeft.y, 10 * pLeft.scale, 0, Math.PI * 2);
-                                            ctx.fill();
-                                            ctx.stroke();
-                                            
-                                            ctx.font = '700 8px Figtree, sans-serif';
-                                            ctx.fillStyle = 'rgba(0, 174, 255, 0.8)';
-                                            ctx.textAlign = 'center';
-                                            ctx.fillText('INPUT: PIM / DAM / ERP', pLeft.x, pLeft.y - 18 * pLeft.scale);
-                                            
-                                            // Right gateway
-                                            ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-                                            ctx.strokeStyle = '#ffffff';
-                                            ctx.beginPath();
-                                            ctx.arc(pRight.x, pRight.y, 10 * pRight.scale, 0, Math.PI * 2);
-                                            ctx.fill();
-                                            ctx.stroke();
-                                            
-                                            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                                            ctx.fillText('OUTPUT: API / MCP OUT', pRight.x, pRight.y - 18 * pRight.scale);
-                                            
-                                            // Gateway connector lines
-                                            nodes.forEach(n => {
-                                                const distL = Math.sqrt((n.x - leftGateway.x)**2 + (n.y - leftGateway.y)**2 + (n.z - leftGateway.z)**2);
-                                                if (distL < 130) {
-                                                    const p1 = project(leftGateway.x, leftGateway.y, leftGateway.z);
-                                                    const p2 = project(n.x, n.y, n.z);
-                                                    ctx.strokeStyle = `rgba(0, 174, 255, ${(1 - distL / 130) * 0.08})`;
-                                                    ctx.beginPath();
-                                                    ctx.moveTo(p1.x, p1.y);
-                                                    ctx.lineTo(p2.x, p2.y);
-                                                    ctx.stroke();
-                                                }
-                                                const distR = Math.sqrt((n.x - rightGateway.x)**2 + (n.y - rightGateway.y)**2 + (n.z - rightGateway.z)**2);
-                                                if (distR < 130) {
-                                                    const p1 = project(rightGateway.x, rightGateway.y, rightGateway.z);
-                                                    const p2 = project(n.x, n.y, n.z);
-                                                    ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - distR / 130) * 0.08})`;
-                                                    ctx.beginPath();
-                                                    ctx.moveTo(p1.x, p1.y);
-                                                    ctx.lineTo(p2.x, p2.y);
-                                                    ctx.stroke();
-                                                }
-                                            });
-                                            
-                                            renderList.forEach(item => {
-                                                const p = project(item.obj.x, item.obj.y, item.obj.z);
-                                                
-                                                if (item.type === 'node') {
-                                                    const size = 2 * p.scale;
-                                                    ctx.fillStyle = `rgba(0, 174, 255, ${p.scale * 0.65})`;
-                                                    ctx.beginPath();
-                                                    ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                                                    ctx.fill();
-                                                    
-                                                    if (p.scale > 0.8) {
-                                                        ctx.fillStyle = `rgba(0, 174, 255, ${p.scale * 0.12})`;
-                                                        ctx.beginPath();
-                                                        ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-                                                        ctx.fill();
-                                                    }
-                                                } else if (item.type === 'packet') {
-                                                    const size = item.obj.size * p.scale;
-                                                    
-                                                    if (item.obj.trail.length > 1) {
-                                                        ctx.beginPath();
-                                                        const pStart = project(item.obj.trail[0].x, item.obj.trail[0].y, item.obj.trail[0].z);
-                                                        ctx.moveTo(pStart.x, pStart.y);
-                                                        for (let k = 1; k < item.obj.trail.length; k++) {
-                                                            const pMid = project(item.obj.trail[k].x, item.obj.trail[k].y, item.obj.trail[k].z);
-                                                            ctx.lineTo(pMid.x, pMid.y);
-                                                        }
-                                                        ctx.strokeStyle = item.obj.color;
-                                                        ctx.lineWidth = size * 0.6;
-                                                        ctx.globalAlpha = 0.25;
-                                                        ctx.stroke();
-                                                        ctx.globalAlpha = 1.0;
-                                                    }
-                                                    
-                                                    ctx.fillStyle = item.obj.color;
-                                                    ctx.beginPath();
-                                                    ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                                                    ctx.fill();
-                                                }
-                                            });
-                                            
-                                            const pCenter = project(0, 0, 0);
-                                            ctx.font = '900 9px Figtree, sans-serif';
-                                            ctx.fillStyle = '#ffffff';
-                                            ctx.textAlign = 'center';
-                                            ctx.fillText('CONTENT MACHINE CORE', pCenter.x, pCenter.y + 90 * pCenter.scale);
-                                            ctx.font = '400 7px monospace';
-                                            ctx.fillStyle = 'rgba(0, 174, 255, 0.65)';
-                                            ctx.fillText('INTEGRATION BUS: BIDIRECTIONAL', pCenter.x, pCenter.y + 102 * pCenter.scale);
-                                        }
+                                        const t = p.progress;
+                                        const px = startCoords.x + (endCoords.x - startCoords.x) * t;
+                                        const py = startCoords.y + (endCoords.y - startCoords.y) * t;
                                         
-                                        function loop(time) {
-                                            if (slide && slide.classList.contains('active')) {
-                                                const rect = canvas.getBoundingClientRect();
-                                                if (rect.width !== width || rect.height !== height) {
-                                                    resize();
-                                                }
-                                                update(time);
-                                                draw();
-                                            }
-                                            requestAnimationFrame(loop);
+                                        ctx.fillStyle = p.color;
+                                        ctx.shadowColor = p.color;
+                                        ctx.shadowBlur = 6;
+                                        ctx.beginPath();
+                                        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+                                        ctx.fill();
+                                        ctx.shadowBlur = 0;
+                                        
+                                        // Trail
+                                        ctx.strokeStyle = p.color;
+                                        ctx.lineWidth = 1.5;
+                                        ctx.globalAlpha = 0.25;
+                                        ctx.beginPath();
+                                        ctx.moveTo(px - (endCoords.x - startCoords.x) * 0.06, py - (endCoords.y - startCoords.y) * 0.06);
+                                        ctx.lineTo(px, py);
+                                        ctx.stroke();
+                                        ctx.globalAlpha = 1.0;
+                                    });
+                                    
+                                    // Central Core Box
+                                    const coreX = coreCoords.x - coreW / 2;
+                                    const coreY = coreCoords.y - coreH / 2;
+                                    
+                                    ctx.fillStyle = '#121212';
+                                    ctx.fillRect(coreX, coreY, coreW, coreH);
+                                    ctx.strokeStyle = '#222222';
+                                    ctx.lineWidth = 1;
+                                    ctx.strokeRect(coreX, coreY, coreW, coreH);
+                                    
+                                    if (corePulseVal > 0) {
+                                        ctx.strokeStyle = `rgba(0, 174, 255, ${corePulseVal})`;
+                                        ctx.lineWidth = 1.5;
+                                        ctx.shadowColor = '#00aeff';
+                                        ctx.shadowBlur = 10 * corePulseVal;
+                                        ctx.strokeRect(coreX, coreY, coreW, coreH);
+                                        ctx.shadowBlur = 0;
+                                    }
+                                    
+                                    ctx.font = '800 10px Figtree, sans-serif';
+                                    ctx.fillStyle = '#ffffff';
+                                    ctx.textAlign = 'center';
+                                    ctx.fillText('CONTENT MACHINE', coreCoords.x, coreCoords.y - 10);
+                                    
+                                    ctx.font = '800 7px Figtree, sans-serif';
+                                    ctx.fillStyle = '#00aeff';
+                                    ctx.fillText('CORE ENGINE', coreCoords.x, coreCoords.y + 2);
+                                    
+                                    const statusColor = corePulseVal > 0.2 ? '#00aeff' : '#333333';
+                                    ctx.fillStyle = statusColor;
+                                    ctx.beginPath();
+                                    ctx.arc(coreCoords.x - 38, coreCoords.y + 16, 2.5, 0, Math.PI * 2);
+                                    ctx.fill();
+                                    
+                                    ctx.font = '400 7px monospace';
+                                    ctx.fillStyle = corePulseVal > 0.2 ? '#ffffff' : '#71717a';
+                                    ctx.textAlign = 'left';
+                                    ctx.fillText(corePulseVal > 0.2 ? 'PROCESSING' : 'SYSTEM IDLE', coreCoords.x - 30, coreCoords.y + 18);
+                                    
+                                    // Input Boxes
+                                    const boxW = 100;
+                                    const boxH = 40;
+                                    ctx.textAlign = 'center';
+                                    
+                                    nodes.inputs.forEach(input => {
+                                        const coords = getCoords(input);
+                                        const bx = coords.x - boxW / 2;
+                                        const by = coords.y - boxH / 2;
+                                        
+                                        ctx.fillStyle = '#121212';
+                                        ctx.fillRect(bx, by, boxW, boxH);
+                                        ctx.strokeStyle = '#222222';
+                                        ctx.lineWidth = 1;
+                                        ctx.strokeRect(bx, by, boxW, boxH);
+                                        
+                                        ctx.font = '800 9px Figtree, sans-serif';
+                                        ctx.fillStyle = '#ffffff';
+                                        ctx.fillText(input.label, coords.x, coords.y - 3);
+                                        
+                                        ctx.font = '400 7px Figtree, sans-serif';
+                                        ctx.fillStyle = 'rgba(0, 174, 255, 0.7)';
+                                        ctx.fillText(input.desc, coords.x, coords.y + 7);
+                                    });
+                                    
+                                    // Output Boxes
+                                    nodes.outputs.forEach(output => {
+                                        const coords = getCoords(output);
+                                        const bx = coords.x - boxW / 2;
+                                        const by = coords.y - boxH / 2;
+                                        
+                                        ctx.fillStyle = '#121212';
+                                        ctx.fillRect(bx, by, boxW, boxH);
+                                        ctx.strokeStyle = '#222222';
+                                        ctx.lineWidth = 1;
+                                        ctx.strokeRect(bx, by, boxW, boxH);
+                                        
+                                        ctx.font = '800 9px Figtree, sans-serif';
+                                        ctx.fillStyle = '#ffffff';
+                                        ctx.fillText(output.label, coords.x, coords.y - 3);
+                                        
+                                        ctx.font = '400 7px Figtree, sans-serif';
+                                        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                                        ctx.fillText(output.desc, coords.x, coords.y + 7);
+                                    });
+                                }
+                                
+                                function loop(time) {
+                                    if (slide && slide.classList.contains('active')) {
+                                        const rect = canvas.getBoundingClientRect();
+                                        if (rect.width !== width || rect.height !== height) {
+                                            resize();
                                         }
-                                        requestAnimationFrame(loop);
-                                    })();
-                                </script>
-                            </div>
-                        </div>
+                                        update(time);
+                                        draw();
+                                    }
+                                    requestAnimationFrame(loop);
+                                }
+                                requestAnimationFrame(loop);
+                            })();
+                        </script>
                     </div>
                 </div>
             </section>
