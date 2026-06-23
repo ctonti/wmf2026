@@ -61,7 +61,7 @@ function LazyVideo({ src, className, style }) {
     }
   }, [loaded, src]);
 
-  return <video ref={videoRef} loop muted playsinline className={className} style={style} />;
+  return <video ref={videoRef} loop muted playsInline className={className} style={style} />;
 }
 
 export default function App() {
@@ -69,6 +69,7 @@ export default function App() {
   const [wallStep, setWallStep] = useState(0); // 0 to 32
   const [manualActiveCampaign, setManualActiveCampaign] = useState(null);
   const [manualActiveView, setManualActiveView] = useState('concept'); // 'concept' | 'assets' | 'texts'
+  const [delayedShowOverlay, setDelayedShowOverlay] = useState(false);
   
   // Wall Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -136,6 +137,17 @@ export default function App() {
       showTextsDashboard = true;
     }
   }
+
+  useEffect(() => {
+    if (focusedCampaign) {
+      const timer = setTimeout(() => {
+        setDelayedShowOverlay(true);
+      }, 800);
+      return () => clearTimeout(timer);
+    } else {
+      setDelayedShowOverlay(false);
+    }
+  }, [focusedCampaign]);
 
 
   const gridRef = useRef(null);
@@ -507,8 +519,8 @@ export default function App() {
                     <div className="browser-header">
                       <div className="browser-dots">
                         <span className="browser-dot red"></span>
-                        <span class="browser-dot yellow"></span>
-                        <span class="browser-dot green"></span>
+                        <span className="browser-dot yellow"></span>
+                        <span className="browser-dot green"></span>
                       </div>
                       <div className="browser-address">contentmachine.websolute.it/knowledge-base</div>
                     </div>
@@ -706,8 +718,8 @@ export default function App() {
                     <div className="browser-header">
                       <div className="browser-dots">
                         <span className="browser-dot red"></span>
-                        <span class="browser-dot yellow"></span>
-                        <span class="browser-dot green"></span>
+                        <span className="browser-dot yellow"></span>
+                        <span className="browser-dot green"></span>
                       </div>
                       <div className="browser-address">contentmachine.websolute.it/document-intelligence</div>
                     </div>
@@ -982,7 +994,7 @@ export default function App() {
 
       {/* CONCEPT DASHBOARD OVERLAY */}
       {showConceptDashboard && focusedCampaign && (
-        <div className="dashboard-overlay active">
+        <div className={`dashboard-overlay ${delayedShowOverlay ? 'active' : ''}`}>
           <div className="dashboard-container">
             <div className="db-header">
               <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
@@ -1096,7 +1108,7 @@ export default function App() {
 
       {/* ASSET DASHBOARD OVERLAY */}
       {showAssetsDashboard && focusedCampaign && (
-        <div className="dashboard-overlay active">
+        <div className={`dashboard-overlay ${delayedShowOverlay ? 'active' : ''}`}>
           <div className="dashboard-container">
             <div className="db-header">
               <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
@@ -1195,7 +1207,7 @@ export default function App() {
 
       {/* STRATEGIA & TESTI DASHBOARD OVERLAY */}
       {showTextsDashboard && focusedCampaign && (
-        <div className="dashboard-overlay active">
+        <div className={`dashboard-overlay ${delayedShowOverlay ? 'active' : ''}`}>
           <div className="dashboard-container">
             <div className="db-header">
               <div className="db-header-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
