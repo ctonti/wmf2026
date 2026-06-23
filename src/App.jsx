@@ -138,6 +138,7 @@ export default function App() {
     }
   }
 
+
   useEffect(() => {
     if (focusedCampaign) {
       const timer = setTimeout(() => {
@@ -149,6 +150,19 @@ export default function App() {
     }
   }, [focusedCampaign]);
 
+  // Dynamically load Agentation bundle only on localhost/127.0.0.1
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      const script = document.createElement('script');
+      script.src = './assets/agentation-bundle.js';
+      script.async = true;
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, []);
 
   const gridRef = useRef(null);
   const [gridTransform, setGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
