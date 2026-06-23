@@ -418,28 +418,114 @@ export default function App() {
             
             {/* SLIDE 0: Cover */}
             <section className={`slide ${currentSlide === 0 ? 'active' : ''}`} id="slide-0">
-              <span className="slide-tag">WMF 2026 Speech Presentation</span>
-              <h1 className="slide-title">CONTENT MACHINE</h1>
-              <p className="slide-subtitle" style={{ fontSize: '1.8rem', marginTop: '15px' }}>
-                Tutti i contenuti che servono. Non solo quelli che riesci a fare.
-              </p>
-              <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', marginTop: '10px', letterSpacing: '0.1em' }}>
-                On scale. On demand. On brand. On Knowledge.
-              </p>
-              
-              <div className="cover-footer">
-                <div className="cover-meta">
-                  <div className="meta-item">
-                    <div className="meta-label">Evento</div>
-                    <div className="meta-val">WMF 2026</div>
+              <div className="slide-layout-split" style={{ alignItems: 'center' }}>
+                <div className="slide-content-left">
+                  <span className="slide-tag">WMF 2026 Speech Presentation</span>
+                  <h1 className="slide-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)', lineHeight: 1.05 }}>CONTENT MACHINE</h1>
+                  <p className="slide-subtitle" style={{ fontSize: '1.6rem', marginTop: '15px', maxWidth: '100%' }}>
+                    Tutti i contenuti che servono. Non solo quelli che riesci a fare.
+                  </p>
+                  <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', marginTop: '15px', letterSpacing: '0.1em' }}>
+                    On scale. On demand. On brand. On Knowledge.
+                  </p>
+                  
+                  <div className="cover-meta" style={{ marginTop: '40px', display: 'flex', gap: '30px' }}>
+                    <div className="meta-item">
+                      <div className="meta-label">Evento</div>
+                      <div className="meta-val">WMF 2026</div>
+                    </div>
+                    <div className="meta-item">
+                      <div className="meta-label">Location</div>
+                      <div className="meta-val">BolognaFiere</div>
+                    </div>
+                    <div className="meta-item">
+                      <div className="meta-label">Data</div>
+                      <div className="meta-val">24 - 26 Giugno 2026</div>
+                    </div>
                   </div>
-                  <div className="meta-item">
-                    <div className="meta-label">Location</div>
-                    <div className="meta-val">BolognaFiere</div>
-                  </div>
-                  <div className="meta-item">
-                    <div className="meta-label">Data</div>
-                    <div className="meta-val">24 - 26 Giugno 2026</div>
+                </div>
+
+                <div className="slide-content-right" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="speaker-card" style={{
+                    background: 'rgba(20, 20, 20, 0.6)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '16px',
+                    padding: '30px 24px',
+                    textAlign: 'center',
+                    width: '100%',
+                    maxWidth: '360px',
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '15px'
+                  }}>
+                    <div className="speaker-photo-container" style={{
+                      position: 'relative',
+                      width: '180px',
+                      height: '180px',
+                      borderRadius: '50%',
+                      padding: '4px',
+                      background: 'linear-gradient(135deg, var(--accent) 0%, rgba(0, 174, 255, 0.2) 100%)',
+                      boxShadow: '0 0 25px var(--accent-glow)',
+                      overflow: 'hidden'
+                    }}>
+                      <img src="assets/claudio_tonti.jpg" alt="Claudio Tonti" style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }} />
+                    </div>
+                    <div>
+                      <span className="speaker-label" style={{
+                        fontFamily: 'Roboto',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        color: 'var(--accent)',
+                        fontWeight: 700,
+                        letterSpacing: '0.15em',
+                        display: 'block',
+                        marginBottom: '4px'
+                      }}>Relatore</span>
+                      <h3 className="speaker-name" style={{
+                        fontFamily: 'Figtree',
+                        fontSize: '1.8rem',
+                        fontWeight: 800,
+                        color: '#ffffff',
+                        margin: '0',
+                        textTransform: 'none',
+                        letterSpacing: '-0.01em'
+                      }}>Claudio Tonti</h3>
+                      <p className="speaker-title" style={{
+                        fontFamily: 'Roboto',
+                        fontSize: '0.95rem',
+                        color: 'var(--text-sec)',
+                        fontWeight: 500,
+                        marginTop: '6px',
+                        lineHeight: 1.3
+                      }}>
+                        Chief AI Officer & Board Member<br />
+                        <span style={{ color: '#ffffff', fontWeight: 600 }}>websolute</span>
+                      </p>
+                      <div style={{
+                        width: '40px',
+                        height: '2px',
+                        background: 'var(--border)',
+                        margin: '12px auto'
+                      }}></div>
+                      <p className="speaker-bio" style={{
+                        fontFamily: 'Roboto',
+                        fontSize: '0.8rem',
+                        color: 'var(--text-muted)',
+                        lineHeight: 1.4,
+                        fontWeight: 400
+                      }}>
+                        Digital Strategy • AI Product Designer • Innovation Director
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
