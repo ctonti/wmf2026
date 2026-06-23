@@ -1504,7 +1504,7 @@
                                 <div class="browser-address">contentmachine.websolute.it/integrations</div>
                             </div>
                             <div class="browser-body" style="background: #050505; overflow: hidden; position: relative;">
-                                <canvas id="integration-3d-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+                                <canvas id="integration-3d-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"></canvas>
                                 <script>
                                     (function() {
                                         const canvas = document.getElementById('integration-3d-canvas');
@@ -1517,6 +1517,7 @@
                                         
                                         function resize() {
                                             const rect = canvas.getBoundingClientRect();
+                                            if (rect.width === 0 || rect.height === 0) return;
                                             width = rect.width;
                                             height = rect.height;
                                             const dpr = window.devicePixelRatio || 1;
@@ -1527,9 +1528,8 @@
                                             centerY = height / 2;
                                         }
                                         
-                                        // Wait a bit to ensure container is fully rendered before taking layout dimensions
-                                        setTimeout(resize, 100);
                                         window.addEventListener('resize', resize);
+                                        resize();
                                         
                                         // Core central nodes in 3D
                                         const nodes = [];
@@ -1584,7 +1584,9 @@
                                         const focalLength = 220;
                                         
                                         function update(time) {
-                                            if (!lastTime) lastTime = time;
+                                            if (!lastTime || (time - lastTime > 100)) {
+                                                lastTime = time;
+                                            }
                                             const dt = time - lastTime;
                                             lastTime = time;
                                             
@@ -1796,6 +1798,10 @@
                                         
                                         function loop(time) {
                                             if (slide && slide.classList.contains('active')) {
+                                                const rect = canvas.getBoundingClientRect();
+                                                if (rect.width !== width || rect.height !== height) {
+                                                    resize();
+                                                }
                                                 update(time);
                                                 draw();
                                             }
