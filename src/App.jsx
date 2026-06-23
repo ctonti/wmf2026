@@ -517,7 +517,7 @@ export default function App() {
                         marginTop: '10px',
                         lineHeight: 1.3
                       }}>
-                        Chief AI Officer & Board Member<br />
+                        VP of AI & Innovation, co-founder<br />
                         <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.25rem' }}>websolute</span>
                       </p>
                     </div>
