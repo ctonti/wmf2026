@@ -1829,11 +1829,13 @@
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 6px 12px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            text-align: left;
+            gap: 4px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease;
         }
 
@@ -1845,19 +1847,21 @@
         .concept-angle-box-lbl {
             font-family: 'Figtree', sans-serif;
             font-weight: 700;
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            text-align: center;
         }
 
         .concept-angle-box-val {
-            font-family: 'Roboto', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-family: 'Figtree', sans-serif;
+            font-size: 1.12rem;
+            font-weight: 700;
             color: var(--text-main);
-            line-height: 1.3;
+            line-height: 1.35;
             word-break: break-word;
+            text-align: center;
         }
 
         /* 4 COLUMN ASSET GRID ABOVE THE FOLD */
