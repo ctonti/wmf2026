@@ -447,84 +447,158 @@ export default function App() {
 
                 <div className="slide-content-right" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <div className="speaker-card" style={{
-                    background: 'rgba(20, 20, 20, 0.6)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '16px',
-                    padding: '30px 24px',
+                    background: 'rgba(15, 15, 15, 0.75)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '20px',
+                    padding: '24px',
                     textAlign: 'center',
                     width: '100%',
-                    maxWidth: '360px',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                    maxWidth: '380px',
+                    backdropFilter: 'blur(20px)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '15px'
+                    gap: '16px'
                   }}>
-                    <div className="speaker-photo-container" style={{
-                      position: 'relative',
-                      width: '180px',
-                      height: '180px',
-                      borderRadius: '50%',
-                      padding: '4px',
-                      background: 'linear-gradient(135deg, var(--accent) 0%, rgba(0, 174, 255, 0.2) 100%)',
-                      boxShadow: '0 0 25px var(--accent-glow)',
-                      overflow: 'hidden'
-                    }}>
-                      <img src="assets/claudio_tonti.jpg" alt="Claudio Tonti" style={{
-                        width: '100%',
-                        height: '100%',
+                    {/* Speaker Header */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%', textAlign: 'left' }}>
+                      <div className="speaker-photo-container" style={{
+                        position: 'relative',
+                        width: '90px',
+                        height: '90px',
                         borderRadius: '50%',
-                        objectFit: 'cover',
-                        display: 'block'
-                      }} />
+                        padding: '3px',
+                        background: 'linear-gradient(135deg, var(--accent) 0%, rgba(0, 174, 255, 0.2) 100%)',
+                        boxShadow: '0 0 20px var(--accent-glow)',
+                        overflow: 'hidden',
+                        flexShrink: 0
+                      }}>
+                        <img src="assets/claudio_tonti.jpg" alt="Claudio Tonti" style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }} />
+                      </div>
+                      <div>
+                        <span className="speaker-label" style={{
+                          fontFamily: 'Roboto',
+                          fontSize: '0.7rem',
+                          textTransform: 'uppercase',
+                          color: 'var(--accent)',
+                          fontWeight: 700,
+                          letterSpacing: '0.15em',
+                          display: 'block',
+                          marginBottom: '2px'
+                        }}>Relatore</span>
+                        <h3 className="speaker-name" style={{
+                          fontFamily: 'Figtree',
+                          fontSize: '1.45rem',
+                          fontWeight: 800,
+                          color: '#ffffff',
+                          margin: '0',
+                          textTransform: 'none',
+                          lineHeight: 1.1
+                        }}>Claudio Tonti</h3>
+                        <p className="speaker-title" style={{
+                          fontFamily: 'Roboto',
+                          fontSize: '0.85rem',
+                          color: 'var(--text-sec)',
+                          fontWeight: 500,
+                          marginTop: '4px',
+                          lineHeight: 1.2
+                        }}>
+                          Chief AI Officer & Board Member<br />
+                          <span style={{ color: '#ffffff', fontWeight: 600 }}>websolute</span>
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="speaker-label" style={{
-                        fontFamily: 'Roboto',
-                        fontSize: '0.8rem',
-                        textTransform: 'uppercase',
-                        color: 'var(--accent)',
-                        fontWeight: 700,
-                        letterSpacing: '0.15em',
-                        display: 'block',
-                        marginBottom: '4px'
-                      }}>Relatore</span>
-                      <h3 className="speaker-name" style={{
-                        fontFamily: 'Figtree',
-                        fontSize: '1.8rem',
-                        fontWeight: 800,
-                        color: '#ffffff',
-                        margin: '0',
-                        textTransform: 'none',
-                        letterSpacing: '-0.01em'
-                      }}>Claudio Tonti</h3>
-                      <p className="speaker-title" style={{
-                        fontFamily: 'Roboto',
-                        fontSize: '0.95rem',
-                        color: 'var(--text-sec)',
-                        fontWeight: 500,
-                        marginTop: '6px',
-                        lineHeight: 1.3
-                      }}>
-                        Chief AI Officer & Board Member<br />
-                        <span style={{ color: '#ffffff', fontWeight: 600 }}>websolute</span>
-                      </p>
-                      <div style={{
-                        width: '40px',
-                        height: '2px',
-                        background: 'var(--border)',
-                        margin: '12px auto'
-                      }}></div>
-                      <p className="speaker-bio" style={{
-                        fontFamily: 'Roboto',
-                        fontSize: '0.8rem',
-                        color: 'var(--text-muted)',
-                        lineHeight: 1.4,
-                        fontWeight: 400
-                      }}>
-                        Digital Strategy • AI Product Designer • Innovation Director
-                      </p>
+
+                    <div style={{
+                      width: '100%',
+                      height: '1px',
+                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)'
+                    }}></div>
+
+                    {/* Book Promotion Card */}
+                    <div className="book-promo-card" style={{
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.05)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '12px',
+                      textAlign: 'left'
+                    }}>
+                      <div>
+                        <span style={{
+                          fontFamily: 'Roboto',
+                          fontSize: '0.7rem',
+                          textTransform: 'uppercase',
+                          color: '#00ffaa',
+                          fontWeight: 700,
+                          letterSpacing: '0.1em',
+                          display: 'block',
+                          marginBottom: '2px'
+                        }}>📖 NUOVO LIBRO (GIUGNO 2026)</span>
+                        <h4 style={{
+                          fontFamily: 'Figtree',
+                          fontSize: '1.2rem',
+                          fontWeight: 800,
+                          color: '#ffffff',
+                          margin: '0',
+                          textTransform: 'none',
+                          lineHeight: 1.2
+                        }}>"Dialogo sulla Soglia"</h4>
+                        <p style={{
+                          fontFamily: 'Roboto',
+                          fontSize: '0.75rem',
+                          color: 'var(--text-sec)',
+                          marginTop: '2px',
+                          lineHeight: 1.3
+                        }}>
+                          Un confronto filosofico tra un essere umano e Claude.
+                        </p>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{
+                          background: '#ffffff',
+                          padding: '4px',
+                          borderRadius: '8px',
+                          width: '80px',
+                          height: '80px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                        }}>
+                          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Famzn.eu%2Fd%2F0caKA0Gf" alt="QR Code Amazon" style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'block'
+                          }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <span style={{
+                            fontFamily: 'Roboto',
+                            fontSize: '0.75rem',
+                            color: '#ffffff',
+                            fontWeight: 600
+                          }}>Disponibile su Amazon</span>
+                          <span style={{
+                            fontFamily: 'Roboto',
+                            fontSize: '0.68rem',
+                            color: 'var(--text-muted)',
+                            lineHeight: 1.2
+                          }}>Inquadra il QR Code per ordinare la copia fisica o digitale.</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
