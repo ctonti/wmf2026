@@ -453,7 +453,7 @@ export default function App() {
                     padding: '24px',
                     textAlign: 'center',
                     width: '100%',
-                    maxWidth: '380px',
+                    maxWidth: '440px',
                     backdropFilter: 'blur(20px)',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
                     display: 'flex',
@@ -531,13 +531,13 @@ export default function App() {
                       width: '100%',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '12px',
+                      gap: '10px',
                       textAlign: 'left'
                     }}>
                       <div>
                         <span style={{
                           fontFamily: 'Roboto',
-                          fontSize: '0.7rem',
+                          fontSize: '0.65rem',
                           textTransform: 'uppercase',
                           color: '#00ffaa',
                           fontWeight: 700,
@@ -547,22 +547,31 @@ export default function App() {
                         }}>📖 NUOVO LIBRO (GIUGNO 2026)</span>
                         <h4 style={{
                           fontFamily: 'Figtree',
-                          fontSize: '1.2rem',
+                          fontSize: '1.25rem',
                           fontWeight: 800,
                           color: '#ffffff',
                           margin: '0',
                           textTransform: 'none',
-                          lineHeight: 1.2
+                          lineHeight: 1.15
                         }}>"Dialogo sulla Soglia"</h4>
                         <p style={{
                           fontFamily: 'Roboto',
-                          fontSize: '0.75rem',
+                          fontSize: '0.72rem',
                           color: 'var(--text-sec)',
-                          marginTop: '2px',
-                          lineHeight: 1.3
+                          marginTop: '4px',
+                          lineHeight: 1.35,
+                          marginBottom: '8px'
                         }}>
-                          Un confronto filosofico tra un essere umano e Claude.
+                          La trascrizione integrale del confronto filosofico ed esistenziale tra un essere umano e Claude.
                         </p>
+                      </div>
+
+                      {/* Pill Badges for Key Themes */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '4px' }}>
+                        <span style={{ background: 'rgba(0, 255, 170, 0.06)', border: '1px solid rgba(0, 255, 170, 0.15)', color: '#00ffaa', fontFamily: 'Roboto', fontSize: '0.62rem', fontWeight: 600, padding: '3px 8px', borderRadius: '20px', letterSpacing: '0.02em' }}>Coscienza & AI</span>
+                        <span style={{ background: 'rgba(0, 255, 170, 0.06)', border: '1px solid rgba(0, 255, 170, 0.15)', color: '#00ffaa', fontFamily: 'Roboto', fontSize: '0.62rem', fontWeight: 600, padding: '3px 8px', borderRadius: '20px', letterSpacing: '0.02em' }}>Judo Cognitivo</span>
+                        <span style={{ background: 'rgba(0, 255, 170, 0.06)', border: '1px solid rgba(0, 255, 170, 0.15)', color: '#00ffaa', fontFamily: 'Roboto', fontSize: '0.62rem', fontWeight: 600, padding: '3px 8px', borderRadius: '20px', letterSpacing: '0.02em' }}>Post-Lavoro</span>
+                        <span style={{ background: 'rgba(0, 255, 170, 0.06)', border: '1px solid rgba(0, 255, 170, 0.15)', color: '#00ffaa', fontFamily: 'Roboto', fontSize: '0.62rem', fontWeight: 600, padding: '3px 8px', borderRadius: '20px', letterSpacing: '0.02em' }}>Responsabilità ed Etica</span>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -570,8 +579,8 @@ export default function App() {
                           background: '#ffffff',
                           padding: '4px',
                           borderRadius: '8px',
-                          width: '80px',
-                          height: '80px',
+                          width: '72px',
+                          height: '72px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -584,19 +593,27 @@ export default function App() {
                             display: 'block'
                           }} />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                           <span style={{
                             fontFamily: 'Roboto',
-                            fontSize: '0.75rem',
+                            fontSize: '0.72rem',
                             color: '#ffffff',
                             fontWeight: 600
                           }}>Disponibile su Amazon</span>
                           <span style={{
                             fontFamily: 'Roboto',
-                            fontSize: '0.68rem',
+                            fontSize: '0.64rem',
                             color: 'var(--text-muted)',
-                            lineHeight: 1.2
-                          }}>Inquadra il QR Code per ordinare la copia fisica o digitale.</span>
+                            lineHeight: 1.25
+                          }}>Inquadra il QR Code per ordinare il libro.</span>
+                          <span style={{
+                            fontFamily: 'Roboto',
+                            fontSize: '0.64rem',
+                            color: 'var(--accent)',
+                            fontWeight: 500,
+                            textDecoration: 'underline',
+                            marginTop: '1px'
+                          }}>amzn.eu/d/0caKA0Gf</span>
                         </div>
                       </div>
                     </div>
