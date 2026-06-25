@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import campaignData from './data.json';
+import editorialData from './data_editorial.json';
 const campaigns = (campaignData.dataset || []).map(item => ({
   order: item.order,
   ...(item.data?.it || {})
@@ -9,7 +10,8 @@ const productBagAsset = (campaignData.assets || []).find(a => a.tagName === '##p
 const firstProduct = campaigns[0] || {};
 import IntegrationFlow from './components/IntegrationFlow';
 import KnowledgeGraph from './components/KnowledgeGraph';
-import { PaintBrush, Package, Brain, Target, Lightbulb, UserFocus, MapPin, Anchor, Warning, BookOpen, Images, PencilLine, Crosshair, SlidersHorizontal, CaretCircleRight } from '@phosphor-icons/react';
+import { InstagramCarousel, InstagramStory, TikTokPhone } from './components/PhoneMockup';
+import { PaintBrush, Package, Brain, Target, Lightbulb, UserFocus, MapPin, Anchor, Warning, BookOpen, Images, PencilLine, Crosshair, SlidersHorizontal, CaretCircleRight, PawPrint, Clock, Megaphone, Globe, Newspaper, MusicNote } from '@phosphor-icons/react';
 
 
 // Helper component for lazy-loaded images
@@ -69,7 +71,8 @@ function LazyVideo({ src, className, style }) {
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [wallStep, setWallStep] = useState(0); // 0 to 32
+  const [wallStep, setWallStep] = useState(0); // 0 to 32 (UC1)
+  const [editWallStep, setEditWallStep] = useState(0); // 0 to 5 (UC2 carousel)
   const [manualActiveCampaign, setManualActiveCampaign] = useState(null);
   const [manualActiveView, setManualActiveView] = useState('concept'); // 'concept' | 'assets' | 'texts'
   const [delayedShowOverlay, setDelayedShowOverlay] = useState(false);
@@ -79,9 +82,17 @@ export default function App() {
   const [valFilter, setValFilter] = useState('');
   const [benFilter, setBenFilter] = useState('');
   const [perFilter, setPerFilter] = useState('');
+  const [uc1ImageIdx, setUc1ImageIdx] = useState(0);
+  const [uc2ImageIdx, setUc2ImageIdx] = useState(0);
 
-  const totalSlides = 15;
+  const totalSlides = 20;
   const featuredCampaignOrders = [0, 1, 2, 4, 5, 11, 13, 8];
+
+  // Editorial contents (UC2) — only filled rows
+  const editorialContents = editorialData.dataset
+    .filter(item => item.data.it?.social_caption)
+    .map(item => ({ order: item.order, ...item.data.it }));
+  const editorialLangs = (editorialData.languages || []).map(l => l.code);
 
   // Slide Names mapping for future use/nav
   const slideNames = [
@@ -94,11 +105,16 @@ export default function App() {
     "Compliance & ROI",
     "A Chi Serve in Azienda",
     "Il Dataset: Valore",
-    "Case Study: ADV Angles",
-    "Advertising Angles",
-    "La Forza dei Numeri",
-    "Futuri Workflow",
-    "Visual Wall Case Study",
+    "Use Case",
+    "ADV Angles",
+    "Combinatoria & Output",
+    "Il Ciclo Ricorsivo",
+    "Piattaforma UC1",
+    "Visual Wall UC1",
+    "Organic Editorial",
+    "Editorial: Numeri & Lingue",
+    "Piattaforma UC2",
+    "Visual Wall UC2",
     "Grazie"
   ];
 
@@ -108,7 +124,7 @@ export default function App() {
   let showAssetsDashboard = false;
   let showTextsDashboard = false;
 
-  if (currentSlide === 13 && wallStep > 0 && wallStep <= 32) {
+  if (currentSlide === 14 && wallStep > 0 && wallStep <= 32) {
     const index = Math.floor((wallStep - 1) / 4);
     const subStep = (wallStep - 1) % 4;
     if (index < featuredCampaignOrders.length) {
@@ -128,6 +144,9 @@ export default function App() {
       }
     }
   }
+
+  // UC2 Editorial: simple sequential carousel (0-5)
+  const currentEditorial = (currentSlide === 18 && editorialContents[editWallStep]) ? editorialContents[editWallStep] : null;
 
   // Handle manual clicks
   if (manualActiveCampaign) {
@@ -168,8 +187,10 @@ export default function App() {
   }, []);
 
   const gridRef = useRef(null);
+  const gridRef2 = useRef(null);
   const slide1VideoRef = useRef(null);
   const [gridTransform, setGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
+  const [editGridTransform, setEditGridTransform] = useState({ transform: 'translate(0px, 0px) scale(1)' });
 
   useEffect(() => {
     if (currentSlide === 1 && slide1VideoRef.current) {
@@ -178,34 +199,58 @@ export default function App() {
     }
   }, [currentSlide]);
 
+  // UC1 screenshot slide: alternate images every 2 seconds
+  useEffect(() => {
+    if (currentSlide !== 13) return;
+    const interval = setInterval(() => {
+      setUc1ImageIdx(prev => (prev === 0 ? 1 : 0));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [currentSlide]);
+
+  // UC2 screenshot slide: alternate images every 2 seconds
+  useEffect(() => {
+    if (currentSlide !== 17) return;
+    const interval = setInterval(() => {
+      setUc2ImageIdx(prev => (prev === 0 ? 1 : 0));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [currentSlide]);
+
   useEffect(() => {
     const updateTransform = () => {
-      if (currentSlide === 13 && focusedCampaign) {
+      if (currentSlide === 14 && focusedCampaign) {
         const card = document.getElementById(`campaign-card-${focusedCampaign.order}`);
         const grid = gridRef.current;
         if (card && grid) {
           const gridRect = grid.getBoundingClientRect();
           const cardRect = card.getBoundingClientRect();
           
-          // Card center relative to grid origin
-          const cardCenterX = cardRect.left + cardRect.width / 2 - gridRect.left;
-          const cardCenterY = cardRect.top + cardRect.height / 2 - gridRect.top;
+          // Card center relative to the grid element (before any transform)
+          // We need the position in the grid's own coordinate space
+          const cardCenterX = card.offsetLeft + card.offsetWidth / 2;
+          const cardCenterY = card.offsetTop + card.offsetHeight / 2;
           
-          // Grid center relative to grid origin
-          const gridCenterX = gridRect.width / 2;
-          const gridCenterY = gridRect.height / 2;
-          
-          const translateX = gridCenterX - cardCenterX;
-          const translateY = gridCenterY - cardCenterY;
+          // Container (viewport) center
+          const container = grid.parentElement;
+          const containerRect = container.getBoundingClientRect();
+          const viewCenterX = containerRect.width / 2;
+          const viewCenterY = containerRect.height / 2;
           
           const scaleFactor = 2.8;
           
+          // After scaling with origin at card center, the card stays at its position.
+          // We translate the scaled grid so the card center aligns with viewport center.
+          const translateX = viewCenterX - cardCenterX;
+          const translateY = viewCenterY - cardCenterY;
+          
           setGridTransform({
+            transformOrigin: `${cardCenterX}px ${cardCenterY}px`,
             transform: `translate(${translateX}px, ${translateY}px) scale(${scaleFactor})`
           });
         }
       } else {
-        setGridTransform({ transform: 'translate(0px, 0px) scale(1)' });
+        setGridTransform({ transform: 'translate(0px, 0px) scale(1)', transformOrigin: 'center center' });
       }
     };
 
@@ -218,6 +263,8 @@ export default function App() {
       window.removeEventListener('resize', updateTransform);
     };
   }, [currentSlide, wallStep, focusedCampaign]);
+
+
 
   // Keyboard navigation
   useEffect(() => {
@@ -249,15 +296,22 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide, wallStep, manualActiveCampaign]);
+  }, [currentSlide, wallStep, manualActiveCampaign, editWallStep]);
 
   const handleNext = () => {
-    if (currentSlide === 13) {
+    if (currentSlide === 14) {
       if (wallStep < 32) {
         setWallStep(prev => prev + 1);
       } else {
         setWallStep(0);
-        setCurrentSlide(14);
+        setCurrentSlide(15);
+      }
+    } else if (currentSlide === 18) {
+      if (editWallStep < editorialContents.length - 1) {
+        setEditWallStep(prev => prev + 1);
+      } else {
+        setEditWallStep(0);
+        setCurrentSlide(19);
       }
     } else if (currentSlide < totalSlides - 1) {
       setCurrentSlide(prev => prev + 1);
@@ -265,15 +319,24 @@ export default function App() {
   };
 
   const handlePrev = () => {
-    if (currentSlide === 13) {
+    if (currentSlide === 14) {
       if (wallStep > 0) {
         setWallStep(prev => prev - 1);
       } else {
-        setCurrentSlide(12);
+        setCurrentSlide(13);
       }
-    } else if (currentSlide === 14) {
-      setCurrentSlide(13);
+    } else if (currentSlide === 15) {
+      setCurrentSlide(14);
       setWallStep(32);
+    } else if (currentSlide === 18) {
+      if (editWallStep > 0) {
+        setEditWallStep(prev => prev - 1);
+      } else {
+        setCurrentSlide(17);
+      }
+    } else if (currentSlide === 19) {
+      setCurrentSlide(18);
+      setEditWallStep(editorialContents.length - 1);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
     }
@@ -396,30 +459,10 @@ export default function App() {
             <span className="brand-logo-dot"></span>
             <span className="brand-agency">websolute</span>
           </div>
-          <div className="brand-divider"></div>
-          <div className="brand-title-wrap">
-            <span className="brand-title">CONTENT MACHINE</span>
-          </div>
         </div>
-        <nav id="view-mode-nav">
-          <button 
-            id="nav-btn-slides" 
-            className={`nav-mode-btn ${currentSlide !== 13 ? 'active' : ''}`}
-            onClick={() => setCurrentSlide(0)}
-          >
-            Slide Deck
-          </button>
-          <button 
-            id="nav-btn-wall" 
-            className={`nav-mode-btn ${currentSlide === 13 ? 'active' : ''}`}
-            onClick={() => {
-              setCurrentSlide(13);
-              setWallStep(0);
-            }}
-          >
-            Visual Wall
-          </button>
-        </nav>
+        <div className="brand-title-wrap">
+          <span className="brand-title">CONTENT MACHINE</span>
+        </div>
       </header>
 
       <div id="app">
@@ -429,53 +472,64 @@ export default function App() {
             
             {/* SLIDE 0: Cover */}
             <section className={`slide ${currentSlide === 0 ? 'active' : ''}`} id="slide-0">
-              <div className="slide-layout-split" style={{ alignItems: 'center' }}>
-                <div className="slide-content-left">
-                  <span className="slide-tag">WMF 2026 Speech Presentation</span>
-                  <h1 className="slide-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)', lineHeight: 1.05 }}>CONTENT MACHINE</h1>
-                  <p className="slide-subtitle" style={{ fontSize: '1.6rem', marginTop: '15px', maxWidth: '100%' }}>
-                    Tutti i contenuti che servono. Non solo quelli che riesci a fare.
-                  </p>
-                  <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', marginTop: '15px', letterSpacing: '0.1em' }}>
-                    On scale. On demand. On brand. On Knowledge.
-                  </p>
+              <div className="slide-layout-split" style={{ gridTemplateColumns: '1.2fr 1fr 1fr', gap: '40px', alignItems: 'center' }}>
+                {/* Column 1: Left */}
+                <div className="slide-content-left" style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'space-between', 
+                  height: '100%', 
+                  minHeight: '760px',
+                  padding: '30px 0'
+                }}>
+                  <div>
+                    <span className="slide-tag">WMF 2026 Speech Presentation</span>
+                    <h1 className="slide-title" style={{ fontSize: 'clamp(2rem, 4.2vw, 4.8rem)', lineHeight: 1.05 }}>CONTENT MACHINE</h1>
+                    <p className="slide-subtitle" style={{ fontSize: '1.45rem', marginTop: '20px', maxWidth: '100%', lineHeight: 1.4 }}>
+                      Tutti i contenuti che servono. Non solo quelli che riesci a fare.
+                    </p>
+                    <p style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.05rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', marginTop: '20px', letterSpacing: '0.1em' }}>
+                      On scale. On demand. On brand. On Knowledge.
+                    </p>
+                  </div>
                   
-                  <div className="cover-meta" style={{ marginTop: '40px', display: 'flex', gap: '30px' }}>
+                  <div className="cover-meta" style={{ display: 'flex', gap: '20px', marginTop: '40px' }}>
                     <div className="meta-item">
                       <div className="meta-label">Evento</div>
-                      <div className="meta-val">WMF 2026</div>
+                      <div className="meta-val" style={{ fontSize: '1.1rem', fontWeight: 600 }}>WMF 2026</div>
                     </div>
                     <div className="meta-item">
                       <div className="meta-label">Location</div>
-                      <div className="meta-val">BolognaFiere</div>
+                      <div className="meta-val" style={{ fontSize: '1.1rem', fontWeight: 600 }}>BolognaFiere</div>
                     </div>
                     <div className="meta-item">
                       <div className="meta-label">Data</div>
-                      <div className="meta-val">24 - 26 Giugno 2026</div>
+                      <div className="meta-val" style={{ fontSize: '1.1rem', fontWeight: 600 }}>24 - 26 Giugno 2026</div>
                     </div>
                   </div>
-                </div>
-
-                <div className="slide-content-right" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
-                  {/* Speaker Card */}
+                </div>                 {/* Column 2: Center */}
+                {/* Column 2: Center */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                   <div className="speaker-card" style={{
                     background: 'rgba(15, 15, 15, 0.75)',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '20px',
-                    padding: '36px 28px',
+                    padding: '40px 24px',
                     width: '100%',
-                    maxWidth: '480px',
+                    height: '100%',
+                    minHeight: '760px',
                     backdropFilter: 'blur(20px)',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '24px'
+                    justifyContent: 'space-around',
+                    textAlign: 'center'
                   }}>
                     <div className="speaker-photo-container" style={{
                       position: 'relative',
-                      width: '170px',
-                      height: '170px',
+                      width: '260px',
+                      height: '260px',
                       borderRadius: '50%',
                       padding: '4px',
                       background: 'linear-gradient(135deg, var(--accent) 0%, rgba(0, 174, 255, 0.2) 100%)',
@@ -491,20 +545,20 @@ export default function App() {
                         display: 'block'
                       }} />
                     </div>
-                    <div style={{ textAlign: 'center' }}>
+                    <div>
                       <span className="speaker-label" style={{
                         fontFamily: 'Roboto',
-                        fontSize: '0.85rem',
+                        fontSize: '0.8rem',
                         textTransform: 'uppercase',
                         color: 'var(--accent)',
                         fontWeight: 700,
                         letterSpacing: '0.15em',
                         display: 'block',
-                        marginBottom: '6px'
+                        marginBottom: '8px'
                       }}>Relatore</span>
                       <h3 className="speaker-name" style={{
                         fontFamily: 'Figtree',
-                        fontSize: '2.4rem',
+                        fontSize: '2.3rem',
                         fontWeight: 900,
                         color: '#ffffff',
                         margin: '0',
@@ -513,65 +567,58 @@ export default function App() {
                       }}>Claudio Tonti</h3>
                       <p className="speaker-title" style={{
                         fontFamily: 'Roboto',
-                        fontSize: '1.1rem',
+                        fontSize: '1.05rem',
                         color: 'var(--text-sec)',
                         fontWeight: 500,
-                        marginTop: '10px',
+                        marginTop: '12px',
                         lineHeight: 1.3
                       }}>
                         VP of AI & Innovation, co-founder<br />
-                        <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.25rem' }}>websolute</span>
+                        <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.25rem' }}>websolute</span><br />
+                        <span style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '1.05rem', marginTop: '10px', display: 'inline-block' }}>Autore di "Dialogo sulla Soglia"</span>
                       </p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Book Promotion Card */}
+                {/* Column 3: Right */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                   <div className="book-promo-card" style={{
                     background: 'rgba(15, 15, 15, 0.65)',
                     border: '1px solid rgba(255, 255, 255, 0.05)',
                     borderRadius: '20px',
-                    padding: '24px',
+                    padding: '40px 24px',
                     width: '100%',
-                    maxWidth: '480px',
+                    height: '100%',
+                    minHeight: '760px',
                     backdropFilter: 'blur(20px)',
                     boxShadow: '0 15px 30px rgba(0,0,0,0.4)',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '20px',
-                    textAlign: 'left'
+                    justifyContent: 'space-between',
+                    gap: '24px',
+                    textAlign: 'center'
                   }}>
-                    <div style={{
-                      background: '#ffffff',
-                      padding: '6px',
-                      borderRadius: '12px',
-                      width: '100px',
-                      height: '100px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                    }}>
-                      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Famzn.eu%2Fd%2F0caKA0Gf" alt="QR Code Amazon" style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'block'
-                      }} />
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      <img 
+                        src="assets/dialogo_sulla_soglia_.jpg" 
+                        alt="Copertina Dialogo sulla Soglia" 
+                        style={{
+                          width: '320px',
+                          height: '480px',
+                          objectFit: 'cover',
+                          borderRadius: '12px',
+                          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+                          border: '1px solid rgba(255,255,255,0.15)'
+                        }} 
+                      />
                     </div>
+                    
                     <div>
-                      <span style={{
-                        fontFamily: 'Roboto',
-                        fontSize: '0.75rem',
-                        textTransform: 'uppercase',
-                        color: '#00ffaa',
-                        fontWeight: 700,
-                        letterSpacing: '0.1em',
-                        display: 'block',
-                        marginBottom: '4px'
-                      }}><BookOpen size={20} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '6px' }} /> NUOVO LIBRO (GIUGNO 2026)</span>
                       <h4 style={{
                         fontFamily: 'Figtree',
-                        fontSize: '1.45rem',
+                        fontSize: '1.6rem',
                         fontWeight: 800,
                         color: '#ffffff',
                         margin: '0',
@@ -580,33 +627,65 @@ export default function App() {
                       }}>"Dialogo sulla Soglia"</h4>
                       <p style={{
                         fontFamily: 'Roboto',
-                        fontSize: '0.85rem',
+                        fontSize: '0.9rem',
                         color: 'var(--text-sec)',
-                        marginTop: '6px',
+                        marginTop: '8px',
                         lineHeight: 1.3
                       }}>
-                        Un confronto filosofico ed etico tra uomo e AI (Claude).
+                        Un confronto filosofico ed etico tra uomo e AI.
                       </p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px' }}>
+                    </div>
+
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '15px', 
+                      background: 'rgba(255,255,255,0.03)', 
+                      padding: '8px 16px', 
+                      borderRadius: '12px', 
+                      border: '1px solid rgba(255,255,255,0.05)',
+                      width: '100%'
+                    }}>
+                      <div style={{
+                        background: '#ffffff',
+                        padding: '4px',
+                        borderRadius: '6px',
+                        width: '50px',
+                        height: '50px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                        flexShrink: 0
+                      }}>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https%3A%2F%2Famzn.eu%2Fd%2F0caKA0Gf" alt="QR Code Amazon" style={{
+                          width: '100%',
+                          height: '100%',
+                          display: 'block'
+                        }} />
+                      </div>
+                      <div style={{ textAlign: 'left' }}>
                         <span style={{
                           fontFamily: 'Roboto',
-                          fontSize: '0.8rem',
+                          fontSize: '0.7rem',
                           color: '#ffffff',
-                          fontWeight: 600
+                          fontWeight: 500,
+                          display: 'block'
                         }}>Ordina su Amazon:</span>
                         <span style={{
                           fontFamily: 'Roboto',
-                          fontSize: '0.8rem',
+                          fontSize: '0.75rem',
                           color: 'var(--accent)',
                           fontWeight: 700,
                           textDecoration: 'underline'
                         }}>amzn.eu/d/0caKA0Gf</span>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
             {/* SLIDE 1: websolute video */}
             <section className={`slide ${currentSlide === 1 ? 'active' : ''}`} id="slide-1" style={{ padding: 0, position: 'relative', overflow: 'hidden', background: '#000' }}>
@@ -881,169 +960,235 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 9: Case Study Cover — ADV Angles (Display 10) */}
+            {/* SLIDE 9: Use Case Cover (Display 10) */}
             <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9" style={{ overflow: 'hidden' }}>
-              <span className="slide-tag">Use Case — ADV Angles</span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '16px', textAlign: 'center' }}>
-                <h2 className="slide-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4.5rem)', lineHeight: 1.05 }}>
-                  ADV Angles
+              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <span className="slide-tag" style={{ marginBottom: '20px', display: 'inline-block' }}>Parte 2</span>
+                <h2 className="slide-title" style={{ fontSize: 'clamp(4rem, 8vw, 8rem)', lineHeight: 1, letterSpacing: '-0.02em' }}>
+                  Use Case
                 </h2>
-                <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.35rem', color: 'var(--text-sec)', maxWidth: '750px', lineHeight: 1.4, fontWeight: 300 }}>
-                  Generazione automatica di campagne ADV iper-personalizzate per <strong style={{ color: '#ffffff' }}>TerraViva Pet</strong> — brand simulato di pet food premium.
-                </p>
-                <div className="takeaway-box" style={{ fontSize: '1.05rem', padding: '10px 20px', borderLeft: '3px solid #ff9f43', textAlign: 'left', maxWidth: '650px' }}>
-                  <Warning size={18} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '6px', color: '#ff9f43' }} />
-                  Progetti reali sotto NDA — caso simulato end-to-end che replica il flusso reale.
-                </div>
-                <div style={{ width: '100%', maxWidth: '1100px', maxHeight: '45vh', borderRadius: '10px', overflow: 'hidden', border: '1px solid var(--border)', boxShadow: '0 15px 40px rgba(0,0,0,0.4)' }}>
-                  <img src="assets/cm_workflow_adv.png" alt="Content Machine — ADV Angles Workflow" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-                </div>
-                <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Workflow reale ADV Angles in Content Machine — 25 nodi, 52 connessioni
+                <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.4rem', color: 'var(--text-sec)', marginTop: '20px', fontWeight: 300 }}>
+                  Content Machine in azione su progetti reali
                 </p>
               </div>
             </section>
 
-            {/* SLIDE 10: Advertising Angles (Display 11) */}
+            {/* SLIDE 10: ADV Angles — Use Case 1 (Display 11) */}
             <section className={`slide ${currentSlide === 10 ? 'active' : ''}`} id="slide-10">
-              <span className="slide-tag">Caso Studio — La Tecnica degli Angles</span>
+              <span className="slide-tag">Use Case 1 — TerraViva Pet</span>
               <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
-                <div className="slide-content-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
-                    Advertising Angles
+                <div className="slide-content-left" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', lineHeight: 1.05 }}>
+                    ADV Angles
                   </h2>
-                  <p className="concept-intro" style={{ fontSize: '2rem', color: '#ffffff', lineHeight: 1.4 }}>
-                    La stessa offerta, raccontata in modo diverso a persone diverse.
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.15rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.4 }}>
+                    Partiamo dalla <strong style={{ color: '#fff' }}>creatività dell'agenzia</strong> e la decliniamo automaticamente in decine di varianti, una per ogni micro-target.
                   </p>
-                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.4rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.6, marginTop: '20px' }}>
-                    Nel performance advertising, un <strong style={{ color: '#ffffff' }}>Angle</strong> è la specifica prospettiva con cui presenti il tuo prodotto a un segmento di pubblico. Cambiando l'angolo — il beneficio enfatizzato, il contesto d'uso, il tipo di persona a cui parli — la stessa offerta diventa decine di creatività diverse, ciascuna rilevante per un micro-target specifico.
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)', boxShadow: '0 10px 30px rgba(0,0,0,0.4)', maxWidth: '340px' }}>
+                    <img src="assets/terraviva_master_adv.png" alt="Creatività di riferimento — TerraViva Pet" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  </div>
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '0.95rem', color: 'var(--text-muted)', fontStyle: 'italic', maxWidth: '340px' }}>
+                    <PaintBrush size={16} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                    Creatività master di riferimento
                   </p>
-                  <div className="takeaway-box" style={{ marginTop: '25px', fontSize: '1.4rem', padding: '16px 20px' }}>
-                    Più angoli testi → più dati raccogli → più velocemente trovi le combinazioni che convertono.
+                  <div className="takeaway-box" style={{ fontSize: '0.95rem', padding: '8px 14px', borderLeft: '3px solid #ff9f43' }}>
+                    <Warning size={16} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '4px', color: '#ff9f43' }} />
+                    Progetti reali sotto NDA — caso simulato end-to-end.
                   </div>
                 </div>
-                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '18px' }}>
-                  <h3 style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-sec)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '5px' }}>
-                    Le dimensioni di variazione
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px' }}>
+                  <h3 style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-sec)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '2px' }}>
+                    Le 6 dimensioni di variazione
                   </h3>
-                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
-                    <div>
-                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={24} weight="duotone" /> Valore di Comunicazione</h3>
-                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Quale value proposition enfatizzare: naturalità, performance, sostenibilità, convenienza...</p>
-                    </div>
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.4, marginBottom: '2px' }}>
+                    Un <strong style={{ color: '#fff' }}>Angle</strong> è la prospettiva con cui presenti il prodotto. Combinando queste 6 dimensioni, la stessa offerta diventa decine di creatività uniche.
+                  </p>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={20} weight="duotone" /> Valore di Comunicazione</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Naturalità, performance, sostenibilità, convenienza...</p>
                   </div>
-                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
-                    <div>
-                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Lightbulb size={24} weight="duotone" /> Beneficio Funzionale</h3>
-                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Il vantaggio pratico: digestione, pelo lucido, energia, controllo del peso...</p>
-                    </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><Lightbulb size={20} weight="duotone" /> Beneficio Funzionale</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Pelo & cute, digestione, energia, controllo del peso...</p>
                   </div>
-                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
-                    <div>
-                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><UserFocus size={24} weight="duotone" /> Target Persona</h3>
-                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>A chi parli: il neo-proprietario ansioso, il cinofilo esperto, la famiglia con bambini...</p>
-                    </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><UserFocus size={20} weight="duotone" /> Target Persona</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Giovane neoadottante, cinofilo esperto, famiglia con bambini...</p>
                   </div>
-                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
-                    <div>
-                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><MapPin size={24} weight="duotone" /> Contesto & Geolocalizzazione</h3>
-                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Dove e quando: vita in città, campagna, clima caldo, stagione invernale...</p>
-                    </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><Clock size={20} weight="duotone" /> Contesto d'Uso</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Momento della pappa, passeggiata al parco, check-up dal vet...</p>
                   </div>
-                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
-                    <div>
-                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Anchor size={24} weight="duotone" /> Hook Creativo</h3>
-                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>L'aggancio che cattura l'attenzione: domanda, dato scientifico, testimonianza, provocazione...</p>
-                    </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><MapPin size={20} weight="duotone" /> Geolocalizzazione</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Nord Italia, attico moderno; Sud, masseria con giardino...</p>
+                  </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><PawPrint size={20} weight="duotone" /> Razza Protagonista</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Labrador Retriever, Maine Coon, Beagle, Siamese...</p>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* SLIDE 12: La Forza dei Numeri */}
+            {/* SLIDE 11: Dalla Combinatoria alla Campagna (Display 12) */}
             <section className={`slide ${currentSlide === 11 ? 'active' : ''}`} id="slide-11">
-              <span className="slide-tag">Caso Studio — ADV Angles Numeri</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '4vh' }}>
-                La Forza dei Numeri (Singolo Run)
+              <span className="slide-tag">Use Case 1 — Selezione & Output</span>
+              <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '2vh' }}>
+                Dalla Combinatoria alla Campagna
               </h2>
-              
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-val">30</div>
-                  <div className="metric-label">Campagne Pubblicitarie</div>
-                  <p className="metric-desc">Trenta micro-segmenti ad-hoc generati contemporaneamente per cani e gatti.</p>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-val">120</div>
-                  <div className="metric-label">Immagini Statistiche</div>
-                  <p className="metric-desc">Visual generati ad alta risoluzione declinati in 4 formati (1:1, 4:5, 9:16, 16:9) per ogni campagna.</p>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-val">60</div>
-                  <div className="metric-label">Video Generati</div>
-                  <p className="metric-desc">Asset video in loop da 6 secondi pronti per Stories e Reels in formato 1:1 e 9:16.</p>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-val">90</div>
-                  <div className="metric-label">Card Narrative Carousel</div>
-                  <p className="metric-desc">Copy di Carousel a 3 schede per ciascun segmento (Problema/Hook, Soluzione, Prova/CTA).</p>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-val">210</div>
-                  <div className="metric-label">Testi e Copy Declinati</div>
-                  <p className="metric-desc">Headline, Body Copy, CTA, Script Hook e Hashtags pronti all'uso.</p>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-val">480+</div>
-                  <div className="metric-label">Asset Totali Pronti</div>
-                  <p className="metric-desc">Un archivio completo esportabile in un click pronto per essere inserito su Meta Business Manager.</p>
-                </div>
-              </div>
-            </section>
-
-            {/* SLIDE 13: Futuri Workflow & Altri Esempi */}
-            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
-              <span className="slide-tag">Piattaforma Estensibile</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '20px' }}>
-                Futuri Workflow & Altri Esempi
-              </h2>
-              <p style={{ color: 'var(--text-sec)', fontSize: '1.1rem', marginBottom: '30px' }}>
-                Il dataset è una struttura aperta adattabile a qualsiasi flusso di lavoro aziendale.
+              <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.25rem', color: 'var(--text-sec)', maxWidth: '900px', lineHeight: 1.5, fontWeight: 300, marginBottom: '3vh' }}>
+                6 dimensioni generano <strong style={{ color: '#fff' }}>1.846.800 combinazioni teoriche</strong>. 
+                Con la tecnica della <strong style={{ color: 'var(--accent)' }}>coppia prevalente</strong> — ogni riga guidata da una coppia dominante Valore × Beneficio, 
+                con le altre dimensioni come variazione secondaria — selezioniamo <strong style={{ color: '#fff' }}>48 angoli ad alta rilevanza</strong>.
               </p>
               
               <div className="metrics-grid">
-                <div className="metric-card" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '20px' }}>
-                  <h3 style={{ fontFamily: 'Figtree', fontSize: '1.3rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>
-                    01. Organic Editorial Plan
-                  </h3>
-                  <p className="metric-desc" style={{ fontSize: '0.9rem' }}>
-                    Creazione automatica di calendari editoriali per newsletter, post social e articoli di blog partendo dalle linee guida di brand e temi mensili.
-                  </p>
+                <div className="metric-card">
+                  <div className="metric-val">1.8M</div>
+                  <div className="metric-label">Combinazioni Teoriche</div>
+                  <p className="metric-desc">6 Valori × 6 Benefici × 19 Persona × 6 Contesti × 30 Geo × 15 Razze</p>
                 </div>
-                <div className="metric-card" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '20px' }}>
-                  <h3 style={{ fontFamily: 'Figtree', fontSize: '1.3rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>
-                    02. E-Commerce PIM Enrichment
-                  </h3>
-                  <p className="metric-desc" style={{ fontSize: '0.9rem' }}>
-                    Generazione automatica e arricchimento di schede prodotto, testi SEO e traduzioni in 15 lingue integrate con PIM/DAM aziendali.
-                  </p>
+                <div className="metric-card" style={{ border: '2px solid var(--accent)' }}>
+                  <div className="metric-val" style={{ color: 'var(--accent)' }}>48</div>
+                  <div className="metric-label">Campagne Selezionate</div>
+                  <p className="metric-desc">Coppie prevalenti Valore × Beneficio, ciascuna declinata su persona, contesto e hook specifici.</p>
                 </div>
-                <div className="metric-card" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '20px' }}>
-                  <h3 style={{ fontFamily: 'Figtree', fontSize: '1.3rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>
-                    03. Custom Workflows
-                  </h3>
-                  <p className="metric-desc" style={{ fontSize: '0.9rem' }}>
-                    Qualsiasi combinazione personalizzata di input (PDF, DB) ed output (documenti legali, FAQ, HTML) configurabile tramite mental model.
-                  </p>
+                <div className="metric-card">
+                  <div className="metric-val">192</div>
+                  <div className="metric-label">Immagini Statiche</div>
+                  <p className="metric-desc">4 formati per campagna (1:1, 4:5, 9:16, 16:9) pronti per ogni piattaforma.</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val">96</div>
+                  <div className="metric-label">Video Generati</div>
+                  <p className="metric-desc">Loop 6s in formato 1:1 e 9:16 per Stories, Reels e feed.</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val">144</div>
+                  <div className="metric-label">Card Carousel</div>
+                  <p className="metric-desc">3 schede narrative per campagna (Hook, Soluzione, CTA).</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val">770+</div>
+                  <div className="metric-label">Asset Totali Pronti</div>
+                  <p className="metric-desc">Immagini, video, testi, copy e hashtag esportabili in un click.</p>
                 </div>
               </div>
             </section>
 
-            {/* SLIDE 14: Visual Wall (Case Study Grid) */}
-            <section className={`slide ${currentSlide === 13 ? 'active' : ''} slide-visual-wall`} id="slide-13">
-              <span className="slide-tag">Visual Wall — Database delle Campagne</span>
+            {/* SLIDE 12: Il Ciclo Ricorsivo (Display 13) */}
+            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
+              <span className="slide-tag">Use Case 1 — Ottimizzazione Continua</span>
+              <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '2vh' }}>
+                Il Ciclo Ricorsivo
+              </h2>
+              <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.25rem', color: 'var(--text-sec)', maxWidth: '900px', lineHeight: 1.5, fontWeight: 300, marginBottom: '4vh' }}>
+                La selezione delle 48 coppie <strong style={{ color: '#fff' }}>non è statica</strong>. 
+                Content Machine si connette <strong style={{ color: 'var(--accent)' }}>via MCP ai dati analytics</strong> delle campagne live, 
+                creando un loop di ottimizzazione continua.
+              </p>
+
+              <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'center', gap: '0', width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
+                {/* Step 1 */}
+                <div style={{ flex: 1, padding: '22px 18px', background: 'rgba(18,18,18,0.6)', border: '1px solid var(--border)', borderRadius: '15px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Crosshair size={34} weight="duotone" style={{ color: 'var(--accent)', marginBottom: '8px' }} />
+                  <h3 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: '6px' }}>1. Selezione</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-sec)', lineHeight: 1.4 }}>
+                    Scelta delle 48 coppie prevalenti guidata da strategia e insight analytics
+                  </p>
+                </div>
+                <CaretCircleRight size={30} weight="duotone" style={{ color: 'var(--accent)', flexShrink: 0, margin: '0 6px', alignSelf: 'center' }} />
+                {/* Step 2 */}
+                <div style={{ flex: 1, padding: '22px 18px', background: 'rgba(18,18,18,0.6)', border: '1px solid var(--border)', borderRadius: '15px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <SlidersHorizontal size={34} weight="duotone" style={{ color: '#00ffaa', marginBottom: '8px' }} />
+                  <h3 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: '6px' }}>2. Generazione</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-sec)', lineHeight: 1.4 }}>
+                    Content Machine produce 770+ asset per le 48 campagne selezionate
+                  </p>
+                </div>
+                <CaretCircleRight size={30} weight="duotone" style={{ color: '#00ffaa', flexShrink: 0, margin: '0 6px', alignSelf: 'center' }} />
+                {/* Step 3 */}
+                <div style={{ flex: 1, padding: '22px 18px', background: 'rgba(18,18,18,0.6)', border: '1px solid var(--border)', borderRadius: '15px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Images size={34} weight="duotone" style={{ color: '#ff9f43', marginBottom: '8px' }} />
+                  <h3 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: '6px' }}>3. Distribuzione</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-sec)', lineHeight: 1.4 }}>
+                    Creatività distribuite su Meta, Google, TikTok e altri canali ADV
+                  </p>
+                </div>
+                <CaretCircleRight size={30} weight="duotone" style={{ color: '#ff9f43', flexShrink: 0, margin: '0 6px', alignSelf: 'center' }} />
+                {/* Step 4 */}
+                <div style={{ flex: 1, padding: '22px 18px', background: 'rgba(18,18,18,0.6)', border: '1px solid var(--border)', borderRadius: '15px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <BookOpen size={34} weight="duotone" style={{ color: '#e879f9', marginBottom: '8px' }} />
+                  <h3 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: '6px' }}>4. Analytics</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-sec)', lineHeight: 1.4 }}>
+                    Performance misurata via <strong style={{ color: '#e879f9' }}>connettore MCP</strong> — alimenta il ciclo successivo
+                  </p>
+                </div>
+              </div>
+
+              {/* Feedback loop arrow */}
+              <div style={{ width: '100%', maxWidth: '1200px', margin: '14px auto 0', textAlign: 'center', position: 'relative' }}>
+                <div style={{ border: '2px dashed var(--accent)', borderTop: 'none', borderRadius: '0 0 20px 20px', height: '36px', margin: '0 60px', position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '-4px', top: '-8px', color: 'var(--accent)', fontSize: '1.4rem' }}>▲</div>
+                  <span style={{ position: 'absolute', bottom: '5px', left: '50%', transform: 'translateX(-50%)', background: 'var(--bg)', padding: '0 16px', fontFamily: 'Figtree, sans-serif', fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
+                    Feedback Loop — Ogni ciclo affina la selezione
+                  </span>
+                </div>
+              </div>
+
+              <div className="takeaway-box" style={{ marginTop: '18px', fontSize: '1.1rem', padding: '12px 20px', maxWidth: '900px' }}>
+                Processo <strong>human-in-the-loop</strong>: il team aggiorna la creatività master, sceglie le nuove coppie con i dati di efficacia reali — e Content Machine può supportare anche la generazione del dataset di partenza.
+              </div>
+            </section>
+
+            {/* SLIDE 13: Use Case 1 — Screenshot Progetto (New) */}
+            <section className={`slide ${currentSlide === 13 ? 'active' : ''}`} id="slide-13">
+              <span className="slide-tag">Use Case 1 — Piattaforma</span>
               <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
-                Matrice dei Risultati Generati (30 Varianti)
+                Configurazione & Dataset di Input
+              </h2>
+              <div style={{ position: 'relative', flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 0, marginTop: '2vh' }}>
+                <img 
+                  src="assets/use_case1_mm.png" 
+                  alt="Use Case 1 Mental Model" 
+                  style={{ 
+                    position: 'absolute', 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                    opacity: uc1ImageIdx === 0 ? 1 : 0,
+                    transition: 'opacity 0.6s ease-in-out',
+                    zIndex: uc1ImageIdx === 0 ? 2 : 1
+                  }} 
+                />
+                <img 
+                  src="assets/use_case1_dataset.png" 
+                  alt="Use Case 1 Dataset" 
+                  style={{ 
+                    position: 'absolute', 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                    opacity: uc1ImageIdx === 1 ? 1 : 0,
+                    transition: 'opacity 0.6s ease-in-out',
+                    zIndex: uc1ImageIdx === 1 ? 2 : 1
+                  }} 
+                />
+              </div>
+            </section>
+
+            {/* SLIDE 14: Visual Wall UC1 (Case Study Grid) */}
+            <section className={`slide ${currentSlide === 14 ? 'active' : ''} slide-visual-wall`} id="slide-14">
+              <span className="slide-tag">Use Case 1 — Visual Wall</span>
+              <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
+                Matrice dei Risultati Generati
               </h2>
               
               <div className="wall-dense-grid-container">
@@ -1066,7 +1211,7 @@ export default function App() {
                         }}
                       >
                         <div className="wall-card-thumb-img-wrapper">
-                          <LazyImage src={camp.img_feed_1x1} alt="" className="thumb-lazy-image" />
+                          <LazyImage src={camp.img_feed_1x1 || camp.img_feed_4x5 || camp.img_banner_16x9} alt="" className="thumb-lazy-image" />
                           <div className="wall-card-thumb-badge">
                             #{orderNum}
                           </div>
@@ -1078,12 +1223,267 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 15: Grazie per l'attenzione */}
-            <section className={`slide ${currentSlide === 14 ? 'active' : ''}`} id="slide-14" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <span className="slide-tag" style={{ marginBottom: '20px' }}>Websolute Content Machine</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', textAlign: 'center', maxWidth: '100%' }}>
-                Grazie per l'attenzione
+            {/* SLIDE 15: Use Case 2 — Organic Editorial (Display 15) */}
+            <section className={`slide ${currentSlide === 15 ? 'active' : ''}`} id="slide-15">
+              <span className="slide-tag">Use Case 2 — TerraViva Pet</span>
+              <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                <div className="slide-content-left" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', lineHeight: 1.05 }}>
+                    Organic Editorial Plan
+                  </h2>
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.15rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.4 }}>
+                    Dalla stessa piattaforma, un workflow diverso: <strong style={{ color: '#fff' }}>contenuti editoriali educativi</strong> per i canali social organici. Stesso brand, nuova angolazione.
+                  </p>
+                  <p className="concept-intro" style={{ fontSize: '1.4rem', color: '#ffffff', lineHeight: 1.3 }}>
+                    Ogni razza ha esigenze diverse. Ogni contenuto parla a un bisogno specifico.
+                  </p>
+                  <div className="takeaway-box" style={{ fontSize: '0.95rem', padding: '8px 14px', borderLeft: '3px solid #00ffaa' }}>
+                    <Newspaper size={16} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '4px', color: '#00ffaa' }} />
+                    Stesso processo ricorsivo del Use Case 1, applicato ai contenuti editoriali.
+                  </div>
+                </div>
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px' }}>
+                  <h3 style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-sec)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '2px' }}>
+                    Le 5 dimensioni editoriali
+                  </h3>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={20} weight="duotone" /> Argomento</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Cura del pelo, digestione, articolazioni, sviluppo cuccioli...</p>
+                  </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={20} weight="duotone" /> Angolo Editoriale</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Consiglio dell'Esperto, Curiosità sulla Razza, Miti da Sfatare...</p>
+                  </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><Megaphone size={20} weight="duotone" /> Canale Social</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Instagram Carousel, Reels/TikTok, Facebook, LinkedIn...</p>
+                  </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><PawPrint size={20} weight="duotone" /> Razza Protagonista</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Golden Retriever, Bulldog Francese, Maine Coon, Siamese...</p>
+                  </div>
+                  <div className="workflow-card" style={{ padding: '10px 14px', minHeight: 'auto' }}>
+                    <h3 className="step-title" style={{ fontSize: '1.1rem', marginBottom: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><MusicNote size={20} weight="duotone" /> Tono di Voce</h3>
+                    <p className="step-desc" style={{ fontSize: '0.9rem' }}>Scientifico-Autorevole, Coinvolgente-Leggero, Empatico-Amichevole</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* SLIDE 16: Editorial — Numeri & Localizzazione (Display 16) */}
+            <section className={`slide ${currentSlide === 16 ? 'active' : ''}`} id="slide-16">
+              <span className="slide-tag">Use Case 2 — Output & Localizzazione</span>
+              <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '2vh' }}>
+                Dalla Redazione alla Scala Globale
               </h2>
+              <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.25rem', color: 'var(--text-sec)', maxWidth: '900px', lineHeight: 1.5, fontWeight: 300, marginBottom: '3vh' }}>
+                5 dimensioni generano <strong style={{ color: '#fff' }}>54.000 combinazioni teoriche</strong>. 
+                Selezioniamo <strong style={{ color: 'var(--accent)' }}>30 contenuti editoriali</strong>, ciascuno con 12 asset pronti per la pubblicazione. 
+                Poi Content Machine <strong style={{ color: '#00ffaa' }}>localizza tutto in 6 lingue</strong>.
+              </p>
+              
+              <div className="metrics-grid">
+                <div className="metric-card">
+                  <div className="metric-val">54K</div>
+                  <div className="metric-label">Combinazioni Teoriche</div>
+                  <p className="metric-desc">30 Argomenti × 5 Angoli × 4 Canali × 30 Razze × 3 Toni</p>
+                </div>
+                <div className="metric-card" style={{ border: '2px solid var(--accent)' }}>
+                  <div className="metric-val" style={{ color: 'var(--accent)' }}>30</div>
+                  <div className="metric-label">Contenuti Selezionati</div>
+                  <p className="metric-desc">Scelti con la tecnica della coppia prevalente Argomento × Razza</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val">360</div>
+                  <div className="metric-label">Asset per Lingua</div>
+                  <p className="metric-desc">Caption, brief, carousel, story, video, voiceover per ogni contenuto</p>
+                </div>
+                <div className="metric-card" style={{ border: '2px solid #00ffaa' }}>
+                  <div className="metric-val" style={{ color: '#00ffaa' }}>6</div>
+                  <div className="metric-label">Lingue</div>
+                  <p className="metric-desc">IT, EN, ES, FR, DE, PT — localizzazione culturale, non simple traduzione</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val">2.160</div>
+                  <div className="metric-label">Asset Totali Localizzati</div>
+                  <p className="metric-desc">360 asset × 6 lingue = piano editoriale globale pronto</p>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-val" style={{ fontSize: '2.5rem' }}>
+                    <Globe size={40} weight="duotone" style={{ color: '#e879f9' }} />
+                  </div>
+                  <div className="metric-label">Localizzazione Culturale</div>
+                  <p className="metric-desc">Roma → Madrid, Milano → Lyon, Toscana → Provence — adattamento geo e tono</p>
+                </div>
+              </div>
+            </section>
+
+            {/* SLIDE 17: Use Case 2 — Screenshot Progetto (New) */}
+            <section className={`slide ${currentSlide === 17 ? 'active' : ''}`} id="slide-17">
+              <span className="slide-tag">Use Case 2 — Piattaforma</span>
+              <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
+                Configurazione & Dataset di Input
+              </h2>
+              <div style={{ position: 'relative', flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 0, marginTop: '2vh' }}>
+                <img 
+                  src="assets/use_case2_mm.png" 
+                  alt="Use Case 2 Mental Model" 
+                  style={{ 
+                    position: 'absolute', 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                    opacity: uc2ImageIdx === 0 ? 1 : 0,
+                    transition: 'opacity 0.6s ease-in-out',
+                    zIndex: uc2ImageIdx === 0 ? 2 : 1
+                  }} 
+                />
+                <img 
+                  src="assets/use_case2_dataset.png" 
+                  alt="Use Case 2 Dataset" 
+                  style={{ 
+                    position: 'absolute', 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                    opacity: uc2ImageIdx === 1 ? 1 : 0,
+                    transition: 'opacity 0.6s ease-in-out',
+                    zIndex: uc2ImageIdx === 1 ? 2 : 1
+                  }} 
+                />
+              </div>
+            </section>
+
+            {/* SLIDE 18: UC2 — Carrellata Contenuti Editoriali (Display 17) */}
+            <section className={`slide ${currentSlide === 18 ? 'active' : ''}`} id="slide-18">
+              {currentEditorial && (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '8px' }}>
+                    <span className="slide-tag" style={{ position: 'relative', top: 0 }}>
+                      Use Case 2 — Contenuto {editWallStep + 1}/{editorialContents.length}
+                    </span>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>
+                        #{(editWallStep + 1).toString().padStart(2, '0')} — {currentEditorial.argomento}
+                      </span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-sec)' }}>·</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>{currentEditorial.razza}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-sec)' }}>·</span>
+                      <span style={{ fontSize: '0.75rem', color: '#e879f9' }}>{currentEditorial.editorial_angle}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      {editorialContents.map((_, i) => (
+                        <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: i === editWallStep ? 'var(--accent)' : 'rgba(255,255,255,0.15)', transition: 'background 0.3s' }} />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '24px', flex: 1, width: '100%', minHeight: 0 }}>
+                    {/* Left: 3 iPhones */}
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <InstagramCarousel 
+                          images={[currentEditorial.carousel_img_1, currentEditorial.carousel_img_2, currentEditorial.carousel_img_3, currentEditorial.carousel_img_4]}
+                          caption={currentEditorial.social_caption}
+                        />
+                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Carousel</span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <InstagramStory 
+                          imageSrc={currentEditorial.story_img}
+                          videoSrc={currentEditorial.story_video}
+                        />
+                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#e879f9', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Story</span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <TikTokPhone 
+                          imageSrc={currentEditorial.tiktok_img}
+                          videoSrc={currentEditorial.tiktok_video}
+                          caption={currentEditorial.social_caption}
+                        />
+                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#00ffaa', textTransform: 'uppercase', letterSpacing: '0.05em' }}>TikTok</span>
+                      </div>
+                    </div>
+
+                    {/* Right: Text panel */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', paddingRight: '8px' }}>
+                      {/* Input angles */}
+                      <div style={{ background: 'var(--surface)', borderRadius: '10px', padding: '12px 14px', border: '1px solid var(--border)' }}>
+                        <h4 style={{ fontFamily: 'Figtree', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-sec)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Dimensioni di Input</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          {[
+                            { label: 'Argomento', value: currentEditorial.argomento, color: 'var(--accent)' },
+                            { label: 'Angolo', value: currentEditorial.editorial_angle, color: '#e879f9' },
+                            { label: 'Canale', value: currentEditorial.canale_social, color: '#ff9f43' },
+                            { label: 'Razza', value: currentEditorial.razza, color: '#00ffaa' },
+                            { label: 'Tono', value: currentEditorial.tono_voce, color: 'var(--text-sec)' },
+                          ].map(({ label, value, color }) => (
+                            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem' }}>
+                              <span style={{ color: 'var(--text-sec)', fontWeight: 500 }}>{label}</span>
+                              <span style={{ color, fontWeight: 600 }}>{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Social Caption */}
+                      <div style={{ background: 'var(--surface)', borderRadius: '10px', padding: '12px 14px', border: '1px solid var(--border)' }}>
+                        <h4 style={{ fontFamily: 'Figtree', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>Social Caption</h4>
+                        <p style={{ fontSize: '0.72rem', color: 'var(--text-sec)', lineHeight: 1.4, margin: 0, maxHeight: '80px', overflow: 'auto' }}>
+                          {currentEditorial.social_caption?.replace(/\*\*/g, '').substring(0, 300)}
+                        </p>
+                      </div>
+
+                      {/* Editorial Brief */}
+                      <div style={{ background: 'var(--surface)', borderRadius: '10px', padding: '12px 14px', border: '1px solid var(--border)' }}>
+                        <h4 style={{ fontFamily: 'Figtree', fontSize: '0.8rem', fontWeight: 700, color: '#00ffaa', marginBottom: '6px' }}>Editorial Brief</h4>
+                        <p style={{ fontSize: '0.72rem', color: 'var(--text-sec)', lineHeight: 1.4, margin: 0, maxHeight: '70px', overflow: 'auto' }}>
+                          {currentEditorial.editorial_brief?.substring(0, 250)}
+                        </p>
+                      </div>
+
+                      {/* Voiceover Script */}
+                      <div style={{ background: 'var(--surface)', borderRadius: '10px', padding: '12px 14px', border: '1px solid var(--border)' }}>
+                        <h4 style={{ fontFamily: 'Figtree', fontSize: '0.8rem', fontWeight: 700, color: '#e879f9', marginBottom: '6px' }}>Reels Voiceover</h4>
+                        <p style={{ fontSize: '0.72rem', color: 'var(--text-sec)', lineHeight: 1.4, margin: 0, maxHeight: '60px', overflow: 'auto' }}>
+                          {currentEditorial.reels_voiceover_script?.substring(0, 200)}
+                        </p>
+                      </div>
+
+                      {/* Visual Brief */}
+                      <div style={{ background: 'var(--surface)', borderRadius: '10px', padding: '12px 14px', border: '1px solid var(--border)' }}>
+                        <h4 style={{ fontFamily: 'Figtree', fontSize: '0.8rem', fontWeight: 700, color: '#ff9f43', marginBottom: '6px' }}>Visual Brief</h4>
+                        <p style={{ fontSize: '0.72rem', color: 'var(--text-sec)', lineHeight: 1.4, margin: 0, maxHeight: '50px', overflow: 'auto' }}>
+                          {currentEditorial.visual_brief_overlay?.substring(0, 180)}
+                        </p>
+                      </div>
+
+                      {/* Languages */}
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', padding: '4px 0' }}>
+                        {['\u{1F1EE}\u{1F1F9} IT', '\u{1F1EC}\u{1F1E7} EN', '\u{1F1EA}\u{1F1F8} ES', '\u{1F1EB}\u{1F1F7} FR', '\u{1F1E9}\u{1F1EA} DE', '\u{1F1F5}\u{1F1F9} PT'].map((lang) => (
+                          <span key={lang} style={{ padding: '3px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 600, background: lang.includes('IT') ? 'var(--accent)' : 'rgba(255,255,255,0.06)', color: lang.includes('IT') ? '#000' : 'var(--text-sec)', border: '1px solid var(--border)' }}>{lang}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </section>
+
+            {/* SLIDE 19: Grazie per l'attenzione (Display 18) */}
+            <section className={`slide ${currentSlide === 19 ? 'active' : ''}`} id="slide-19">
+              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <span className="slide-tag" style={{ marginBottom: '20px' }}>Websolute Content Machine</span>
+                <h2 className="slide-title" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', textAlign: 'center', maxWidth: '100%' }}>
+                  Grazie per l'attenzione
+                </h2>
+              </div>
             </section>
 
             {/* BOTTOM BAR (SLIDE DECK CONTROLS) */}
@@ -1451,6 +1851,8 @@ export default function App() {
           </div>
         </div>
       )}
+
+
 
       {/* Agentation Root */}
       <div id="agentation-root"></div>

@@ -1,0 +1,1522 @@
+{
+  "project": {
+    "name": "[V3.0] DEMO - TerraViva Pet - Organic Editorial Plan (Educational)",
+    "endpoint": "https://platform-ai-dev.ws-deploy-01.wslabs.it/api/llm/message?locale=it&raw&logThread=false",
+    "appkey": "app-wscm-gemini",
+    "apikey": "ddf24aa2-a047-4878-9ca3-e1a0e8e98800",
+    "openaiApikey": "",
+    "geminiApikey": "",
+    "shopifyToken": "",
+    "shopifyApiKey": "",
+    "shopifySecretKey": "",
+    "apiUserKey": "",
+    "appid": "",
+    "previewTemplateUrl": "",
+    "previewTemplateContent": "<!DOCTYPE html>\n<html lang=\"it\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>TerraViva Pet — Social Simulator Preview</title>\n<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap\" rel=\"stylesheet\">\n<style>\n  :root {\n    --bg: #0b0c0b;\n    --surface: #121312;\n    --surface-card: #191a19;\n    --border: rgba(255, 255, 255, 0.08);\n    --primary: #4e8252;\n    --primary-light: #89b38b;\n    --accent: #d4a373;\n    --accent-light: #e6ccb2;\n    --text: #f3f4f6;\n    --text-dim: #cbd5e1;\n    --text-muted: #64748b;\n    --iphone-bg: #000;\n  }\n  \n  * { margin: 0; padding: 0; box-sizing: border-box; }\n  body {\n    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;\n    background: var(--bg);\n    color: var(--text-dim);\n    line-height: 1.6;\n    padding: 30px;\n  }\n\n  .header {\n    max-width: 1400px;\n    margin: 0 auto 30px auto;\n    padding-bottom: 20px;\n    border-bottom: 1px solid var(--border);\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n  .brand-title {\n    font-size: 20px;\n    font-weight: 850;\n    letter-spacing: 1.5px;\n    text-transform: uppercase;\n    color: var(--text);\n  }\n  .brand-title span { color: var(--accent); }\n  .brand-subtitle {\n    font-size: 12px;\n    color: var(--primary-light);\n    font-weight: 600;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n  }\n  \n  .layout-container {\n    max-width: 1400px;\n    margin: 0 auto;\n    display: grid;\n    grid-template-columns: 1.2fr 1fr;\n    gap: 40px;\n  }\n  @media (max-width: 1024px) {\n    .layout-container { grid-template-columns: 1fr; }\n  }\n\n  /* STRATEGIC CHIPS */\n  .meta-panel {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 16px;\n    padding: 24px;\n    margin-bottom: 24px;\n  }\n  .grid-2 {\n    display: grid;\n    grid-template-columns: 1fr 1fr;\n    gap: 16px;\n  }\n  .meta-chip {\n    background: var(--surface-card);\n    border: 1px solid var(--border);\n    border-radius: 10px;\n    padding: 12px 16px;\n  }\n  .meta-label {\n    font-size: 9px;\n    font-weight: 800;\n    color: var(--text-muted);\n    text-transform: uppercase;\n    letter-spacing: 0.5px;\n    margin-bottom: 4px;\n  }\n  .meta-val {\n    font-size: 14px;\n    font-weight: 700;\n    color: var(--text);\n  }\n\n  /* TABS FOR SOCIALS */\n  .social-tabs {\n    display: flex;\n    gap: 10px;\n    margin-bottom: 24px;\n  }\n  .tab-btn {\n    flex: 1;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    color: var(--text-dim);\n    padding: 12px;\n    border-radius: 12px;\n    font-size: 12px;\n    font-weight: 700;\n    cursor: pointer;\n    transition: all 0.2s ease;\n    text-transform: uppercase;\n    letter-spacing: 0.5px;\n    text-align: center;\n  }\n  .tab-btn.active {\n    background: var(--primary);\n    color: white;\n    border-color: var(--primary);\n    box-shadow: 0 0 15px rgba(78, 130, 82, 0.3);\n  }\n  .tab-btn:hover:not(.active) {\n    background: var(--surface-card);\n  }\n\n  /* IPHONE SIMULATOR FRAME */\n  .simulator-column {\n    display: flex;\n    justify-content: center;\n    align-items: flex-start;\n  }\n  .iphone-frame {\n    width: 380px;\n    height: 780px;\n    background: var(--iphone-bg);\n    border: 12px solid #222;\n    border-radius: 50px;\n    position: relative;\n    box-shadow: 0 25px 60px -10px rgba(0,0,0,0.8), 0 0 0 2px #333;\n    overflow: hidden;\n    display: flex;\n    flex-direction: column;\n  }\n  /* Dynamic Island */\n  .dynamic-island {\n    position: absolute;\n    top: 12px;\n    left: 50%;\n    transform: translateX(-50%);\n    width: 100px;\n    height: 25px;\n    background: #000;\n    border-radius: 20px;\n    z-index: 100;\n  }\n\n  /* SOCIAL SCREEN WRAPPERS */\n  .screen-content {\n    width: 100%;\n    height: 100%;\n    overflow-y: auto;\n    background: #000;\n    color: #fff;\n    display: none;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n  }\n  .screen-content.active {\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* INSTAGRAM MOCKUP */\n  .ig-header {\n    display: flex;\n    align-items: center;\n    padding: 12px 16px;\n    margin-top: 25px; /* space for island */\n    border-bottom: 0.5px solid #262626;\n  }\n  .ig-avatar {\n    width: 32px;\n    height: 32px;\n    border-radius: 50%;\n    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);\n    padding: 1.5px;\n    margin-right: 10px;\n  }\n  .ig-avatar-inner {\n    width: 100%;\n    height: 100%;\n    border-radius: 50%;\n    background: #000;\n    overflow: hidden;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .ig-avatar-inner img {\n    width: 80%;\n    height: 80%;\n    object-fit: contain;\n  }\n  .ig-username-col {\n    display: flex;\n    flex-direction: column;\n  }\n  .ig-username {\n    font-size: 13px;\n    font-weight: 700;\n  }\n  .ig-sub {\n    font-size: 10px;\n    color: #a8a8a8;\n  }\n  \n  .ig-media-area {\n    width: 100%;\n    aspect-ratio: 1;\n    position: relative;\n    background: #111;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .ig-media-area img {\n    width: 100%;\n    height: 100%;\n    object-fit: contain;\n  }\n  .ig-carousel-arrows {\n    position: absolute;\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n    padding: 0 10px;\n    top: 50%;\n    transform: translateY(-50%);\n    pointer-events: none;\n  }\n  .carousel-arrow {\n    width: 28px;\n    height: 28px;\n    background: rgba(0, 0, 0, 0.6);\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: #fff;\n    cursor: pointer;\n    font-size: 11px;\n    font-weight: bold;\n    pointer-events: auto;\n  }\n  .ig-dots {\n    display: flex;\n    justify-content: center;\n    gap: 5px;\n    padding: 10px 0;\n  }\n  .dot {\n    width: 6px;\n    height: 6px;\n    background: #555;\n    border-radius: 50%;\n    transition: background 0.2s;\n  }\n  .dot.active {\n    background: #0095f6;\n  }\n  \n  .ig-actions {\n    display: flex;\n    justify-content: space-between;\n    padding: 6px 14px;\n    font-size: 16px;\n  }\n  .ig-actions-left {\n    display: flex;\n    gap: 14px;\n  }\n  \n  .ig-caption-block {\n    padding: 0 14px 20px 14px;\n    font-size: 12.5px;\n    line-height: 1.5;\n  }\n  .ig-likes {\n    font-weight: 700;\n    margin-bottom: 4px;\n  }\n  .ig-caption-text {\n    color: #f5f5f5;\n  }\n  .ig-caption-text strong {\n    color: #fff;\n    margin-right: 5px;\n  }\n\n  /* INSTAGRAM STORY MOCKUP */\n  .story-screen {\n    position: relative;\n    background: #000;\n    overflow: hidden;\n  }\n  .story-bar {\n    position: absolute;\n    top: 45px;\n    left: 10px;\n    right: 10px;\n    height: 2px;\n    display: flex;\n    gap: 4px;\n    z-index: 10;\n  }\n  .story-progress {\n    flex: 1;\n    height: 100%;\n    background: rgba(255,255,255,0.35);\n    border-radius: 1px;\n    overflow: hidden;\n  }\n  .story-progress-fill {\n    width: 100%;\n    height: 100%;\n    background: #fff;\n  }\n  .story-user {\n    position: absolute;\n    top: 55px;\n    left: 14px;\n    display: flex;\n    align-items: center;\n    z-index: 10;\n  }\n  .story-avatar-img {\n    width: 28px;\n    height: 28px;\n    border-radius: 50%;\n    border: 1px solid #fff;\n    background: #000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    margin-right: 8px;\n  }\n  .story-avatar-img img {\n    width: 70%;\n    height: 70%;\n    object-fit: contain;\n  }\n  .story-name {\n    font-size: 12px;\n    font-weight: 700;\n    text-shadow: 0 1px 3px rgba(0,0,0,0.6);\n  }\n  .story-media-container {\n    width: 100%;\n    height: 100%;\n    position: relative;\n  }\n  .story-media-container img, .story-media-container video {\n    width: 100%;\n    height: 100%;\n    object-fit: contain;\n  }\n  .story-bottom-bar {\n    position: absolute;\n    bottom: 20px;\n    left: 14px;\n    right: 14px;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    z-index: 10;\n  }\n  .story-input {\n    flex: 1;\n    border: 1px solid rgba(255,255,255,0.4);\n    background: rgba(0,0,0,0.25);\n    border-radius: 20px;\n    padding: 8px 16px;\n    font-size: 12px;\n    color: #fff;\n  }\n\n  /* TIKTOK MOCKUP */\n  .tiktok-screen {\n    position: relative;\n    background: #000;\n  }\n  .tt-top-nav {\n    position: absolute;\n    top: 45px;\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    gap: 16px;\n    font-size: 14px;\n    font-weight: 700;\n    color: rgba(255,255,255,0.6);\n    z-index: 10;\n  }\n  .tt-top-nav span.active {\n    color: #fff;\n    border-bottom: 2px solid #fff;\n    padding-bottom: 2px;\n  }\n  .tt-media-container {\n    width: 100%;\n    height: 100%;\n  }\n  .tt-media-container img, .tt-media-container video {\n    width: 100%;\n    height: 100%;\n    object-fit: contain;\n  }\n  .tt-right-actions {\n    position: absolute;\n    right: 12px;\n    bottom: 120px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 18px;\n    z-index: 10;\n  }\n  .tt-action-btn {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    font-size: 18px;\n    color: #fff;\n  }\n  .tt-action-btn span {\n    font-size: 9px;\n    margin-top: 3px;\n    font-weight: 600;\n  }\n  .tt-avatar-action {\n    width: 36px;\n    height: 36px;\n    border-radius: 50%;\n    border: 1px solid #fff;\n    background: #000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n  }\n  .tt-avatar-action img {\n    width: 70%;\n    height: 70%;\n    object-fit: contain;\n  }\n  .tt-avatar-plus {\n    position: absolute;\n    bottom: -5px;\n    background: #fe2c55;\n    color: #fff;\n    font-size: 9px;\n    font-weight: bold;\n    border-radius: 50%;\n    width: 14px;\n    height: 14px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .tt-disk {\n    width: 32px;\n    height: 32px;\n    border-radius: 50%;\n    background: #111;\n    border: 4px solid #333;\n    animation: rotate 4s linear infinite;\n  }\n  @keyframes rotate {\n    from { transform: rotate(0deg); }\n    to { transform: rotate(360deg); }\n  }\n  .tt-caption-overlay {\n    position: absolute;\n    left: 14px;\n    bottom: 25px;\n    right: 70px;\n    z-index: 10;\n    text-shadow: 0 1px 3px rgba(0,0,0,0.8);\n  }\n  .tt-username {\n    font-size: 13px;\n    font-weight: 700;\n    margin-bottom: 6px;\n  }\n  .tt-text {\n    font-size: 11.5px;\n    line-height: 1.4;\n    color: #e5e5e5;\n  }\n\n  /* BRIEF & DETAILS CARD (LEFT COLUMN) */\n  .details-column {\n    display: flex;\n    flex-direction: column;\n    gap: 24px;\n  }\n  \n  .details-block {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 16px;\n    padding: 24px;\n    box-shadow: 0 10px 30px rgba(0,0,0,0.2);\n  }\n  .brief-section-title {\n    font-size: 11px;\n    font-weight: 800;\n    color: var(--accent);\n    text-transform: uppercase;\n    letter-spacing: 1.5px;\n    margin-bottom: 8px;\n    padding-bottom: 4px;\n    border-bottom: 1px solid rgba(255, 255, 255, 0.04);\n  }\n  .brief-section-body {\n    font-size: 13px;\n    color: var(--text-dim);\n    line-height: 1.6;\n    margin-bottom: 20px;\n    white-space: pre-wrap;\n  }\n  .brief-section-body:last-child {\n    margin-bottom: 0;\n  }\n  \n  /* TOGGLES STATICO/ANIMATO */\n  .toggle-container {\n    display: flex;\n    justify-content: center;\n    gap: 8px;\n    margin-top: 10px;\n    margin-bottom: 16px;\n  }\n  .toggle-btn {\n    background: rgba(255, 255, 255, 0.05);\n    border: 1px solid var(--border);\n    color: var(--text-dim);\n    padding: 6px 12px;\n    border-radius: 6px;\n    font-size: 10px;\n    font-weight: 700;\n    cursor: pointer;\n    text-transform: uppercase;\n  }\n  .toggle-btn.active {\n    background: var(--accent);\n    color: #000;\n    border-color: var(--accent);\n  }\n\n  /* SCROLL indicator for carousel */\n  .carousel-indicator {\n    text-align: center;\n    font-size: 11px;\n    color: var(--accent);\n    font-weight: 700;\n    margin-top: 8px;\n  }\n</style>\n</head>\n<body>\n\n<!-- HEADER -->\n<div class=\"header\">\n  <div class=\"brand-logo-container\">\n    <div class=\"brand-name\">Terra<span>Viva</span> Pet</div>\n    <div class=\"brand-subtitle\">Simulatore Social Organico</div>\n  </div>\n  <div class=\"header-badge\">📱 Educational Preview</div>\n</div>\n\n<div class=\"layout-container\">\n  \n  <!-- LEFT COLUMN: STRATEGY & CAPTION -->\n  <div class=\"details-column\">\n    \n    <!-- Configurazione Strategica -->\n    <div class=\"details-block\">\n      <div class=\"panel-title\">🎯 Configurazione Strategica</div>\n      <div class=\"grid-2\" style=\"margin-top: 14px;\">\n        <div class=\"meta-chip\">\n          <div class=\"meta-label\">Angolo Editoriale</div>\n          <div class=\"meta-val\">##editorial_angle##</div>\n        </div>\n        <div class=\"meta-chip\">\n          <div class=\"meta-label\">Argomento Focus</div>\n          <div class=\"meta-val\">##argomento##</div>\n        </div>\n        <div class=\"meta-chip\">\n          <div class=\"meta-label\">Canale Social</div>\n          <div class=\"meta-val\">##canale_social##</div>\n        </div>\n        <div class=\"meta-chip\">\n          <div class=\"meta-label\">Razza Protagonista</div>\n          <div class=\"meta-val\">##razza##</div>\n        </div>\n      </div>\n    </div>\n\n    <!-- Brief Strategico -->\n    <div class=\"details-block\">\n      <div class=\"panel-title\" style=\"margin-bottom: 16px;\">📝 Brief Strategico dell'AI</div>\n      <div id=\"brief-raw\" style=\"display: none;\">##$editorial_brief##</div>\n      <div id=\"brief-parsed\">\n        <!-- Injected by JS -->\n      </div>\n    </div>\n\n    <!-- Copy & Script Vocale -->\n    <div class=\"details-block\">\n      <div class=\"panel-title\" style=\"margin-bottom: 16px;\">🎙️ Reels Voiceover Script (30s)</div>\n      <div class=\"brief-section-body\" style=\"font-style: italic; color: var(--accent-light); background: rgba(0,0,0,0.15); padding: 16px; border-radius: 8px; border-left: 3px solid var(--accent);\">\n        \"##$reels_voiceover_script##\"\n      </div>\n    </div>\n\n  </div>\n\n  <!-- RIGHT COLUMN: SIMULATORS -->\n  <div>\n    <!-- Social Selector Tabs -->\n    <div class=\"social-tabs\">\n      <button class=\"tab-btn active\" onclick=\"switchChannel('instagram')\">IG Feed (Carosello)</button>\n      <button class=\"tab-btn\" onclick=\"switchChannel('story')\">IG Story</button>\n      <button class=\"tab-btn\" onclick=\"switchChannel('tiktok')\">TikTok</button>\n    </div>\n\n    <!-- iPhone Simulator -->\n    <div class=\"simulator-column\">\n      <div class=\"iphone-frame\">\n        <div class=\"dynamic-island\"></div>\n        \n        <!-- SCREEN 1: INSTAGRAM FEED (Carousel) -->\n        <div id=\"ig-feed-screen\" class=\"screen-content active\">\n          <div class=\"ig-header\">\n            <div class=\"ig-avatar\">\n              <div class=\"ig-avatar-inner\">\n                <img src=\"https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117397283_xznb5iycj_terraviva_logo.png\" alt=\"Avatar\">\n              </div>\n            </div>\n            <div class=\"ig-username-col\">\n              <span class=\"ig-username\">terravivapet</span>\n              <span class=\"ig-sub\">Post Organico Divulgativo</span>\n            </div>\n          </div>\n          \n          <div class=\"ig-media-area\">\n            <img id=\"ig-carousel-image\" src=\"##$carousel_img_1##\" alt=\"Carousel Slide 1\">\n            <div class=\"ig-carousel-arrows\">\n              <div class=\"carousel-arrow\" style=\"pointer-events: auto;\" onclick=\"prevSlide()\">&lt;</div>\n              <div class=\"carousel-arrow\" style=\"pointer-events: auto;\" onclick=\"nextSlide()\">&gt;</div>\n            </div>\n          </div>\n          \n          <div class=\"ig-dots\">\n            <div class=\"dot active\" id=\"dot-0\"></div>\n            <div class=\"dot\" id=\"dot-1\"></div>\n            <div class=\"dot\" id=\"dot-2\"></div>\n            <div class=\"dot\" id=\"dot-3\"></div>\n          </div>\n          \n          <div class=\"carousel-indicator\">\n            Slide <span id=\"slide-num-indicator\">1</span> di 4\n          </div>\n          \n          <div class=\"ig-actions\">\n            <div class=\"ig-actions-left\">\n              <span>❤️</span> <span>💬</span> <span>✈️</span>\n            </div>\n            <span>💾</span>\n          </div>\n          \n          <div class=\"ig-caption-block\">\n            <div class=\"ig-likes\">Piace a moltissimi pet parent</div>\n            <div class=\"ig-caption-text\">\n              <strong>terravivapet</strong><span id=\"ig-caption-parsed-target\">##$social_caption##</span>\n            </div>\n          </div>\n        </div>\n        \n        <!-- SCREEN 2: INSTAGRAM STORY -->\n        <div id=\"ig-story-screen\" class=\"screen-content\">\n          <div class=\"story-screen\" style=\"width:100%; height:100%;\">\n            <div class=\"story-bar\">\n              <div class=\"story-progress\"><div class=\"story-progress-fill\" id=\"story-progress-fill-bar\"></div></div>\n            </div>\n            <div class=\"story-user\">\n              <div class=\"story-avatar-img\">\n                <img src=\"https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117397283_xznb5iycj_terraviva_logo.png\" alt=\"Avatar\">\n              </div>\n              <span class=\"story-name\">terravivapet</span>\n            </div>\n            \n            <div class=\"story-media-container\" id=\"story-media-target\">\n              <img id=\"story-img-tag\" src=\"##$story_img##\" alt=\"Story Statica\">\n              <video id=\"story-video-tag\" src=\"##$story_video##\" style=\"display:none;\" muted autoplay loop playsinline></video>\n            </div>\n            \n            <div class=\"story-bottom-bar\">\n              <div class=\"story-input\">Invia un messaggio...</div>\n              <span>❤️</span>\n            </div>\n          </div>\n        </div>\n        \n        <!-- SCREEN 3: TIKTOK -->\n        <div id=\"tiktok-screen\" class=\"screen-content\">\n          <div class=\"tiktok-screen\" style=\"width:100%; height:100%;\">\n            <div class=\"tt-top-nav\">\n              <span>Seguiti</span>\n              <span class=\"active\">Per te</span>\n            </div>\n            \n            <div class=\"tt-media-container\" id=\"tt-media-target\">\n              <img id=\"tt-img-tag\" src=\"##$tiktok_img##\" alt=\"TikTok Statica\">\n              <video id=\"tt-video-tag\" src=\"##$tiktok_video##\" style=\"display:none;\" muted autoplay loop playsinline></video>\n            </div>\n            \n            <div class=\"tt-right-actions\">\n              <div class=\"tt-avatar-action\">\n                <img src=\"https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117397283_xznb5iycj_terraviva_logo.png\" alt=\"Avatar\">\n                <div class=\"tt-avatar-plus\">+</div>\n              </div>\n              <div class=\"tt-action-btn\">❤️ <span>2.4k</span></div>\n              <div class=\"tt-action-btn\">💬 <span>142</span></div>\n              <div class=\"tt-action-btn\">⭐ <span>410</span></div>\n              <div class=\"tt-action-btn\">➡️ <span>98</span></div>\n              <div class=\"tt-disk\"></div>\n            </div>\n            \n            <div class=\"tt-caption-overlay\">\n              <div class=\"tt-username\">@terravivapet</div>\n              <div class=\"tt-text\" id=\"tt-caption-target\">\n                <!-- Caption populated by JS -->\n              </div>\n            </div>\n          </div>\n        </div>\n        \n      </div>\n    </div>\n    \n    <!-- Toggles for Video/Static inside Mockups -->\n    <div class=\"toggle-container\" id=\"static-video-toggles\" style=\"display:none;\">\n      <button class=\"toggle-btn active\" id=\"btn-static\" onclick=\"setMediaType('static')\">Foto Statica</button>\n      <button class=\"toggle-btn\" id=\"btn-video\" onclick=\"setMediaType('video')\">Video Animato</button>\n    </div>\n  </div>\n\n</div>\n\n<script>\n  // Asset variables injected by Content Machine\n  const carouselSlides = [\n    `##$carousel_img_1##`,\n    `##$carousel_img_2##`,\n    `##$carousel_img_3##`,\n    `##$carousel_img_4##`\n  ];\n  \n  let currentSlideIdx = 0;\n  let activeChannel = 'instagram';\n  let mediaType = 'static'; // static or video for Story/TikTok\n\n  function checkPlaceholder(url) {\n    return !url || url.includes('##$') || url.includes('##');\n  }\n\n  function switchChannel(channel) {\n    activeChannel = channel;\n    \n    // Switch tabs\n    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));\n    event.currentTarget.classList.add('active');\n    \n    // Switch screen content\n    document.querySelectorAll('.screen-content').forEach(screen => screen.classList.remove('active'));\n    \n    // Toggles visibility\n    const toggles = document.getElementById('static-video-toggles');\n    \n    if (channel === 'instagram') {\n      document.getElementById('ig-feed-screen').classList.add('active');\n      toggles.style.display = 'none';\n    } else if (channel === 'story') {\n      document.getElementById('ig-story-screen').classList.add('active');\n      toggles.style.display = 'flex';\n      setMediaType(mediaType);\n    } else if (channel === 'tiktok') {\n      document.getElementById('tiktok-screen').classList.add('active');\n      toggles.style.display = 'flex';\n      setMediaType(mediaType);\n    }\n  }\n\n  function setMediaType(type) {\n    mediaType = type;\n    \n    document.getElementById('btn-static').classList.remove('active');\n    document.getElementById('btn-video').classList.remove('active');\n    \n    if (type === 'static') {\n      document.getElementById('btn-static').classList.add('active');\n    } else {\n      document.getElementById('btn-video').classList.add('active');\n    }\n    \n    if (activeChannel === 'story') {\n      const img = document.getElementById('story-img-tag');\n      const video = document.getElementById('story-video-tag');\n      \n      if (type === 'static') {\n        img.style.display = 'block';\n        video.style.display = 'none';\n        video.pause();\n      } else {\n        if (checkPlaceholder(video.src)) {\n          alert(\"Video Story in coda di generazione...\");\n          setMediaType('static');\n          return;\n        }\n        img.style.display = 'none';\n        video.style.display = 'block';\n        video.play();\n      }\n    } else if (activeChannel === 'tiktok') {\n      const img = document.getElementById('tt-img-tag');\n      const video = document.getElementById('tt-video-tag');\n      \n      if (type === 'static') {\n        img.style.display = 'block';\n        video.style.display = 'none';\n        video.pause();\n      } else {\n        if (checkPlaceholder(video.src)) {\n          alert(\"Video TikTok in coda di generazione...\");\n          setMediaType('static');\n          return;\n        }\n        img.style.display = 'none';\n        video.style.display = 'block';\n        video.play();\n      }\n    }\n  }\n\n  function updateCarousel() {\n    const imgElement = document.getElementById('ig-carousel-image');\n    let url = carouselSlides[currentSlideIdx];\n    \n    if (checkPlaceholder(url)) {\n      imgElement.src = 'https://toolhub.software/it/placeholder-image/';\n      imgElement.style.opacity = '0.3';\n    } else {\n      imgElement.src = url;\n      imgElement.style.opacity = '1';\n    }\n    \n    document.getElementById('slide-num-indicator').innerText = currentSlideIdx + 1;\n    \n    // Update dots\n    for (let i = 0; i < 4; i++) {\n      const dot = document.getElementById(`dot-${i}`);\n      if (dot) {\n        if (i === currentSlideIdx) dot.classList.add('active');\n        else dot.classList.remove('active');\n      }\n    }\n  }\n\n  function nextSlide() {\n    currentSlideIdx = (currentSlideIdx + 1) % 4;\n    updateCarousel();\n  }\n\n  function prevSlide() {\n    currentSlideIdx = (currentSlideIdx - 1 + 4) % 4;\n    updateCarousel();\n  }\n\n  document.addEventListener(\"DOMContentLoaded\", function() {\n    // 1. BRIEF PARSE\n    const rawBriefEl = document.getElementById(\"brief-raw\");\n    if (rawBriefEl) {\n      const rawText = rawBriefEl.textContent || rawBriefEl.innerText;\n      const keyMessageMatch = rawText.match(/(?:MESSAGGIO CHIAVE|KEY MESSAGE):?\\s*(.*?)(?=(?:INSIGHT|DIREZIONE VISIVA|OBIETTIVO SOCIAL|GOAL):|$)/s);\n      const insightMatch = rawText.match(/(?:INSIGHT):?\\s*(.*?)(?=(?:MESSAGGIO CHIAVE|KEY MESSAGE|DIREZIONE VISIVA|OBIETTIVO SOCIAL|GOAL):|$)/s);\n      const goalMatch = rawText.match(/(?:OBIETTIVO SOCIAL|GOAL):?\\s*(.*?)(?=(?:MESSAGGIO CHIAVE|KEY MESSAGE|INSIGHT|DIREZIONE VISIVA):|$)/s);\n      \n      let html = \"\";\n      if (goalMatch && goalMatch[1].trim()) {\n        html += `<div class=\"brief-section-title\">Obiettivo Social</div><div class=\"brief-section-body\">${goalMatch[1].trim()}</div>`;\n      }\n      if (insightMatch && insightMatch[1].trim()) {\n        html += `<div class=\"brief-section-title\">Target Insight</div><div class=\"brief-section-body\">${insightMatch[1].trim()}</div>`;\n      }\n      if (keyMessageMatch && keyMessageMatch[1].trim()) {\n        html += `<div class=\"brief-section-title\">Messaggio Chiave</div><div class=\"brief-section-body\" style=\"color: var(--accent); font-weight: 700;\">${keyMessageMatch[1].trim()}</div>`;\n      }\n      \n      if (html) {\n        document.getElementById(\"brief-parsed\").innerHTML = html;\n      } else {\n        document.getElementById(\"brief-parsed\").innerHTML = `<div class=\"brief-section-body\">${rawText}</div>`;\n      }\n    }\n\n    // 2. CAPTION PARSE\n    const rawCaptionEl = document.getElementById(\"caption-raw\");\n    if (rawCaptionEl) {\n      let rawText = rawCaptionEl.textContent || rawCaptionEl.innerText;\n      \n      // Populate TikTok caption (first part)\n      const hookMatch = rawText.match(/HOOK:\\s*(.*?)(?=IL CONSIGLIO:|$)/i);\n      const hashMatch = rawText.match(/HASHTAGS:\\s*(.*?)$/i);\n      let ttText = \"\";\n      if (hookMatch) ttText += hookMatch[1].trim() + \" \";\n      if (hashMatch) ttText += \"\\n\" + hashMatch[1].trim();\n      document.getElementById('tt-caption-target').innerText = ttText || rawText.substring(0, 100);\n\n      // Clean labels in IG caption\n      rawText = rawText.replace(/(HOOK|IL CONSIGLIO|CONVERSAZIONE|HASHTAGS):/g, '<strong>$1:</strong>');\n      document.getElementById(\"ig-caption-parsed-target\").innerHTML = rawText;\n    }\n\n    // Init Carousel\n    updateCarousel();\n  });\n</script>\n\n</body>\n</html>",
+    "observabilityPrompt": "",
+    "correctString": "",
+    "partiallyString": "",
+    "incorrectString": "",
+    "operatorString": "",
+    "createdAt": "2026-06-22T13:59:03.749Z",
+    "updatedAt": "2026-06-22T15:31:19.067Z"
+  },
+  "languages": [
+    {
+      "code": "es",
+      "name": "Español",
+      "prompt": "Translate the content into Español (Spanish for Spain). Adapt the tone and cultural references for the Spanish market. Use 'tú' form. Keep brand names unchanged. LOCALIZATION RULE: If there are references to Italian cities, regions, or geographical features, you MUST map them to equivalent Spanish locations (e.g., 'Roma' -> 'Madrid', 'Milano' -> 'Barcelona', 'Toscana' -> 'Andalucía' or 'La Rioja', 'Alpi' -> 'Pirineos', 'Sardegna' -> 'Mallorca').",
+      "isOrigin": false,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "prompt": "Translate the content into English (British English for UK market). Adapt the tone to be pragmatic and benefit-focused, as UK consumers value 'value for money' and 'vet-recommended' claims. Keep brand names unchanged. LOCALIZATION RULE: If there are references to Italian cities, regions, or geographical features, you MUST map them to equivalent British/UK locations (e.g., 'Roma' -> 'London', 'Milano' -> 'Manchester', 'Toscana' -> 'Cotswolds' or 'Cornwall', 'Alpi' -> 'Scottish Highlands', 'Sardegna' -> 'Cornish Coast').",
+      "isOrigin": false,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    },
+    {
+      "code": "pt",
+      "name": "Português",
+      "prompt": "Translate the content into Português (European Portuguese for Portugal). Adapt the tone to be warm and family-oriented. Use 'tu' form. Keep brand names unchanged. LOCALIZATION RULE: If there are references to Italian cities, regions, or geographical features, you MUST map them to equivalent Portuguese locations (e.g., 'Roma' -> 'Lisboa', 'Milano' -> 'Porto', 'Toscana' -> 'Alentejo' or 'Douro', 'Alpi' -> 'Serra da Estrela', 'Sardegna' -> 'Algarve').",
+      "isOrigin": false,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    },
+    {
+      "code": "fr",
+      "name": "Français",
+      "prompt": "Translate the content into Français (French for France). Adapt the tone for French sensibility — slightly more refined and gastronomic. Use 'tu' form for social ads. Keep brand names unchanged. LOCALIZATION RULE: If there are references to Italian cities, regions, or geographical features, you MUST map them to equivalent French locations (e.g., 'Roma' -> 'Paris', 'Milano' -> 'Lyon', 'Toscana' -> 'Provence' or 'Champagne', 'Alpi' -> 'Alpes françaises', 'Sardegna' -> 'Corse').",
+      "isOrigin": false,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    },
+    {
+      "code": "de",
+      "name": "Deutsch",
+      "prompt": "Translate the content into Deutsch (German for Germany). Adapt the tone to be more factual and science-oriented, as German consumers value precision and certifications. Use 'du' form for social ads. Keep brand names unchanged. LOCALIZATION RULE: If there are references to Italian cities, regions, or geographical features, you MUST map them to equivalent German locations (e.g., 'Roma' -> 'Berlin', 'Milano' -> 'München', 'Toscana' -> 'Bayern' or 'Rheingau', 'Alpi' -> 'Bayerische Alpen', 'Sardegna' -> 'Sylt').",
+      "isOrigin": false,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    },
+    {
+      "code": "it",
+      "name": "Italiano",
+      "prompt": null,
+      "isOrigin": true,
+      "createdAt": "2026-06-22T15:09:25.400Z"
+    }
+  ],
+  "extractions": [],
+  "inputs": [
+    {
+      "tagName": "##asset_campagna##",
+      "columnName": "asset_campagna",
+      "type": "image",
+      "description": "Visual di campagna approvato per garantire continuità stilistica",
+      "pre_prompt": "Sei un Art Director senior. Analizza questa creatività pubblicitaria approvata e descrivine lo stile fotografico (es. illuminazione dorata, contrasto morbido, profondità di campo) e la posa del pet. Queste indicazioni serviranno per generare immagini social organiche coerenti, focalizzate unicamente sulla razza e senza mostrare packshot di prodotti.",
+      "translate": false,
+      "test": null,
+      "order": 0
+    },
+    {
+      "tagName": "##razza##",
+      "columnName": "razza",
+      "type": "text",
+      "description": "Razza del cane o gatto protagonista (es. Golden Retriever, Maine Coon)",
+      "pre_prompt": null,
+      "translate": true,
+      "test": null,
+      "order": 1
+    },
+    {
+      "tagName": "##editorial_angle##",
+      "columnName": "editorial_angle",
+      "type": "text",
+      "description": "Angolo editoriale: Consiglio dell'Esperto, Curiosità, Miti da Sfatare, Scienza Dietro la Ricetta, Abitudini Sane, Quiz",
+      "pre_prompt": null,
+      "translate": true,
+      "test": null,
+      "order": 2
+    },
+    {
+      "tagName": "##argomento##",
+      "columnName": "argomento",
+      "type": "text",
+      "description": "Argomento specifico: cura del pelo, digestione, idratazione, porzioni, articolazioni, comportamento",
+      "pre_prompt": null,
+      "translate": true,
+      "test": null,
+      "order": 3
+    },
+    {
+      "tagName": "##canale_social##",
+      "columnName": "canale_social",
+      "type": "text",
+      "description": "Canale di destinazione: Instagram Carousel, Reels/TikTok, Facebook Educational, LinkedIn Professional",
+      "pre_prompt": null,
+      "translate": true,
+      "test": null,
+      "order": 4
+    },
+    {
+      "tagName": "##tono_voce##",
+      "columnName": "tono_voce",
+      "type": "text",
+      "description": "Tono di voce desiderato: Scientifico-Autorevole, Empatico-Amichevole, Coinvolgente-Leggero",
+      "pre_prompt": null,
+      "translate": true,
+      "test": null,
+      "order": 5
+    }
+  ],
+  "outputs": [
+    {
+      "name": "editorial_brief",
+      "columnName": "editorial_brief",
+      "type": "text",
+      "translate": true,
+      "finalField": false,
+      "observability": false,
+      "round": 1,
+      "prompt": "Sei un Senior Social Media Strategist per brand di pet care di lusso. Il tuo obiettivo è creare un brief per un contenuto social organico ed educational per TerraViva Pet, partendo da un asset grafico di campagna già approvato.\n\nINPUTS:\n- Razza protagonista: ##razza##\n- Angolo Editoriale: ##editorial_angle##\n- Argomento: ##argomento##\n- Canale Social: ##canale_social##\n- Tono di Voce: ##tono_voce##\n- Analisi Visual Campagna Approvata: ##asset_campagna##\n\nCrea un EDITORIAL BRIEF strutturato in Italiano che guidi i copywriter e i grafici.\nIMPORTANTE: I post sono al 100% informativi per creare fiducia nel brand, pertanto NON menzionare alcun prodotto specifico, NON mostrare pacchi o sacchi di cibo e NON inserire inviti all'acquisto commerciali.\n\nUsa esattamente questo formato:\n\nOBIETTIVO SOCIAL: [Quale valore informativo stiamo portando ai pet parent con questo post?]\nINSIGHT: [Perché un proprietario di ##razza## dovrebbe fermarsi a leggere questo post? Qual è il suo reale interesse sull'argomento ##argomento##?]\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Descrizione grafica della copertina per attirare attenzione sul tema ##argomento##.\n- Slide 2 (Problema/Curiosità): Visual con il pet in posa curiosa o pensierosa.\n- Slide 3 (Consiglio/Infografica): Visual di uno schema pulito o di dettagli fotografici educativi.\n- Slide 4 (Outro/Interazione): Visual testuale con invito a commentare e salvare.\nDIREZIONE VISIVA STORY & TIKTOK: Descrizione per format verticali singoli.\nMESSAGGIO CHIAVE: [Una singola frase forte e memorabile che riassume il consiglio educativo.]",
+      "note": "Brief strategico che definisce il valore educativo e la direzione visiva organica senza prodotti",
+      "referenceImages": [],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "moderation": "auto",
+        "size": "auto",
+        "quality": "auto"
+      },
+      "geminiOptions": {
+        "imageSize": "auto",
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "endFrameField": "",
+        "styleReferenceFields": [],
+        "startFrameField": "",
+        "sourceVideoField": ""
+      },
+      "order": 0
+    },
+    {
+      "name": "social_caption",
+      "columnName": "social_caption",
+      "type": "text",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 2,
+      "prompt": "Sei un esperto copywriter specializzato in contenuti social organici per pet brand premium.\n\nBasandoti sul brief strategico:\n##$editorial_brief##\n\nScrivi una CAPTION per un post social (Instagram/Facebook) in Italiano. Rispetta queste regole:\n- NESSUNA CTA di vendita o menzione commerciale del prodotto. Il focus è interamente divulgativo.\n- Usa paragrafi brevi ed emoji.\n- Struttura la caption esattamente come segue:\n\nHOOK: [Una frase iniziale in grassetto che attira l'attenzione con una domanda o una curiosità su ##argomento## per proprietari di ##razza##]\n\nIL CONSIGLIO: [2-3 brevi paragrafi informativi dettagliati che spiegano l'abitudine corretta o la curiosità scientifica per il benessere dell'animale]\n\nCONVERSAZIONE: [Una domanda aperta per stimolare commenti (es. 'E tu come gestisci questo momento?', 'Anche il tuo cane fa così?')]\n\nHASHTAGS: [Esattamente 6 hashtag organici divisi da spazi (es. #TerraVivaPet #CuraDelCane #CaniFelici #ConsigliUtili #VitaDaCani #BenessereAnimale)]",
+      "note": "Caption social organica focalizzata sulla community e sul valore informativo (no prodotti)",
+      "referenceImages": [],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "size": "auto",
+        "quality": "auto",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "aspectRatio": "auto",
+        "thinkingLevel": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "styleReferenceFields": [],
+        "endFrameField": "",
+        "startFrameField": "",
+        "sourceVideoField": ""
+      },
+      "order": 1
+    },
+    {
+      "name": "visual_brief_overlay",
+      "columnName": "visual_brief_overlay",
+      "type": "text",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 2,
+      "prompt": "Analizza il brief strategico:\n##$editorial_brief##\n\nEstrai i copy esatti (in Italiano) da sovrapporre graficamente sulle immagini dei diversi canali. Questi testi verranno posizionati sopra le grafiche. Sii estremamente sintetico, chiaro ed educational.\n\nFormatta esattamente così:\n\nCAROUSEL SLIDE 1 TITLE: [Titolo forte per la copertina, max 5 parole]\nCAROUSEL SLIDE 1 SUBTITLE: [Sottotitolo, max 6 parole]\nCAROUSEL SLIDE 2 TITLE: [Titolo slide 2, max 4 parole]\nCAROUSEL SLIDE 2 TEXT: [Testo slide 2, spiegazione del problema/curiosità, max 15 parole]\nCAROUSEL SLIDE 3 TITLE: [Titolo slide 3, max 4 parole]\nCAROUSEL SLIDE 3 TEXT: [Testo slide 3, consiglio pratico, max 15 parole]\nCAROUSEL SLIDE 4 TITLE: [Titolo slide 4, max 4 parole]\nCAROUSEL SLIDE 4 TEXT: [Testo slide 4, invito all'interazione o al salvataggio, max 12 parole]\n\nSTORY TITLE: [Titolo Story, max 5 parole]\nSTORY TEXT: [Testo per Story, consiglio/domanda max 15 parole]\n\nTIKTOK TITLE: [Titolo TikTok, stile hook nativo di impatto, max 6 parole]\nTIKTOK TEXT: [Testo TikTok, max 12 parole]",
+      "note": "Testi sintetici da inserire nelle grafiche delle slide, della Story e di TikTok",
+      "referenceImages": [],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "moderation": "auto",
+        "quality": "auto",
+        "size": "auto"
+      },
+      "geminiOptions": {
+        "aspectRatio": "auto",
+        "thinkingLevel": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "startFrameField": "",
+        "sourceVideoField": "",
+        "endFrameField": "",
+        "styleReferenceFields": []
+      },
+      "order": 2
+    },
+    {
+      "name": "reels_voiceover_script",
+      "columnName": "reels_voiceover_script",
+      "type": "text",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 2,
+      "prompt": "Sei un Pet Content Creator. Scrivi lo script per un video Reels/TikTok educativo di 30 secondi basato su questo brief:\n##$editorial_brief##\n\nRegole del copione:\n- Tono colloquiale, empatico e molto naturale.\n- Nessuna menzione commerciale di prodotti o vendita.\n- Scrivi i numeri interamente in lettere.\n- Rispondi SOLO con il testo parlato continuo (nessun label, nessuna parentesi).\n- Massimo 70 parole totali in Italiano.",
+      "note": "Script vocale continuo e pulito per video educational di 30s",
+      "referenceImages": [],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "size": "auto",
+        "quality": "auto",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "aspectRatio": "auto",
+        "thinkingLevel": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "endFrameField": "",
+        "styleReferenceFields": [],
+        "startFrameField": "",
+        "sourceVideoField": ""
+      },
+      "order": 3
+    },
+    {
+      "name": "carousel_img_1",
+      "columnName": "carousel_img_1",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "You are a Senior Art Director. Create a premium, clean Instagram Carousel Slide 1 (Cover, 1:1 square) for TerraViva Pet.\n\nYou must keep absolute campaign visual continuity with the approved campaign asset (Image Reference 1) in terms of lighting, warm golden tones, and premium photographic feel.\n\nCOMPOSITION & GRAPHICS:\n- BACKGROUND: A beautiful, warm aesthetic background inspired by Image Reference 1. Focus strictly on a close-up of a happy, well-groomed ##razza## looking directly into the camera. Absolutely NO product packaging, bags, or commercial boxes.\n- GRAPHIC OVERLAY CARD: Place a large, elegant, semi-transparent white card with a clean dark border. Inside this card, overlay the following text in a bold, modern, highly legible sans-serif font:\nuse CAROUSEL SLIDE 1 TITLE and SUBTITLE from ##$visual_brief_overlay##\n- CRITICAL RULES:\n  1. DO NOT draw, write, or generate any brand logo, text logo, emblem, or crest on the image itself. No watermarks, no leaf crests. Keep it clean of all logos.\n  2. Absolutely NO bottom menu bar, NO layout guides, and NO text blocks at the bottom referencing other channels (like TikTok, Story, etc.). It must be a clean, single IG Carousel slide.\n- Visual feel: An elegant editorial cover slide, not a commercial ad.",
+      "note": "Slide 1 Carosello IG: Copertina con foto pet e titolo grande",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "moderation": "auto",
+        "quality": "high",
+        "size": "1024x1024"
+      },
+      "geminiOptions": {
+        "imageSize": "auto",
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "endFrameField": "",
+        "styleReferenceFields": [],
+        "sourceVideoField": "",
+        "startFrameField": ""
+      },
+      "order": 4
+    },
+    {
+      "name": "carousel_img_2",
+      "columnName": "carousel_img_2",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "Create Slide 2 (1:1 square) for the Instagram Carousel. Visual style must match Slide 1 and Image Reference 1.\n\n- VISUAL: A cute, candid photo of the ##razza## looking curious or thoughtful on a soft-focus background. NO product packaging.\n- GRAPHIC OVERLAY: In a clean negative space, place a semi-transparent text box containing:\nuse CAROUSEL SLIDE 2 TITLE and TEXT from ##$visual_brief_overlay##\n- CRITICAL RULE: DO NOT generate or draw any brand logo, text logo, emblem, crest, or brand name text on the image. Keep it clean of all logos.\n- Visual feel: A natural, educational social slide.",
+      "note": "Slide 2 Carosello IG: Il problema o curiosità con foto pet",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "quality": "high",
+        "size": "1024x1024",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "imageSize": "auto",
+        "aspectRatio": "auto",
+        "thinkingLevel": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "styleReferenceFields": [],
+        "endFrameField": "",
+        "startFrameField": "",
+        "sourceVideoField": ""
+      },
+      "order": 5
+    },
+    {
+      "name": "carousel_img_3",
+      "columnName": "carousel_img_3",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "Create Slide 3 (1:1 square) for the Instagram Carousel. Visual style must match the previous slides and Image Reference 1.\n\n- VISUAL: A clean, premium infographic or diagram layout on a soft, warm background. You can show a details shot (e.g. paws, coat details) or a beautiful minimal graphic illustrating pet care. No products.\n- GRAPHIC OVERLAY: Place a clean card containing:\nuse CAROUSEL SLIDE 3 TITLE and TEXT from ##$visual_brief_overlay##\n- CRITICAL RULE: DO NOT generate or draw any brand logo, text logo, emblem, crest, or brand name text on the image. Keep it clean of all logos.\n- Visual feel: Clean, scientific, high-value educational tip.",
+      "note": "Slide 3 Carosello IG: Infografica o schema educativo",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "quality": "high",
+        "size": "1024x1024",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "endFrameField": "",
+        "styleReferenceFields": [],
+        "startFrameField": "",
+        "sourceVideoField": ""
+      },
+      "order": 6
+    },
+    {
+      "name": "carousel_img_4",
+      "columnName": "carousel_img_4",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "Create Slide 4 (1:1 square) for the Instagram Carousel. Visual style must match the previous slides and Image Reference 1.\n\n- VISUAL: A beautiful, warm, minimal textured background (e.g. warm stucco, elegant soft green linen texture). Absolutely no busy elements.\n- GRAPHIC OVERLAY: A large, clean card centered on the screen containing:\nuse CAROUSEL SLIDE 4 TITLE and TEXT from ##$visual_brief_overlay##\nAdd a subtle callout icon for saving the post.\n- CRITICAL RULE: DO NOT generate or draw any brand logo, text logo, emblem, crest, or brand name text on the image. Keep it clean of all logos.",
+      "note": "Slide 4 Carosello IG: Slide di chiusura e invito alla conversazione",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "size": "1024x1024",
+        "quality": "high",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "aspectRatio": "auto",
+        "thinkingLevel": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "startFrameField": "",
+        "sourceVideoField": "",
+        "styleReferenceFields": [],
+        "endFrameField": ""
+      },
+      "order": 7
+    },
+    {
+      "name": "story_img",
+      "columnName": "story_img",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "Create a vertical Instagram Story visual (9:16 portrait) for TerraViva Pet. Match the premium warm lighting and style of Image Reference 1.\n\n- VISUAL: A vertical shot of the ##razza## in a cozy setting. NO products or packshots.\n- GRAPHIC OVERLAY: Place an elegant text card in the upper portion containing:\nuse STORY TITLE and TEXT from ##$visual_brief_overlay##\n- CRITICAL RULE: DO NOT generate or draw any brand logo, text logo, emblem, crest, or brand name text on the image itself. Keep it clean of all logos.",
+      "note": "Instagram Story statica con testo educativo (9:16)",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "quality": "high",
+        "size": "1024x1792",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "sourceVideoField": "",
+        "startFrameField": "",
+        "endFrameField": "",
+        "styleReferenceFields": []
+      },
+      "order": 8
+    },
+    {
+      "name": "tiktok_img",
+      "columnName": "tiktok_img",
+      "type": "genimage",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 3,
+      "prompt": "Create a vertical TikTok post visual (9:16 portrait) for TerraViva Pet. Match the warm editorial style of Image Reference 1 but adapt it for a native, engaging TikTok look.\n\n- VISUAL: A candid, authentic, close-up shot of the ##razza##. No staging, looks like a high-quality smartphone photo. NO products.\n- GRAPHIC OVERLAY: Overlay a colored TikTok-style text bubble (e.g., yellow or neon green background badge with black bold text) containing:\nuse TIKTOK TITLE and TEXT from ##$visual_brief_overlay##\n- CRITICAL RULE: DO NOT generate or draw any brand logo, text logo, emblem, crest, or brand name text on the image itself. Keep it clean of all logos.",
+      "note": "TikTok Photo statica con testi in stile TikTok nativo (9:16)",
+      "referenceImages": [
+        "##asset_campagna##"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "openai",
+      "imageOptions": {
+        "quality": "high",
+        "size": "1024x1792",
+        "moderation": "auto"
+      },
+      "geminiOptions": {
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "auto",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "text-to-video",
+      "videoReferenceConfig": {
+        "sourceVideoField": "",
+        "startFrameField": "",
+        "endFrameField": "",
+        "styleReferenceFields": []
+      },
+      "order": 9
+    },
+    {
+      "name": "story_video",
+      "columnName": "story_video",
+      "type": "genvideo",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 4,
+      "prompt": "Anima questa copertina verticale per Instagram Stories (Immagine di riferimento 1) con movimenti cinematografici lenti per 6 secondi.\nInquadratura fissa su cavalletto. Il ##razza## sbatte le palpebre dolcemente e muove leggermente la testa o le orecchie in modo pacifico.\nLa card di testo sovrapposta e il logo TerraViva Pet devono rimanere perfettamente stabili, nitidi e immutati.",
+      "note": "Video Story 9:16 animato a partire dalla foto statica",
+      "referenceImages": [
+        "##$story_img##",
+        "story_img"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "gemini",
+      "imageOptions": {
+        "moderation": "auto",
+        "size": "auto",
+        "quality": "auto"
+      },
+      "geminiOptions": {
+        "imageSize": "auto",
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "9:16",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "image-to-video",
+      "videoReferenceConfig": {
+        "startFrameField": "##$story_img##",
+        "sourceVideoField": "",
+        "endFrameField": "story_img",
+        "styleReferenceFields": []
+      },
+      "order": 10
+    },
+    {
+      "name": "tiktok_video",
+      "columnName": "tiktok_video",
+      "type": "genvideo",
+      "translate": true,
+      "finalField": true,
+      "observability": false,
+      "round": 4,
+      "prompt": "Anima questo post TikTok (Immagine di riferimento 1) con un movimento più dinamico ed energetico per 6 secondi.\nLa camera esegue uno zoom in lento o un micro-pan fluido. Il ##razza## muove la coda allegramente o si guarda intorno curioso.\nLa bolla di testo stile TikTok e il logo devono rimanere perfettamente fissi e nitidi senza distorsioni.",
+      "note": "Video TikTok 9:16 ad animazione dinamica",
+      "referenceImages": [
+        "##$tiktok_img##",
+        "tiktok_img"
+      ],
+      "editReferenceImages": false,
+      "imageProvider": "gemini",
+      "imageOptions": {
+        "moderation": "auto",
+        "quality": "auto",
+        "size": "auto"
+      },
+      "geminiOptions": {
+        "thinkingLevel": "auto",
+        "aspectRatio": "auto",
+        "imageSize": "auto"
+      },
+      "videoOptions": {
+        "aspectRatio": "9:16",
+        "quality": "auto"
+      },
+      "referenceVideos": [],
+      "videoReferenceMode": "image-to-video",
+      "videoReferenceConfig": {
+        "endFrameField": "tiktok_img",
+        "styleReferenceFields": [],
+        "startFrameField": "##$tiktok_img##",
+        "sourceVideoField": ""
+      },
+      "order": 11
+    }
+  ],
+  "columnMappings": [
+    {
+      "columnName": "asset_campagna",
+      "inputFieldId": "AzNEgTq01aMWFP7Tic63"
+    },
+    {
+      "columnName": "razza",
+      "inputFieldId": "UyV9ION6ARfh34M3bm8J"
+    },
+    {
+      "columnName": "editorial_angle",
+      "inputFieldId": "vyr34xjAE4RIKLDOKKhs"
+    },
+    {
+      "inputFieldId": "VcMbJSS4nxm4at9z40Ph",
+      "columnName": "argomento"
+    },
+    {
+      "columnName": "canale_social",
+      "inputFieldId": "isKb7wifkAXgOpPILcoC"
+    },
+    {
+      "columnName": "tono_voce",
+      "inputFieldId": "Kv2mGJEEEkQguuwopYl3"
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "editorial_brief"
+    },
+    {
+      "columnName": "social_caption",
+      "inputFieldId": null
+    },
+    {
+      "columnName": "visual_brief_overlay",
+      "inputFieldId": null
+    },
+    {
+      "columnName": "reels_voiceover_script",
+      "inputFieldId": null
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "carousel_img_1"
+    },
+    {
+      "columnName": "carousel_img_2",
+      "inputFieldId": null
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "carousel_img_3"
+    },
+    {
+      "columnName": "carousel_img_4",
+      "inputFieldId": null
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "story_img"
+    },
+    {
+      "columnName": "tiktok_img",
+      "inputFieldId": null
+    },
+    {
+      "columnName": "story_video",
+      "inputFieldId": null
+    },
+    {
+      "columnName": "tiktok_video",
+      "inputFieldId": null
+    },
+    {
+      "columnName": "reels_voiceover_script_reasoning",
+      "inputFieldId": null
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "social_caption_reasoning"
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "visual_brief_overlay_observability"
+    },
+    {
+      "columnName": "editorial_brief_observability",
+      "inputFieldId": null
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "reels_voiceover_script_observability"
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "visual_brief_overlay_reasoning"
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "editorial_brief_reasoning"
+    },
+    {
+      "inputFieldId": null,
+      "columnName": "social_caption_observability"
+    }
+  ],
+  "skills": [],
+  "assets": [
+    {
+      "tagName": "##master_adv_reference##",
+      "type": "image",
+      "description": "",
+      "value": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+      "pre_prompt": null,
+      "order": 0
+    },
+    {
+      "tagName": "##logo_terraviva##",
+      "type": "image",
+      "description": "",
+      "value": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117397283_xznb5iycj_terraviva_logo.png",
+      "pre_prompt": null,
+      "order": 0
+    }
+  ],
+  "dataset": [
+    {
+      "data": {
+        "it": {
+          "social_caption_reasoning": "",
+          "razza": "Golden Retriever",
+          "tono_voce": "Scientifico-Autorevole",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141667597_t9snade22_size-1024x1024_quality-high.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Il Doppio Manto del Golden\nCAROUSEL SLIDE 1 SUBTITLE: Guida alla Cura Perfetta\nCAROUSEL SLIDE 2 TITLE: Sai cosa nasconde?\nCAROUSEL SLIDE 2 TEXT: Il suo magnifico pelo ha un segreto: un doppio strato che richiede cure specifiche.\nCAROUSEL SLIDE 3 TITLE: La tecnica corretta\nCAROUSEL SLIDE 3 TEXT: Solleva il pelo e spazzola il sottopelo lanoso con un cardatore, prima contropelo e poi seguendolo.\nCAROUSEL SLIDE 4 TITLE: La sua salute è nel pelo\nCAROUSEL SLIDE 4 TEXT: Salva questo consiglio e condividi la tua esperienza nei commenti.\n\nSTORY TITLE: Il segreto del suo splendore\nSTORY TEXT: La spazzolatura non è solo bellezza, ma un gesto di cura fondamentale. Lo sapevi?\n\nTIKTOK TITLE: Stai spazzolando il tuo Golden nel modo SBAGLIATO\nTIKTOK TEXT: Il segreto per un pelo perfetto è nel sottopelo. Guarda come",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141577918_4jbyg0pzf_size-1024x1792_quality-high.png",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141638771_8a8c2h7s2_size-1024x1024_quality-high.png",
+          "editorial_brief_observability": "",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782141736256_4mh2xwnzm_ratio-9x16.mp4",
+          "reels_voiceover_script_observability": "",
+          "reels_voiceover_script": "Il segreto per un manto così magnifico? Non è solo estetica, è salute. Il doppio pelo del tuo Golden ha bisogno di cure specifiche. Prima, spazzola con delicatezza contropelo: questo aiuta a sollevare il sottopelo denso e a rimuovere quello in eccesso. Poi, ripassa nella direzione di crescita del pelo per renderlo lucido e ordinato. Un piccolo gesto che previene nodi e irritazioni, trasformando la spazzolatura in una coccola di benessere.",
+          "reels_voiceover_script_reasoning": "",
+          "visual_brief_overlay_reasoning": "",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141633254_u46lyc8mz_size-1024x1024_quality-high.png",
+          "social_caption": "**Sapevi che il magnifico pelo del tuo Golden Retriever nasconde un segreto?**\n\nIL CONSIGLIO:\nIl suo splendido manto non è composto da un solo strato, ma da due! ✨ Un pelo di copertura, più lungo e impermeabile, e un sottopelo denso e lanoso che funge da perfetto isolante termico, sia dal caldo che dal freddo.\n\nQuesto \"doppio tesoro\" richiede una cura speciale. Durante i periodi di muta, il sottopelo morto può rimanere intrappolato sotto il manto di copertura, creando nodi e impedendo alla pelle di respirare. Questo può portare a irritazioni e dermatiti. 😥\n\nIl segreto per una cute sana e un pelo fluente? Spazzolare prima delicatamente contropelo con uno strumento adatto (come il cardatore) per sollevare e rimuovere il sottopelo in eccesso, e solo dopo seguire la direzione di crescita del pelo per riordinare il manto e distribuire gli oli naturali. Un piccolo gesto che fa una grande differenza per la sua salute! ❤️\n\nCONVERSAZIONE:\nE il tuo Golden, come vive il momento della spazzolatura? Raccontacelo qui sotto! 👇\n\nHASHTAGS:\n#GoldenRetriever #CuraDelPelo #BenessereAnimale #ConsigliPet #DoppioManto #AmoreAQuattroZampe",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782141736597_6il6ozcgj_ratio-9x16.mp4",
+          "social_caption_observability": "",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai proprietari di Golden Retriever consigli autorevoli e basati sulla scienza per la corretta gestione del doppio manto, consolidando la percezione di TerraViva Pet come un brand esperto e affidabile nel benessere animale.\n\nINSIGHT: Il proprietario di un Golden Retriever è orgoglioso del magnifico pelo del suo cane, ma è anche consapevole della sua gestione impegnativa (muta, nodi, pulizia). Cerca soluzioni non solo estetiche ma che garantiscano la salute della cute e del pelo, ed è motivato a imparare tecniche professionali per migliorare il benessere del suo compagno a quattro zampe.\n\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Un'immagine macro, quasi astratta, del pelo folto e dorato di un Golden Retriever. La luce calda e radente ne esalta la texture e la lucentezza. Titolo in sovrimpressione con font elegante: \"Il Doppio Manto del Golden Retriever: Guida alla Cura Perfetta\".\n- Slide 2 (Problema/Curiosità): Un Golden Retriever inquadrato di tre quarti, con la testa leggermente inclinata e uno sguardo interrogativo verso una spazzola (tipo cardatore) appoggiata a terra, leggermente fuori fuoco. L'ambiente è domestico, illuminato da una luce naturale che entra da una finestra, creando un'atmosfera intima e riflessiva.\n- Slide 3 (Consiglio/Infografica): Un'immagine divisa a metà o una sequenza di due foto. A sinistra, un dettaglio delle mani che scostano dolcemente il pelo di copertura per mostrare il sottopelo più denso e lanoso. A destra, un dettaglio della stessa mano che usa correttamente il cardatore, con una freccia grafica pulita che indica la direzione del movimento. Lo stile è pulito, quasi didattico, ma sempre immerso in una luce calda e morbida.\n- Slide 4 (Outro/Interazione): Slide puramente testuale su uno sfondo color crema, con una texture leggera che ricorda la carta artigianale. Il logo di TerraViva Pet è presente, ma discreto. Testo: \"La sua salute si vede dal pelo. Salva questo consiglio e condividi la tua esperienza nei commenti.\" con le icone di salvataggio e commento.\n\nDIREZIONE VISIVA STORY & TIKTOK: Un video verticale di 15-20 secondi. Inizia con una scena rallentata di una mano che accarezza dolcemente il dorso di un Golden Retriever, facendo ondeggiare il pelo sotto una luce dorata. Seguono 2-3 clip rapide che mostrano: 1) un dettaglio del sottopelo, 2) la tecnica di spazzolatura contropelo e 3) la spazzolatura nella direzione del pelo. Il video si conclude con il cane felice e rilassato che si gode le coccole post-spazzolatura. Testo in sovrimpressione sintetizza i passaggi chiave. Musica di sottofondo strumentale, calma e sofisticata.\n\nMESSAGGIO CHIAVE: La spazzolatura regolare non è solo un atto di bellezza, ma un gesto di cura fondamentale per la salute della sua pelle e del suo pelo.",
+          "visual_brief_overlay_observability": "",
+          "editorial_brief_reasoning": "",
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141583605_dash7td4w_size-1024x1792_quality-high.png",
+          "argomento": "cura del pelo",
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782141637091_h9x03bvk3_size-1024x1024_quality-high.png"
+        }
+      },
+      "order": 0
+    },
+    {
+      "data": {
+        "it": {
+          "tono_voce": "Coinvolgente-Leggero",
+          "social_caption_reasoning": "",
+          "razza": "Labrador Retriever",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142158096_4zh92sv9a_size-1024x1024_quality-high.png",
+          "editorial_brief_observability": "",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142228501_h496mz5rz_ratio-9x16.mp4",
+          "reels_voiceover_script_observability": "",
+          "reels_voiceover_script": "Il tuo Labrador ha energie infinite? Non è iperattivo, è un super atleta nato per il riporto! Ma per essere davvero felice, non basta la corsa. La sua mente brillante ha bisogno di sfide. Prova a nascondere i suoi croccantini o usa giochi interattivi. Stimolare la sua intelligenza è il vero segreto per un cane appagato. Qual è il gioco di mente preferito dal tuo? Raccontamelo nei commenti",
+          "reels_voiceover_script_reasoning": "",
+          "visual_brief_overlay_reasoning": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Il tuo Labrador è inesauribile?\nCAROUSEL SLIDE 1 SUBTITLE: Ti sveliamo il perché.\nCAROUSEL SLIDE 2 TITLE: Non è iperattivo!\nCAROUSEL SLIDE 2 TEXT: È un atleta nato, la sua energia è un'eredità da cane da riporto.\nCAROUSEL SLIDE 3 TITLE: Stimola la sua mente.\nCAROUSEL SLIDE 3 TEXT: 3 giochi intelligenti per un Labrador appagato, oltre la solita passeggiata.\nCAROUSEL SLIDE 4 TITLE: Ora tocca a te.\nCAROUSEL SLIDE 4 TEXT: Qual è il suo gioco di intelligenza preferito? Scrivilo nei commenti!\nSTORY TITLE: Mente attiva, Labrador felice.\nSTORY TEXT: Qual è il gioco di intelligenza preferito dal tuo cane? Raccontacelo!\nTIKTOK TITLE: Il tuo Labrador ti distrugge casa?\nTIKTOK TEXT: Forse ha solo bisogno di questi giochi di attivazione mentale.",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142146130_x2vao7xje_size-1024x1024_quality-high.png",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142099522_5r3grstsc_size-1024x1792_quality-high.png",
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142223282_03bs3i3rk_ratio-9x16.mp4",
+          "social_caption_observability": "",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai proprietari di Labrador Retriever consigli pratici e di valore per gestire l'alta energia tipica della razza attraverso il gioco, posizionando TerraViva Pet come una fonte autorevole e attenta al benessere animale.\n\nINSIGHT: Il proprietario di un Labrador sa che il suo cane è energico, ma spesso si chiede come incanalare questa vitalità in modo costruttivo per evitare comportamenti distruttivi e rafforzare il legame. Cerca soluzioni di gioco che non siano solo fisiche, ma anche mentali, per garantire al suo pet un reale appagamento.\n\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Foto dinamica di un Labrador felice che salta per afferrare un gioco (non una palla da tennis, ma un gioco in corda o gomma naturale), immerso nella luce dorata del tramonto in un parco. Testo in sovraimpressione: \"Il tuo Labrador ha le batterie infinite? Ecco perché.\"\n- Slide 2 (Problema/Curiosità): Primo piano di un Labrador con la testa leggermente inclinata e uno sguardo interrogativo. La luce calda evidenzia l'espressione dolce. Testo in sovraimpressione: \"Non è iperattivo, è un atleta nato! La sua energia è un'eredità genetica da cane da riporto.\"\n- Slide 3 (Consiglio/Infografica): Un layout pulito con tre riquadri fotografici su sfondo color crema. Ogni riquadro mostra un dettaglio di un gioco di attivazione mentale: un Labrador che interagisce con un puzzle toy, che cerca un oggetto nascosto, che esegue un comando. Lo stile è caldo e intimo. Testo: \"3 giochi per stimolare la sua mente (oltre alla solita passeggiata).\"\n- Slide 4 (Outro/Interazione): Visual pulito con solo testo su uno sfondo sfocato e caldo che richiama i colori del brand. Testo: \"Qual è il gioco di intelligenza preferito dal tuo Lab? Raccontacelo nei commenti!\". Includere una piccola icona \"Salva il post\".\n\nDIREZIONE VISIVA STORY & TIKTOK: Un video Reel/TikTok dinamico e coinvolgente. Inizia con una clip di un Labrador che corre pieno di energia. Segue un montaggio rapido di diverse attività di gioco intelligente (es. fiuto, problem solving con giochi interattivi, riporto di oggetti specifici). Brevi testi in sovraimpressione spiegano i benefici di ogni gioco. La musica è allegra e ritmata. Le riprese mantengono lo stile caldo, con luce naturale e un'atmosfera felice e spontanea. Il video si chiude con una domanda per stimolare l'interazione.\n\nMESSAGGIO CHIAVE: Stimola la sua mente, non solo i suoi muscoli, per un Labrador davvero appagato.",
+          "canale_social": "Reels/TikTok",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142161842_zjx3r4j1n_size-1024x1024_quality-high.png",
+          "social_caption": "HOOK:\n**Il tuo Labrador ha le batterie infinite e non sai più come scaricarle? 🐾**\n\nIL CONSIGLIO:\nQuell'energia vulcanica non è un capriccio: è il DNA del Labrador che parla! 🧬 Nati come instancabili cani da riporto, sono stati selezionati per ore di lavoro e concentrazione. Per questo una semplice passeggiata, anche se lunga, spesso non basta a renderli davvero appagati.\n\nIl segreto per un Labrador equilibrato e felice è stimolare la sua mente tanto quanto i suoi muscoli. 🧠 Giochi di fiuto, problem-solving con puzzle interattivi o semplici esercizi di obbedienza creativa lo aiutano a incanalare le energie in modo costruttivo, riducendo stress, noia e comportamenti distruttivi. Bastano 15 minuti al giorno per fare la differenza!\n\nCONVERSAZIONE:\nQual è il gioco di intelligenza preferito dal tuo Lab? Raccontacelo nei commenti! 👇\n\nHASHTAGS:\n#LabradorRetriever #AttivazioneMentaleCane #GiochiPerCani #CaneFelice #VitaDaLabrador #ConsigliPerCani",
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142110239_me0ln0iui_size-1024x1792_quality-high.png",
+          "argomento": "energia e giochi",
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142172280_43atb5i2n_size-1024x1024_quality-high.png",
+          "visual_brief_overlay_observability": "",
+          "editorial_brief_reasoning": ""
+        }
+      },
+      "order": 1
+    },
+    {
+      "data": {
+        "it": {
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption_reasoning": "",
+          "razza": "Bulldog Francese",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142174170_p3llu93ot_size-1024x1024_quality-high.png",
+          "editorial_brief_observability": "",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142275679_baxl6m7xq_ratio-9x16.mp4",
+          "reels_voiceover_script_observability": "",
+          "reels_voiceover_script": "Il tuo Bulldog ha spesso la pancia che brontola? Molti pensano sia normale, ma non è sempre così. Gas eccessivo e continui borborigmi possono essere un segnale da non sottovalutare. Osserva la frequenza e l'intensità. Imparare ad ascoltare la sua pancia è il primo, grande gesto d'amore per il suo benessere. Raccontaci la tua esperienza nei commenti.",
+          "reels_voiceover_script_reasoning": "",
+          "visual_brief_overlay_reasoning": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Digestione del Bulldog Francese\nCAROUSEL SLIDE 1 SUBTITLE: 3 Miti Comuni da Sfatare\nCAROUSEL SLIDE 2 TITLE: Mito #1: Gas Normale?\nCAROUSEL SLIDE 2 TEXT: Un po' di gas è normale, ma se eccessivo può indicare uno squilibrio.\nCAROUSEL SLIDE 3 TITLE: La Verità sulla Pancia\nCAROUSEL SLIDE 3 TEXT: Flatulenza e borborigmi eccessivi sono un segnale. Osserva frequenza e intensità.\nCAROUSEL SLIDE 4 TITLE: La Tua Esperienza Conta\nCAROUSEL SLIDE 4 TEXT: Raccontaci la tua storia nei commenti e salva il post.\n\nSTORY TITLE: La sua pancia parla\nSTORY TEXT: Il suo mal di pancia non è normale. Impara ad ascoltare i segnali.\n\nTIKTOK TITLE: Il tuo Bulldog soffre davvero?\nTIKTOK TEXT: Non ignorare i segnali: la sua pancia ti parla chiaro.",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142213575_lh4um04tq_size-1024x1024_quality-high.png",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142160659_c10su9u5h_size-1024x1792_quality-high.png",
+          "editorial_angle": "Miti da Sfatare",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142270230_snzieu4vz_ratio-9x16.mp4",
+          "social_caption_observability": "",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai proprietari di Bulldog Francese strumenti chiari e affidabili per riconoscere e gestire la digestione sensibile del loro pet, sfatando i luoghi comuni più diffusi e posizionando il brand come una fonte autorevole e di supporto.\nINSIGHT: I proprietari di Bulldog Francese sanno che la razza è incline a problemi digestivi come flatulenza e sensibilità alimentari. Sono costantemente alla ricerca di informazioni verificate per migliorare il benessere del loro cane e sono frustrati da consigli generici o contraddittori. Il loro interesse è capire la *vera* causa del disagio e trovare soluzioni pratiche, non sentirsi vendere un prodotto.\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): **Visual:** Primo piano di un Bulldog Francese dall'espressione serena e felice, illuminato da una luce calda e morbida che entra da una finestra. Sguardo diretto in camera. **Copy (sovrimpresso):** \"Digestione Sensibile del Bulldog Francese: 3 Miti da Sfatare\". **Stile:** Coerente con la campagna: luce dorata, contrasto morbido, focus sul pet.\n- Slide 2 (Problema/Curiosità): **Visual:** Bulldog Francese seduto su un tappeto, con la testa leggermente inclinata (posa \"pensierosa\" o \"curiosa\"), mentre guarda verso l'alto. L'ambiente è domestico e accogliente. **Copy (sovrimpresso):** \"Mito #1: 'Un po' di gas è normale per loro'\". **Stile:** Mantenere la profondità di campo ridotta per isolare il cane e la sua espressione interrogativa.\n- Slide 3 (Consiglio/Infografica): **Visual:** Dettaglio fotografico macro: una mano umana accarezza dolcemente la pancia del Bulldog Francese, che è sdraiato e rilassato. L'immagine comunica cura e attenzione. **Copy (sovrimpresso):** \"Verità: Sebbene comuni, flatulenza eccessiva e borborigmi possono essere un segnale di squilibrio. Osserva la frequenza e l'intensità.\" **Stile:** Pulito, elegante, con focus sul gesto di cura. L'illuminazione calda enfatizza il pelo del cane e la texture della pelle umana.\n- Slide 4 (Outro/Interazione): **Visual:** Sfondo neutro con i colori caldi della palette di campagna. Nessuna immagine, solo testo. **Copy:** \"Il tuo Bouledogue ha la pancia sensibile? Raccontaci la tua esperienza nei commenti. Salva il post per non perdere i nostri consigli.\" **Icone:** Aggiungere le icone di commento e salvataggio di Instagram.\nDIREZIONE VISIVA STORY & TIKTOK: Un breve video verticale (Reel/TikTok) che mostra il Bulldog Francese in diverse situazioni: prima con un'espressione leggermente imbronciata o pensierosa (testo in sovrimpressione: \"Il tuo Bulldog ha spesso mal di pancia?\"), poi felice e rilassato mentre viene accarezzato (testo: \"Forse non è come pensi...\"). Il video si conclude con il messaggio chiave del post. Utilizzare transizioni morbide e una musica di sottofondo calma e positiva. Lo stile visivo rimane invariato: luce calda, naturale e focus sull'emozione del pet.\nMESSAGGIO CHIAVE: Ascoltare la sua pancia è il primo gesto d'amore per il benessere del tuo Bulldog.",
+          "canale_social": "Instagram Carousel",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142189251_9zd0j2p4r_size-1024x1024_quality-high.png",
+          "social_caption": "HOOK:\n**\"Un po' di gas è normale\", ma sei sicuro che sia così anche per il tuo Bulldog Francese?** 🤔\n\nIL CONSIGLIO:\nÈ vero, la conformazione fisica del Bulldog Francese può portarlo a ingerire più aria durante i pasti, ma non dobbiamo mai considerare \"normale\" un disagio persistente. Flatulenza eccessiva, borborigmi (i rumori della pancia) frequenti o episodi di vomito sono campanelli d'allarme. 🔔\n\nIl suo sistema digestivo è delicato e ci sta comunicando qualcosa. Imparare ad \"ascoltare\" la sua pancia è il primo passo per garantirgli un benessere reale e duraturo. Un piccolo squilibrio, se ignorato, può influire sul suo umore e sulla sua vitalità. 🐾\n\nUn consiglio pratico? Prova a tenere un piccolo diario. Annota la frequenza e l'intensità dei sintomi e se noti una correlazione con determinati alimenti o momenti della giornata. Questo semplice gesto di osservazione è un atto d'amore che può fare una grande differenza. ❤️\n\nCONVERSAZIONE:\nLa pancia del tuo Bouledogue è un argomento delicato? Raccontaci la tua esperienza nei commenti.\n\nHASHTAGS:\n#BouledogueFrancese #CuraDelCane #DigestioneSensibile #BenessereAnimale #CaniFelici #AmiciPelosi",
+          "argomento": "digestione sensibile",
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142146551_32urmqs0x_size-1024x1792_quality-high.png",
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142180253_l9ve5xgjh_size-1024x1024_quality-high.png",
+          "visual_brief_overlay_observability": "",
+          "editorial_brief_reasoning": ""
+        }
+      },
+      "order": 2
+    },
+    {
+      "data": {
+        "it": {
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142148778_fekti5aak_size-1024x1792_quality-high.png",
+          "argomento": "sviluppo cuccioli",
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142180117_6vcjjtiys_size-1024x1024_quality-high.png",
+          "editorial_brief_reasoning": "",
+          "visual_brief_overlay_observability": "",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai proprietari di cuccioli di Pastore Tedesco una guida chiara e rassicurante sulle tappe fondamentali della crescita, aiutandoli a comprendere e supportare al meglio lo sviluppo fisico e cognitivo del loro cane per costruire un rapporto di fiducia con il brand.\nINSIGHT: Il proprietario di un Pastore Tedesco è consapevole di avere un cane di taglia grande con esigenze specifiche. È proattivo nella ricerca di informazioni per garantirgli uno sviluppo ottimale, soprattutto per quanto riguarda la salute delle articolazioni e la socializzazione. Il suo timore è di non fare abbastanza o di commettere errori in questa fase cruciale, quindi cerca consigli autorevoli e pratici per crescere un adulto sano ed equilibrato.\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Primo piano di un adorabile cucciolo di Pastore Tedesco (2-3 mesi) che guarda con curiosità verso l'obiettivo. L'illuminazione è calda, quasi dorata, proveniente da una finestra laterale per creare un morbido controluce che ne delinea il pelo. Sfondo domestico e sfocato. Testo in sovrimpressione: \"Le 3 Fasi Chiave nella Crescita del tuo Cucciolo di Pastore Tedesco\".\n- Slide 2 (Problema/Curiosità): Il cucciolo di Pastore Tedesco è seduto, con la testa leggermente inclinata, come se stesse \"ascoltando\" attentamente. La proprietaria (visibile solo nelle mani o di schiena, per mantenere il focus sul pet) interagisce con lui con un gesto delicato. La luce calda evidenzia la sua espressione interrogativa. Testo: \"Sai cosa succede tra i 2 e i 4 mesi? È un periodo cruciale.\"\n- Slide 3 (Consiglio/Infografica): Dettaglio fotografico: una zampa del cucciolo tenuta delicatamente in una mano umana, a simboleggiare cura e supporto. L'illuminazione è sempre morbida e calda. Sovrapposta, un'infografica minimale e pulita con 3 icone e brevi testi che illustrano le fasi: 1. Socializzazione (icona con più cani/persone), 2. Sviluppo Dentale (icona dente), 3. Apprendimento Rapido (icona lampadina).\n- Slide 4 (Outro/Interazione): Visual puramente testuale su uno sfondo color crema caldo, che riprende i toni della palette fotografica. Il font è elegante ma amichevole. Testo: \"Qual è la sfida più grande che stai affrontando con il tuo cucciolo? Raccontacelo nei commenti! Salva il post per non perdere questi consigli.\" Icone \"commento\" e \"salva\" minimali.\nDIREZIONE VISIVA STORY & TIKTOK: Breve video verticale (Reel/TikTok). Si apre con la stessa scena della cover del carosello (cucciolo curioso). Segue una sequenza di clip brevissime e dinamiche: il cucciolo che gioca delicatamente con un altro cane (socializzazione), che mordicchia un gioco adatto alla dentizione, che impara un semplice comando come \"seduto\". Le clip mantengono lo stile caldo, intimo e con luce naturale. Testi in sovrimpressione animati evidenziano i punti chiave in modo rapido e leggibile. Musica di sottofondo strumentale, calma e positiva. Voce fuori campo amichevole che pone una domanda alla fine per stimolare i commenti.\nMESSAGGIO CHIAVE: Comprendere ogni fase della sua crescita è il primo gesto d'amore per garantire al tuo cucciolo un futuro sano e felice.",
+          "canale_social": "Facebook Educational",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142251340_wim1aw99p_ratio-9x16.mp4",
+          "social_caption_observability": "",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142189487_hkojg1qzj_size-1024x1024_quality-high.png",
+          "social_caption": "HOOK: **Il tuo cucciolo di Pastore Tedesco ha tra i 2 e i 4 mesi? 🐾 Stai vivendo la fase più decisiva per il suo futuro.**\n\nIL CONSIGLIO: Questo è il \"periodo sensibile\" della socializzazione! 🐶 Fino alle 16 settimane, il suo cervello è una spugna, incredibilmente ricettivo a nuovi incontri. Esporlo gradualmente e in sicurezza a persone, altri cani (vaccinati!) e ambienti diversi è fondamentale per crescere un adulto equilibrato e sicuro di sé.\n\nNello stesso periodo, inizierà la fastidiosa fase della dentizione. 🦷 Offrigli giochi sicuri da mordere per alleviare il fastidio e salvare i tuoi mobili! La sua capacità di apprendimento è al massimo: inizia con comandi semplici e positivi. Ogni sessione di training rafforza il vostro legame. ❤️\n\nCONVERSAZIONE: Qual è la scoperta più bella o la sfida più grande che stai vivendo in questa fase con il tuo cucciolo?\n\nHASHTAGS: #PastoreTedescoCucciolo #CrescitaCucciolo #EducazioneCane #SocializzazioneCucciolo #ConsigliCinofili #VitaDaCucciolo",
+          "reels_voiceover_script_observability": "",
+          "reels_voiceover_script_reasoning": "",
+          "reels_voiceover_script": "Il tuo cucciolo di Pastore Tedesco cresce in un lampo, vero? Tra i due e i quattro mesi attraversa tre fasi importantissime: socializza con il mondo, mette i dentini nuovi e impara tutto super velocemente. Accompagnarlo con amore in ogni scoperta è fondamentale per farlo crescere sano e forte. Qual è la sfida più grande che stai affrontando con il tuo cucciolo in questa fase? Raccontacelo nei commenti",
+          "visual_brief_overlay_reasoning": "",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142174690_ie45bxcts_size-1024x1024_quality-high.png",
+          "editorial_brief_observability": "",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142245991_zkh1nx0kv_ratio-9x16.mp4",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142126680_jo6d0btuw_size-1024x1792_quality-high.png",
+          "editorial_angle": "Abitudini Sane",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142171591_tdh97n927_size-1024x1024_quality-high.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Le 3 Fasi Chiave\nCAROUSEL SLIDE 1 SUBTITLE: Crescita del tuo Pastore Tedesco\nCAROUSEL SLIDE 2 TITLE: La fase 2-4 mesi\nCAROUSEL SLIDE 2 TEXT: Sai cosa succede in questo periodo? È una fase cruciale per il suo sviluppo futuro.\nCAROUSEL SLIDE 3 TITLE: Le 3 tappe chiave\nCAROUSEL SLIDE 3 TEXT: Socializzazione, sviluppo dentale e apprendimento rapido: le basi per un cucciolo sano ed equilibrato.\nCAROUSEL SLIDE 4 TITLE: Qual è la tua sfida?\nCAROUSEL SLIDE 4 TEXT: Raccontacelo nei commenti e salva il post per futuri consigli.\n\nSTORY TITLE: La crescita del tuo cucciolo\nSTORY TEXT: Socializzazione, dentizione e apprendimento: qual è la sfida più grande per te?\n\nTIKTOK TITLE: Stai facendo questi errori col cucciolo?\nTIKTOK TEXT: Le 3 fasi di crescita che ogni proprietario deve assolutamente conoscere.",
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption_reasoning": "",
+          "razza": "Pastore Tedesco"
+        }
+      },
+      "order": 3
+    },
+    {
+      "data": {
+        "it": {
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142161099_k1eu6g32t_size-1024x1024_quality-high.png",
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142112685_nd42vquhw_size-1024x1792_quality-high.png",
+          "argomento": "articolazioni forti",
+          "editorial_brief_reasoning": "",
+          "visual_brief_overlay_observability": "",
+          "canale_social": "LinkedIn Professional",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai proprietari di Beagle conoscenze scientifiche approfondite su come la nutrizione supporti la salute delle articolazioni, posizionando il brand come una fonte autorevole e affidabile nel pet care di lusso.\n\nINSIGHT: Il proprietario di un Beagle sa che questa è una razza energica e soggetta a problemi articolari, specialmente con l'avanzare dell'età. È quindi proattivamente alla ricerca di informazioni scientifiche e consigli pratici per garantire al proprio cane una vita lunga, attiva e senza dolori, andando oltre le semplici soluzioni commerciali.\n\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Un primo piano dinamico di un Beagle in corsa in un parco, catturato con un leggero motion blur per enfatizzare il movimento. La luce dorata del tardo pomeriggio colpisce il suo pelo, mettendo in risalto la sua muscolatura agile. Testo in sovrimpressione: \"Articolazioni del Beagle: La Scienza della Mobilità.\"\n- Slide 2 (Problema/Curiosità): Un Beagle adulto è seduto su un parquet caldo, con la testa leggermente inclinata e uno sguardo interrogativo verso la camera. La luce morbida proveniente da una finestra laterale crea un'atmosfera intima e riflessiva. Testo in sovrimpressione: \"Perché la loro vitalità dipende da articolazioni forti?\"\n- Slide 3 (Consiglio/Infografica): Una slide grafica estremamente pulita ed elegante su sfondo neutro (color crema o sabbia). Al centro, un'illustrazione stilizzata e scientifica dell'articolazione del ginocchio di un cane, con linee che puntano a componenti chiave come cartilagine e liquido sinoviale. Accanto, icone minimaliste rappresentano nutrienti essenziali (es. una molecola per la glucosamina, una goccia per gli Omega-3) con una breve descrizione della loro funzione. Nessun riferimento a ingredienti specifici.\n- Slide 4 (Outro/Interazione): Sfondo colorato con il logo TerraViva Pet in piccolo. Testo centrale, chiaro e autorevole: \"La prevenzione è il gesto d'amore più grande. Come mantieni agile il tuo Beagle? Raccontacelo nei commenti.\" In basso, le icone \"Salva\" e \"Commenta\" stilizzate.\n\nDIREZIONE VISIVA STORY & TIKTOK: Un video verticale di 15 secondi. Inizia con una clip in slow-motion di un Beagle che salta per afferrare una foglia, con la luce calda del tramonto che ne esalta la silhouette. Appaiono testi animati in modo elegante e scientifico che evidenziano concetti chiave come \"Supporto Cartilagineo\" e \"Flessibilità Articolare\". Il video si chiude con un'inquadratura del Beagle che si accoccola felice ai piedi del proprietario. La musica di sottofondo è strumentale, calma e sofisticata.\n\nMESSAGGIO CHIAVE: La nutrizione scientifica è il pilastro per costruire e mantenere la vitalità e la libertà di movimento del tuo Beagle.",
+          "social_caption_observability": "",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142257854_643x0p0el_ratio-9x16.mp4",
+          "social_caption": "**Il tuo Beagle è un concentrato di energia inesauribile? 🐾 Ecco la scienza che protegge i suoi salti e le sue corse sfrenate.**\n\nIL CONSIGLIO:\nLa loro struttura compatta e la loro vivacità instancabile, sebbene siano fonte di gioia, mettono costantemente alla prova le articolazioni. La cartilagine, il \"cuscinetto\" ammortizzatore naturale del corpo, ha bisogno di essere costantemente nutrita per rimanere elastica e funzionale nel tempo. 🧬\n\nUna nutrizione scientificamente formulata fornisce i mattoncini fondamentali per la salute articolare. Nutrienti specifici, infatti, contribuiscono a mantenere la cartilagine forte e a garantire un'adeguata lubrificazione all'interno dell'articolazione (liquido sinoviale), proprio come l'olio per un ingranaggio perfetto. ⚙️\n\nQuesto approccio non è un dettaglio, ma il pilastro per preservare la loro agilità e assicurargli una vita di movimento, libera e felice, anche con l'avanzare dell'età.\n\nCONVERSAZIONE:\nLa prevenzione è il gesto d'amore più grande. Come mantieni agile e scattante il tuo Beagle? Raccontacelo nei commenti! 👇\n\nHASHTAGS:\n#SaluteDelBeagle #ArticolazioniCane #NutrizioneCane #BenessereAnimale #VitaDaBeagle #CuraDelCane",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142195530_xzxnptfv0_size-1024x1024_quality-high.png",
+          "reels_voiceover_script_reasoning": "",
+          "reels_voiceover_script": "Vedere il tuo Beagle correre è pura gioia, vero? Quell'energia va protetta. La scienza ci mostra come: una nutrizione mirata è la chiave per la salute delle sue articolazioni. Supporta la cartilagine e mantiene la flessibilità per garantirgli una vita di corse felici. Prendersi cura della sua mobilità, fin da subito, è il più grande gesto d'amore che puoi fargli.",
+          "visual_brief_overlay_reasoning": "",
+          "reels_voiceover_script_observability": "",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142251932_6eib03z2d_ratio-9x16.mp4",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142151860_ax89vdmaj_size-1024x1024_quality-high.png",
+          "editorial_brief_observability": "",
+          "editorial_angle": "Scienza Dietro la Ricetta",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142139181_cehi6qjii_size-1024x1792_quality-high.png",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142177382_kzo66pyki_size-1024x1024_quality-high.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Articolazioni del Beagle\nCAROUSEL SLIDE 1 SUBTITLE: La Scienza della Mobilità.\nCAROUSEL SLIDE 2 TITLE: Vitalità e articolazioni.\nCAROUSEL SLIDE 2 TEXT: La loro inesauribile energia dipende da articolazioni forti e sane. Ecco perché.\nCAROUSEL SLIDE 3 TITLE: La scienza dei nutrienti.\nCAROUSEL SLIDE 3 TEXT: Nutrienti mirati supportano la cartilagine e mantengono la corretta lubrificazione delle articolazioni.\nCAROUSEL SLIDE 4 TITLE: Un gesto d'amore.\nCAROUSEL SLIDE 4 TEXT: Come mantieni agile il tuo Beagle? Raccontacelo nei commenti.\n\nSTORY TITLE: La scienza della sua agilità.\nSTORY TEXT: Supporto cartilagineo e flessibilità articolare: scopri come la nutrizione può fare la differenza.\n\nTIKTOK TITLE: Mantieni il tuo Beagle sempre attivo.\nTIKTOK TEXT: Il segreto per la sua mobilità? È nella ciotola.",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "tono_voce": "Scientifico-Autorevole",
+          "social_caption_reasoning": "",
+          "razza": "Beagle"
+        }
+      },
+      "order": 4
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Cocker Spaniel",
+          "social_caption_reasoning": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "carousel_img_1": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142194360_kdefrq0h0_size-1024x1024_quality-high.png",
+          "visual_brief_overlay": "CAROUSEL SLIDE 1 TITLE: Il Segreto di un Manto Splendente\nCAROUSEL SLIDE 1 SUBTITLE: La bellezza che nasce dall'interno.\nCAROUSEL SLIDE 2 TITLE: Perché ha perso brillantezza?\nCAROUSEL SLIDE 2 TEXT: Il suo pelo non è solo estetica, ma un importante indicatore di benessere generale.\nCAROUSEL SLIDE 3 TITLE: Il potere dei nutrienti\nCAROUSEL SLIDE 3 TEXT: Omega-3 e Vitamina A sono essenziali per un manto forte, sano e lucente.\nCAROUSEL SLIDE 4 TITLE: I tuoi rituali\nCAROUSEL SLIDE 4 TEXT: Quali sono i tuoi rituali di bellezza? Salva e condividi la tua esperienza.\n\nSTORY TITLE: Da opaco a splendente\nSTORY TEXT: Il segreto per un pelo lucente? Non si applica, si nutre dall'interno.\n\nTIKTOK TITLE: Trasforma il suo pelo così\nTIKTOK TEXT: Il segreto per un manto splendente non è la spazzola.",
+          "story_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142138234_wlbduzv43_size-1024x1792_quality-high.png",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "editorial_brief_observability": "",
+          "carousel_img_4": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142176000_rlwbk0il4_size-1024x1024_quality-high.png",
+          "tiktok_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142251514_89kve90y4_ratio-9x16.mp4",
+          "reels_voiceover_script_observability": "",
+          "visual_brief_overlay_reasoning": "",
+          "reels_voiceover_script": "Il pelo del tuo Cocker ti sembra un po' spento e opaco? Il segreto per una vera lucentezza non si applica, si nutre. Pensa a preziosi nutrienti come gli Omega-tre e le vitamine, direttamente nella sua ciotola. Bastano pochi, semplici ingredienti per fare la differenza. Nutri il suo benessere dall'interno per vederlo risplendere ogni giorno di più. La sua felicità brillerà attraverso un manto sano e splendente.",
+          "reels_voiceover_script_reasoning": "",
+          "carousel_img_2": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142194801_qjli9fsxx_size-1024x1024_quality-high.png",
+          "social_caption": "**Il pelo del tuo Cocker Spaniel non brilla come vorresti? Il segreto potrebbe non essere in una nuova spazzola, ma nella sua ciotola.**\n\nUn manto setoso e splendente è lo specchio della sua salute interna. Quando il pelo appare opaco e spento, spesso il primo campanello d'allarme riguarda proprio l'alimentazione. Un piccolo deficit nutrizionale può manifestarsi quasi subito sulla qualità del suo meraviglioso mantello. ✨\n\nLa vera brillantezza nasce da nutrienti specifici. Gli acidi grassi essenziali, come Omega-3 e Omega-6, sono i migliori alleati: nutrono il follicolo pilifero dall'interno, promuovendo un pelo forte, elastico e lucido. Anche le vitamine, in particolare la Vitamina A e la Biotina, giocano un ruolo cruciale nel mantenere la cute sana e, di conseguenza, un manto splendente. 🥕\n\nUn piccolo gesto quotidiano può fare una grande differenza. Arricchire la sua dieta con fonti naturali di questi elementi è un atto d'amore che si vede. La costanza è la chiave per trasformare un pelo spento in un manto che cattura la luce. 🐾\n\nE tu, hai qualche rituale speciale o un segreto naturale per far risplendere il manto del tuo cane?\n\n#TerraVivaPet #CockerSpaniel #CuraDelPelo #BenessereAnimale #AlimentazioneCane #CaniFelici",
+          "story_video": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genvideos/dkWCNUWLZs2REMC6101l/genvideo_1782142245618_77nuaib48_ratio-9x16.mp4",
+          "social_caption_observability": "",
+          "editorial_brief": "OBIETTIVO SOCIAL: Fornire ai pet parent di Cocker Spaniel consigli pratici e scientificamente validati per migliorare la salute e la lucentezza del pelo del loro cane, posizionando TerraViva Pet come un'autorità competente e affidabile nel benessere animale.\nINSIGHT: Il proprietario di un Cocker Spaniel è orgoglioso del caratteristico pelo lungo e setoso della razza. La lucentezza non è solo un fattore estetico, ma un indicatore visibile di salute e benessere. È costantemente alla ricerca di consigli autorevoli e non commerciali per mantenere e valorizzare al meglio il manto del proprio cane, andando oltre le soluzioni superficiali.\nDIREZIONE VISIVA CAROSELLO (4 Slide):\n- Slide 1 (Cover): Dettaglio macro sul pelo di un Cocker Spaniel, illuminato da una luce calda e radente che ne esalta la texture setosa e la lucentezza dorata. L'inquadratura è stretta, quasi astratta, per creare curiosità. Titolo in sovrimpressione: \"Il Segreto di un Manto Splendente\".\n- Slide 2 (Problema/Curiosità): Un Cocker Spaniel dal manto leggermente opaco è seduto in un ambiente domestico (un tappeto, una poltrona), con la testa leggermente inclinata e uno sguardo interrogativo verso la camera. La luce è morbida, l'atmosfera intima. Testo in sovrimpressione: \"Perché il suo pelo ha perso brillantezza?\".\n- Slide 3 (Consiglio/Infografica): Visual diviso a metà. A sinistra, un dettaglio fotografico macro di un ingrediente naturale noto per i suoi benefici (es. semi di lino, un pezzetto di carota), con la stessa illuminazione calda e dorata. A destra, su fondo neutro, un'icona grafica stilizzata e pulita che rappresenta un nutriente chiave (es. molecola di Omega-3, icona della Vitamina A) con una breve spiegazione testuale.\n- Slide 4 (Outro/Interazione): Visual pulito con il logo di TerraViva Pet in alto. Testo principale: \"Quali sono i tuoi rituali di bellezza per il suo pelo?\". Invito all'azione in basso con icone: \"Salva il consiglio | Condividi la tua esperienza nei commenti\". Lo sfondo è una versione sfocata e soft-focus del cane felice della copertina.\nDIREZIONE VISIVA STORY & TIKTOK: Un video verticale dinamico. Inizia con un'inquadratura di 2 secondi di un Cocker Spaniel con il pelo opaco e un'espressione \"triste\" (es. sbadiglio). Transizione rapida a una serie di clip macro: una spazzola che accarezza un manto lucidissimo, una mano che aggiunge un filo d'olio di semi di lino (senza mostrare la bottiglia/marca) in una ciotola vuota, un dettaglio di verdure fresche. Il video si chiude con lo stesso Cocker, ora con un pelo visibilmente splendente, che scodinzola felice verso la camera. Musica di sottofondo calma e positiva. Testi in sovrimpressione che riassumono i consigli in modo rapido.\nMESSAGGIO CHIAVE: La vera lucentezza del suo manto non si applica, si nutre dall'interno.",
+          "canale_social": "Instagram Carousel",
+          "visual_brief_overlay_observability": "",
+          "editorial_brief_reasoning": "",
+          "tiktok_img": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142132166_8d1tpq4ox_size-1024x1792_quality-high.png",
+          "argomento": "lucentezza pelo",
+          "carousel_img_3": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/genimages/dkWCNUWLZs2REMC6101l/genimage_1782142185310_u6605s2r8_size-1024x1024_quality-high.png"
+        }
+      },
+      "order": 5
+    },
+    {
+      "data": {
+        "it": {
+          "reels_voiceover_script": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "stimolazione mentale",
+          "editorial_angle": "Abitudini Sane",
+          "story_img": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_brief": "",
+          "canale_social": "Reels/TikTok",
+          "tono_voce": "Coinvolgente-Leggero",
+          "story_video": "",
+          "razza": "Border Collie",
+          "social_caption": "",
+          "carousel_img_2": ""
+        }
+      },
+      "order": 6
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Jack Russell Terrier",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "tono_voce": "Empatico-Amichevole",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "story_video": "",
+          "story_img": "",
+          "editorial_angle": "Miti da Sfatare",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "reels_voiceover_script": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "porzioni e peso",
+          "tiktok_video": "",
+          "carousel_img_3": ""
+        }
+      },
+      "order": 7
+    },
+    {
+      "data": {
+        "it": {
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_img": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "reels_voiceover_script": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "argomento": "cura dei nodi",
+          "razza": "Barboncino",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "canale_social": "Facebook Educational",
+          "editorial_brief": "",
+          "tono_voce": "Empatico-Amichevole",
+          "story_video": ""
+        }
+      },
+      "order": 8
+    },
+    {
+      "data": {
+        "it": {
+          "reels_voiceover_script": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "argomento": "cuore sano",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "story_img": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "canale_social": "LinkedIn Professional",
+          "editorial_brief": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "story_video": "",
+          "razza": "Boxer",
+          "social_caption": "",
+          "carousel_img_2": ""
+        }
+      },
+      "order": 9
+    },
+    {
+      "data": {
+        "it": {
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "idratazione felice",
+          "reels_voiceover_script": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_img": "",
+          "story_video": "",
+          "editorial_brief": "",
+          "canale_social": "Instagram Carousel",
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Maine Coon"
+        }
+      },
+      "order": 10
+    },
+    {
+      "data": {
+        "it": {
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Siamese",
+          "story_video": "",
+          "canale_social": "Reels/TikTok",
+          "editorial_brief": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Scienza Dietro la Ricetta",
+          "story_img": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "argomento": "controllo del peso",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "reels_voiceover_script": ""
+        }
+      },
+      "order": 11
+    },
+    {
+      "data": {
+        "it": {
+          "story_img": "",
+          "editorial_angle": "Abitudini Sane",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "reels_voiceover_script": "",
+          "argomento": "boli di pelo",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "razza": "Persiano",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "tono_voce": "Empatico-Amichevole",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "story_video": ""
+        }
+      },
+      "order": 12
+    },
+    {
+      "data": {
+        "it": {
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "argomento": "cura degli occhi",
+          "reels_voiceover_script": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "story_img": "",
+          "story_video": "",
+          "editorial_brief": "",
+          "canale_social": "Facebook Educational",
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Ragdoll"
+        }
+      },
+      "order": 13
+    },
+    {
+      "data": {
+        "it": {
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Abitudini Sane",
+          "story_img": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "argomento": "gioco e caccia",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "reels_voiceover_script": "",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Bengal",
+          "story_video": "",
+          "canale_social": "Reels/TikTok",
+          "editorial_brief": "",
+          "tono_voce": "Coinvolgente-Leggero"
+        }
+      },
+      "order": 14
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Certosino",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "tono_voce": "Empatico-Amichevole",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "story_video": "",
+          "story_img": "",
+          "editorial_angle": "Curiosità sulla Razza",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "reels_voiceover_script": "",
+          "argomento": "comportamento sonno",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "tiktok_video": "",
+          "carousel_img_3": ""
+        }
+      },
+      "order": 15
+    },
+    {
+      "data": {
+        "it": {
+          "reels_voiceover_script": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "argomento": "pelle delicata",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "story_img": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_brief": "",
+          "canale_social": "LinkedIn Professional",
+          "tono_voce": "Scientifico-Autorevole",
+          "story_video": "",
+          "razza": "Sfinge",
+          "social_caption": "",
+          "carousel_img_2": ""
+        }
+      },
+      "order": 16
+    },
+    {
+      "data": {
+        "it": {
+          "reels_voiceover_script": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "svezzamento sicuro",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "story_img": "",
+          "editorial_angle": "Abitudini Sane",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "tono_voce": "Empatico-Amichevole",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "story_video": "",
+          "razza": "British Shorthair",
+          "carousel_img_2": "",
+          "social_caption": ""
+        }
+      },
+      "order": 17
+    },
+    {
+      "data": {
+        "it": {
+          "argomento": "mutamento sottopelo",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "reels_voiceover_script": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "story_img": "",
+          "editorial_angle": "Scienza Dietro la Ricetta",
+          "story_video": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "canale_social": "Reels/TikTok",
+          "editorial_brief": "",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "razza": "Husky Siberiano"
+        }
+      },
+      "order": 18
+    },
+    {
+      "data": {
+        "it": {
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Dalmata",
+          "story_video": "",
+          "editorial_brief": "",
+          "canale_social": "Instagram Carousel",
+          "tono_voce": "Coinvolgente-Leggero",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_img": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "argomento": "attività fisica",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "reels_voiceover_script": ""
+        }
+      },
+      "order": 19
+    },
+    {
+      "data": {
+        "it": {
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Chihuahua",
+          "story_video": "",
+          "canale_social": "Facebook Educational",
+          "editorial_brief": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Consiglio dell'Esperto",
+          "story_img": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "argomento": "denti e tartaro",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "reels_voiceover_script": ""
+        }
+      },
+      "order": 20
+    },
+    {
+      "data": {
+        "it": {
+          "story_video": "",
+          "editorial_brief": "",
+          "canale_social": "Instagram Carousel",
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Shih Tzu",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "pulizia orecchie",
+          "reels_voiceover_script": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Abitudini Sane",
+          "story_img": ""
+        }
+      },
+      "order": 21
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Bassotto",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "editorial_brief": "",
+          "canale_social": "Reels/TikTok",
+          "tono_voce": "Coinvolgente-Leggero",
+          "story_video": "",
+          "editorial_angle": "Miti da Sfatare",
+          "story_img": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "reels_voiceover_script": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "carousel_img_4": "",
+          "argomento": "salute colonna",
+          "tiktok_img": ""
+        }
+      },
+      "order": 22
+    },
+    {
+      "data": {
+        "it": {
+          "story_video": "",
+          "canale_social": "LinkedIn Professional",
+          "editorial_brief": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Rottweiler",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "proteine muscolari",
+          "reels_voiceover_script": "",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Scienza Dietro la Ricetta",
+          "story_img": ""
+        }
+      },
+      "order": 23
+    },
+    {
+      "data": {
+        "it": {
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "argomento": "respirazione e peso",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "reels_voiceover_script": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "editorial_angle": "Abitudini Sane",
+          "story_img": "",
+          "story_video": "",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "tono_voce": "Empatico-Amichevole",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "razza": "Carlino"
+        }
+      },
+      "order": 24
+    },
+    {
+      "data": {
+        "it": {
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_img": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "reels_voiceover_script": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "argomento": "socializzazione gatti",
+          "carousel_img_4": "",
+          "tiktok_img": "",
+          "razza": "Sacro di Birmania",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "tono_voce": "Empatico-Amichevole",
+          "story_video": ""
+        }
+      },
+      "order": 25
+    },
+    {
+      "data": {
+        "it": {
+          "story_video": "",
+          "tono_voce": "Scientifico-Autorevole",
+          "canale_social": "Facebook Educational",
+          "editorial_brief": "",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "razza": "Scottish Fold",
+          "tiktok_img": "",
+          "argomento": "salute orecchie folded",
+          "carousel_img_4": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "reels_voiceover_script": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "story_img": "",
+          "editorial_angle": "Consiglio dell'Esperto"
+        }
+      },
+      "order": 26
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Siberiano",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "tono_voce": "Coinvolgente-Leggero",
+          "canale_social": "Reels/TikTok",
+          "editorial_brief": "",
+          "story_video": "",
+          "story_img": "",
+          "editorial_angle": "Abitudini Sane",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "reels_voiceover_script": "",
+          "tiktok_img": "",
+          "carousel_img_4": "",
+          "argomento": "crescita ossea",
+          "tiktok_video": "",
+          "carousel_img_3": ""
+        }
+      },
+      "order": 27
+    },
+    {
+      "data": {
+        "it": {
+          "story_video": "",
+          "tono_voce": "Empatico-Amichevole",
+          "canale_social": "Instagram Carousel",
+          "editorial_brief": "",
+          "carousel_img_2": "",
+          "social_caption": "",
+          "razza": "Gatto Comune Europeo",
+          "tiktok_img": "",
+          "argomento": "latte ai gatti",
+          "carousel_img_4": "",
+          "tiktok_video": "",
+          "carousel_img_3": "",
+          "reels_voiceover_script": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "carousel_img_1": "",
+          "visual_brief_overlay": "",
+          "story_img": "",
+          "editorial_angle": "Miti da Sfatare"
+        }
+      },
+      "order": 28
+    },
+    {
+      "data": {
+        "it": {
+          "razza": "Norvegese delle Foreste",
+          "social_caption": "",
+          "carousel_img_2": "",
+          "canale_social": "Reels/TikTok",
+          "editorial_brief": "",
+          "tono_voce": "Coinvolgente-Leggero",
+          "story_video": "",
+          "editorial_angle": "Curiosità sulla Razza",
+          "story_img": "",
+          "visual_brief_overlay": "",
+          "carousel_img_1": "",
+          "asset_campagna": "https://storage.googleapis.com/contentmachine-8f4fc.firebasestorage.app/images/n8mjxF1QIryq6qLllBPm/1782117400999_a7bq7llw2_terraviva_master_adv.png",
+          "reels_voiceover_script": "",
+          "carousel_img_3": "",
+          "tiktok_video": "",
+          "argomento": "arrampicata sicura",
+          "carousel_img_4": "",
+          "tiktok_img": ""
+        }
+      },
+      "order": 29
+    }
+  ],
+  "exportedAt": "2026-06-25T08:42:55.282Z",
+  "version": "2.0.0"
+}
