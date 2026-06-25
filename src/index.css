@@ -491,9 +491,8 @@
             font-family: 'Roboto', sans-serif;
             font-size: 0.9rem;
             font-weight: 600;
-            width: 80px;
-            text-align: right;
-            visibility: hidden; /* Nascondiamo il contatore di slide su richiesta dell'utente */
+            width: 120px;
+            color: var(--text-sec);
         }
 
         /* VISUAL WALL VIEW */

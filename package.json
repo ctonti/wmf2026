@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "agentation": "^3.0.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

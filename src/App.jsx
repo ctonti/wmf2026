@@ -6,8 +6,10 @@ const campaigns = (campaignData.dataset || []).map(item => ({
 }));
 const masterRefAsset = (campaignData.assets || []).find(a => a.tagName === '##master_adv_reference##')?.value || '';
 const productBagAsset = (campaignData.assets || []).find(a => a.tagName === '##product_bag##')?.value || '';
+const firstProduct = campaigns[0] || {};
 import IntegrationFlow from './components/IntegrationFlow';
 import KnowledgeGraph from './components/KnowledgeGraph';
+import { PaintBrush, Package, Brain, Target, Lightbulb, UserFocus, MapPin, Anchor, Warning, BookOpen, Images, PencilLine, Crosshair, SlidersHorizontal, CaretCircleRight } from '@phosphor-icons/react';
 
 
 // Helper component for lazy-loaded images
@@ -78,7 +80,7 @@ export default function App() {
   const [benFilter, setBenFilter] = useState('');
   const [perFilter, setPerFilter] = useState('');
 
-  const totalSlides = 16;
+  const totalSlides = 15;
   const featuredCampaignOrders = [0, 1, 2, 4, 5, 11, 13, 8];
 
   // Slide Names mapping for future use/nav
@@ -92,9 +94,8 @@ export default function App() {
     "Compliance & ROI",
     "A Chi Serve in Azienda",
     "Il Dataset: Valore",
-    "Multilingue & Vision",
-    "Matrice ADV Angles",
-    "Il Processo ADV",
+    "Case Study: ADV Angles",
+    "Advertising Angles",
     "La Forza dei Numeri",
     "Futuri Workflow",
     "Visual Wall Case Study",
@@ -107,7 +108,7 @@ export default function App() {
   let showAssetsDashboard = false;
   let showTextsDashboard = false;
 
-  if (currentSlide === 14 && wallStep > 0 && wallStep <= 32) {
+  if (currentSlide === 13 && wallStep > 0 && wallStep <= 32) {
     const index = Math.floor((wallStep - 1) / 4);
     const subStep = (wallStep - 1) % 4;
     if (index < featuredCampaignOrders.length) {
@@ -179,7 +180,7 @@ export default function App() {
 
   useEffect(() => {
     const updateTransform = () => {
-      if (currentSlide === 14 && focusedCampaign) {
+      if (currentSlide === 13 && focusedCampaign) {
         const card = document.getElementById(`campaign-card-${focusedCampaign.order}`);
         const grid = gridRef.current;
         if (card && grid) {
@@ -251,12 +252,12 @@ export default function App() {
   }, [currentSlide, wallStep, manualActiveCampaign]);
 
   const handleNext = () => {
-    if (currentSlide === 14) {
+    if (currentSlide === 13) {
       if (wallStep < 32) {
         setWallStep(prev => prev + 1);
       } else {
         setWallStep(0);
-        setCurrentSlide(15);
+        setCurrentSlide(14);
       }
     } else if (currentSlide < totalSlides - 1) {
       setCurrentSlide(prev => prev + 1);
@@ -264,14 +265,14 @@ export default function App() {
   };
 
   const handlePrev = () => {
-    if (currentSlide === 14) {
+    if (currentSlide === 13) {
       if (wallStep > 0) {
         setWallStep(prev => prev - 1);
       } else {
-        setCurrentSlide(13);
+        setCurrentSlide(12);
       }
-    } else if (currentSlide === 15) {
-      setCurrentSlide(14);
+    } else if (currentSlide === 14) {
+      setCurrentSlide(13);
       setWallStep(32);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
@@ -403,16 +404,16 @@ export default function App() {
         <nav id="view-mode-nav">
           <button 
             id="nav-btn-slides" 
-            className={`nav-mode-btn ${currentSlide !== 14 ? 'active' : ''}`}
+            className={`nav-mode-btn ${currentSlide !== 13 ? 'active' : ''}`}
             onClick={() => setCurrentSlide(0)}
           >
             Slide Deck
           </button>
           <button 
             id="nav-btn-wall" 
-            className={`nav-mode-btn ${currentSlide === 14 ? 'active' : ''}`}
+            className={`nav-mode-btn ${currentSlide === 13 ? 'active' : ''}`}
             onClick={() => {
-              setCurrentSlide(14);
+              setCurrentSlide(13);
               setWallStep(0);
             }}
           >
@@ -567,7 +568,7 @@ export default function App() {
                         letterSpacing: '0.1em',
                         display: 'block',
                         marginBottom: '4px'
-                      }}>📖 NUOVO LIBRO (GIUGNO 2026)</span>
+                      }}><BookOpen size={20} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '6px' }} /> NUOVO LIBRO (GIUGNO 2026)</span>
                       <h4 style={{
                         fontFamily: 'Figtree',
                         fontSize: '1.45rem',
@@ -880,132 +881,87 @@ export default function App() {
               </div>
             </section>
 
-            {/* SLIDE 9: Traduzione, Vision & Intelligence */}
-            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9" style={{ textAlign: 'center' }}>
-              <span className="slide-tag">Funzionalità Avanzate</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)', lineHeight: 1.05, marginBottom: '15px', maxWidth: '100%', margin: '0 auto' }}>
-                Multilingue Aware & Vision
-              </h2>
-              <p className="concept-intro" style={{ fontSize: '1.8rem', color: 'var(--text-sec)', marginBottom: '30px' }}>Elaborazione intelligente di testi, lingue e asset visivi integrata.</p>
-              
-              <div style={{ display: 'flex', gap: '30px', marginTop: '2vh', width: '100%', justifyContent: 'center' }}>
-                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>Localizzazione Aware</h3>
-                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>La traduzione rispetta tono, stile, terminologia specifica (glossario) e convenzioni locali del brand.</p>
+            {/* SLIDE 9: Case Study Cover — ADV Angles (Display 10) */}
+            <section className={`slide ${currentSlide === 9 ? 'active' : ''}`} id="slide-9" style={{ overflow: 'hidden' }}>
+              <span className="slide-tag">Use Case — ADV Angles</span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '16px', textAlign: 'center' }}>
+                <h2 className="slide-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4.5rem)', lineHeight: 1.05 }}>
+                  ADV Angles
+                </h2>
+                <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.35rem', color: 'var(--text-sec)', maxWidth: '750px', lineHeight: 1.4, fontWeight: 300 }}>
+                  Generazione automatica di campagne ADV iper-personalizzate per <strong style={{ color: '#ffffff' }}>TerraViva Pet</strong> — brand simulato di pet food premium.
+                </p>
+                <div className="takeaway-box" style={{ fontSize: '1.05rem', padding: '10px 20px', borderLeft: '3px solid #ff9f43', textAlign: 'left', maxWidth: '650px' }}>
+                  <Warning size={18} weight="duotone" style={{ verticalAlign: 'middle', marginRight: '6px', color: '#ff9f43' }} />
+                  Progetti reali sotto NDA — caso simulato end-to-end che replica il flusso reale.
                 </div>
-                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>Vision Specializzata</h3>
-                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>Analisi di immagini con prompt per materiali, finiture, colori, guidando descrizioni e copy coerenti.</p>
+                <div style={{ width: '100%', maxWidth: '1100px', maxHeight: '45vh', borderRadius: '10px', overflow: 'hidden', border: '1px solid var(--border)', boxShadow: '0 15px 40px rgba(0,0,0,0.4)' }}>
+                  <img src="assets/cm_workflow_adv.png" alt="Content Machine — ADV Angles Workflow" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                 </div>
-                <div className="dept-card" style={{ flex: 1, padding: '36px 30px', minHeight: '240px', background: 'rgba(18, 18, 18, 0.6)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <h3 style={{ fontSize: '1.6rem', color: 'var(--accent)', marginBottom: '15px', textTransform: 'uppercase' }}>PDF & Docs</h3>
-                  <p style={{ fontSize: '1.25rem', color: 'var(--text-sec)', lineHeight: 1.5, fontWeight: 300 }}>Estrazione automatica di testi, numeri e tabelle da manuali e schede tecniche complesse.</p>
-                </div>
+                <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Workflow reale ADV Angles in Content Machine — 25 nodi, 52 connessioni
+                </p>
               </div>
             </section>
 
-            {/* SLIDE 10: Caso di Studio: La Matrice */}
+            {/* SLIDE 10: Advertising Angles (Display 11) */}
             <section className={`slide ${currentSlide === 10 ? 'active' : ''}`} id="slide-10">
-              <span className="slide-tag">Caso Studio — ADV Angles Matrice</span>
-              <div className="grid-matrix">
-                <div className="matrix-left">
-                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '20px' }}>
-                    L'Iper-personalizzazione di TerraViva Pet
+              <span className="slide-tag">Caso Studio — La Tecnica degli Angles</span>
+              <div className="slide-layout-split" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                <div className="slide-content-left">
+                  <h2 className="slide-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4.5rem)', lineHeight: 1.05, marginBottom: '20px' }}>
+                    Advertising Angles
                   </h2>
-                  <p className="matrix-intro">Incrociare le variabili per parlare a ciascun target in base ad angoli specifici di razza, valore, beneficio, contesto e geolocalizzazione.</p>
-                  
-                  <div className="matrix-formula">
-                    <div className="formula-item">23 Razze</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">6 Valori</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">6 Benefici</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">6 Target Persona</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">6 Contesti</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">30 Località</div>
-                    <div className="formula-operator">×</div>
-                    <div className="formula-item">6 Hooks</div>
+                  <p className="concept-intro" style={{ fontSize: '2rem', color: '#ffffff', lineHeight: 1.4 }}>
+                    La stessa offerta, raccontata in modo diverso a persone diverse.
+                  </p>
+                  <p style={{ fontFamily: 'Roboto, sans-serif', fontSize: '1.4rem', color: 'var(--text-sec)', fontWeight: 300, lineHeight: 1.6, marginTop: '20px' }}>
+                    Nel performance advertising, un <strong style={{ color: '#ffffff' }}>Angle</strong> è la specifica prospettiva con cui presenti il tuo prodotto a un segmento di pubblico. Cambiando l'angolo — il beneficio enfatizzato, il contesto d'uso, il tipo di persona a cui parli — la stessa offerta diventa decine di creatività diverse, ciascuna rilevante per un micro-target specifico.
+                  </p>
+                  <div className="takeaway-box" style={{ marginTop: '25px', fontSize: '1.4rem', padding: '16px 20px' }}>
+                    Più angoli testi → più dati raccogli → più velocemente trovi le combinazioni che convertono.
                   </div>
                 </div>
-                <div className="matrix-right">
-                  <div className="matrix-stat">
-                    <div className="matrix-number">2.7M+</div>
-                    <div className="matrix-desc">Combinazioni creative potenziali</div>
+                <div className="slide-content-right" style={{ borderLeft: '1px solid var(--border)', paddingLeft: '4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '18px' }}>
+                  <h3 style={{ fontFamily: 'Figtree, sans-serif', fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-sec)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '5px' }}>
+                    Le dimensioni di variazione
+                  </h3>
+                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
+                    <div>
+                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={24} weight="duotone" /> Valore di Comunicazione</h3>
+                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Quale value proposition enfatizzare: naturalità, performance, sostenibilità, convenienza...</p>
+                    </div>
                   </div>
-                  <div className="matrix-stat" style={{ borderTop: '1px solid var(--border-light)', paddingTop: '20px' }}>
-                    <div className="matrix-number" style={{ fontSize: 'clamp(3.5rem, 6.5vw, 6.5rem)', color: 'var(--accent)' }}>45 minuti</div>
-                    <div className="matrix-desc">Tempo di esecuzione per 30 campagne multicanale complete</div>
+                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
+                    <div>
+                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Lightbulb size={24} weight="duotone" /> Beneficio Funzionale</h3>
+                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Il vantaggio pratico: digestione, pelo lucido, energia, controllo del peso...</p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </section>
-
-            {/* SLIDE 11: Il Processo Operativo */}
-            <section className={`slide ${currentSlide === 11 ? 'active' : ''}`} id="slide-11">
-              <span className="slide-tag">Caso Studio — ADV Angles Flusso</span>
-              <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '4vh' }}>
-                Il Processo ADV Angles
-              </h2>
-              
-              <div className="workflow-grid">
-                <div className="workflow-card">
-                  <div>
-                    <div className="step-num">01</div>
-                    <h3 className="step-title">Definizione Matrice</h3>
-                    <p className="step-desc">Configurazione e invio dei parametri strategici di incrocio nel dataset (Excel/JSON).</p>
+                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
+                    <div>
+                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><UserFocus size={24} weight="duotone" /> Target Persona</h3>
+                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>A chi parli: il neo-proprietario ansioso, il cinofilo esperto, la famiglia con bambini...</p>
+                    </div>
                   </div>
-                  <div className="step-pill-list">
-                    <span className="step-pill">Input parameters</span>
+                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
+                    <div>
+                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><MapPin size={24} weight="duotone" /> Contesto & Geolocalizzazione</h3>
+                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>Dove e quando: vita in città, campagna, clima caldo, stagione invernale...</p>
+                    </div>
                   </div>
-                </div>
-                <div className="workflow-card">
-                  <div>
-                    <div className="step-num">02</div>
-                    <h3 className="step-title">Strategia Brief</h3>
-                    <p className="step-desc">Gemini scrive un Creative Brief strategico fondendo in modo coerente tutti gli angoli scelti.</p>
-                  </div>
-                  <div className="step-pill-list">
-                    <span className="step-pill">Direzione Creativa</span>
-                  </div>
-                </div>
-                <div className="workflow-card">
-                  <div>
-                    <div className="step-num">03</div>
-                    <h3 className="step-title">AI Copywriting</h3>
-                    <p className="step-desc">Generazione immediata e parallela di Headline, Body Copy, CTA e sceneggiature per Stories e Carousel.</p>
-                  </div>
-                  <div className="step-pill-list">
-                    <span className="step-pill">Copy Multi-Formato</span>
-                  </div>
-                </div>
-                <div className="workflow-card">
-                  <div>
-                    <div className="step-num">04</div>
-                    <h3 className="step-title">Art Direction</h3>
-                    <p className="step-desc">Generazione dei visual (DALL-E 3 o Gemini) coerenti con razza, prodotto e linea guida grafica.</p>
-                  </div>
-                  <div className="step-pill-list">
-                    <span className="step-pill">Aspect Ratios (4)</span>
-                  </div>
-                </div>
-                <div className="workflow-card">
-                  <div>
-                    <div className="step-num">05</div>
-                    <h3 className="step-title">Video Gen</h3>
-                    <p className="step-desc">Declinazione dei visual statici in brevi video in loop di 6 secondi pronti per Stories e Reels.</p>
-                  </div>
-                  <div className="step-pill-list">
-                    <span className="step-pill">Loops 1:1 & 9:16</span>
+                  <div className="workflow-card" style={{ padding: '18px 22px', minHeight: 'auto' }}>
+                    <div>
+                      <h3 className="step-title" style={{ fontSize: '1.3rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}><Anchor size={24} weight="duotone" /> Hook Creativo</h3>
+                      <p className="step-desc" style={{ fontSize: '1.1rem' }}>L'aggancio che cattura l'attenzione: domanda, dato scientifico, testimonianza, provocazione...</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
             {/* SLIDE 12: La Forza dei Numeri */}
-            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
+            <section className={`slide ${currentSlide === 11 ? 'active' : ''}`} id="slide-11">
               <span className="slide-tag">Caso Studio — ADV Angles Numeri</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2.2rem, 4vw, 4rem)', marginBottom: '4vh' }}>
                 La Forza dei Numeri (Singolo Run)
@@ -1046,7 +1002,7 @@ export default function App() {
             </section>
 
             {/* SLIDE 13: Futuri Workflow & Altri Esempi */}
-            <section className={`slide ${currentSlide === 13 ? 'active' : ''}`} id="slide-13">
+            <section className={`slide ${currentSlide === 12 ? 'active' : ''}`} id="slide-12">
               <span className="slide-tag">Piattaforma Estensibile</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)', marginBottom: '20px' }}>
                 Futuri Workflow & Altri Esempi
@@ -1084,7 +1040,7 @@ export default function App() {
             </section>
 
             {/* SLIDE 14: Visual Wall (Case Study Grid) */}
-            <section className={`slide ${currentSlide === 14 ? 'active' : ''} slide-visual-wall`} id="slide-14">
+            <section className={`slide ${currentSlide === 13 ? 'active' : ''} slide-visual-wall`} id="slide-13">
               <span className="slide-tag">Visual Wall — Database delle Campagne</span>
               <h2 className="slide-title" style={{ fontSize: '2rem', marginBottom: '15px', textTransform: 'uppercase' }}>
                 Matrice dei Risultati Generati (30 Varianti)
@@ -1123,7 +1079,7 @@ export default function App() {
             </section>
 
             {/* SLIDE 15: Grazie per l'attenzione */}
-            <section className={`slide ${currentSlide === 15 ? 'active' : ''}`} id="slide-15" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <section className={`slide ${currentSlide === 14 ? 'active' : ''}`} id="slide-14" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <span className="slide-tag" style={{ marginBottom: '20px' }}>Websolute Content Machine</span>
               <h2 className="slide-title" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', textAlign: 'center', maxWidth: '100%' }}>
                 Grazie per l'attenzione
@@ -1132,7 +1088,9 @@ export default function App() {
 
             {/* BOTTOM BAR (SLIDE DECK CONTROLS) */}
             <div className="bottom-bar" id="presentation-controls">
-              <div className="slide-counter" style={{ textAlign: 'left', width: '80px' }}></div>
+              <div className="slide-counter" id="slide-counter-left" style={{ textAlign: 'left', width: '120px' }}>
+                Slide {currentSlide + 1}
+              </div>
               <div className="slide-progress-wrapper">
                 <div className="slide-progress-bar" id="slide-progress-bar" style={{ width: `${progressPercent}%` }}></div>
               </div>
@@ -1171,7 +1129,7 @@ export default function App() {
                       setManualActiveView('concept');
                     }}
                   >
-                    🎯 Concept
+                    <Crosshair size={18} weight="duotone" style={{ marginRight: '5px' }} /> Concept
                   </button>
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
@@ -1180,7 +1138,7 @@ export default function App() {
                       setManualActiveView('assets');
                     }}
                   >
-                    🖼️ Declinazioni
+                    <Images size={18} weight="duotone" style={{ marginRight: '5px' }} /> Declinazioni
                   </button>
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
@@ -1189,7 +1147,7 @@ export default function App() {
                       setManualActiveView('texts');
                     }}
                   >
-                    ✍️ Strategia & Copy
+                    <PencilLine size={18} weight="duotone" style={{ marginRight: '5px' }} /> Strategia & Copy
                   </button>
                 </div>
               </div>
@@ -1285,7 +1243,7 @@ export default function App() {
                       setManualActiveView('concept');
                     }}
                   >
-                    🎯 Concept
+                    <Crosshair size={18} weight="duotone" style={{ marginRight: '5px' }} /> Concept
                   </button>
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
@@ -1294,7 +1252,7 @@ export default function App() {
                       setManualActiveView('assets');
                     }}
                   >
-                    🖼️ Declinazioni
+                    <Images size={18} weight="duotone" style={{ marginRight: '5px' }} /> Declinazioni
                   </button>
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
@@ -1303,7 +1261,7 @@ export default function App() {
                       setManualActiveView('texts');
                     }}
                   >
-                    ✍️ Strategia & Copy
+                    <PencilLine size={18} weight="duotone" style={{ marginRight: '5px' }} /> Strategia & Copy
                   </button>
                 </div>
               </div>
@@ -1384,7 +1342,7 @@ export default function App() {
                       setManualActiveView('concept');
                     }}
                   >
-                    🎯 Concept
+                    <Crosshair size={18} weight="duotone" style={{ marginRight: '5px' }} /> Concept
                   </button>
                   <button 
                     className={`db-tab-btn ${showAssetsDashboard ? 'active' : ''}`}
@@ -1393,7 +1351,7 @@ export default function App() {
                       setManualActiveView('assets');
                     }}
                   >
-                    🖼️ Declinazioni
+                    <Images size={18} weight="duotone" style={{ marginRight: '5px' }} /> Declinazioni
                   </button>
                   <button 
                     className={`db-tab-btn ${showTextsDashboard ? 'active' : ''}`}
@@ -1402,7 +1360,7 @@ export default function App() {
                       setManualActiveView('texts');
                     }}
                   >
-                    ✍️ Strategia & Copy
+                    <PencilLine size={18} weight="duotone" style={{ marginRight: '5px' }} /> Strategia & Copy
                   </button>
                 </div>
               </div>
@@ -1420,7 +1378,7 @@ export default function App() {
 
             <div className="db-texts-columns">
               <div className="db-text-col">
-                <h3 className="db-col-title">🎯 Creative Brief</h3>
+                <h3 className="db-col-title"><Crosshair size={22} weight="duotone" style={{ marginRight: '6px', verticalAlign: 'middle' }} /> Creative Brief</h3>
                 <div className="db-card-section">
                   <div className="db-card-section-lbl">Messaggio Chiave</div>
                   <div className="db-card-section-val highlight">{getBriefSection(focusedCampaign.creative_brief, 'KEY MESSAGE')}</div>
@@ -1446,7 +1404,7 @@ export default function App() {
               </div>
 
               <div className="db-text-col">
-                <h3 className="db-col-title">✍️ Ad Copy Pubblicitario</h3>
+                <h3 className="db-col-title"><PencilLine size={22} weight="duotone" style={{ marginRight: '6px', verticalAlign: 'middle' }} /> Ad Copy Pubblicitario</h3>
                 <div className="db-card-section">
                   <div className="db-card-section-lbl">Headline</div>
                   <div className="db-card-section-val copy-quote">"{focusedCampaign.headline}"</div>
@@ -1472,7 +1430,7 @@ export default function App() {
               </div>
 
               <div className="db-text-col">
-                <h3 className="db-col-title">🎠 Carousel & Hashtags</h3>
+                <h3 className="db-col-title"><SlidersHorizontal size={22} weight="duotone" style={{ marginRight: '6px', verticalAlign: 'middle' }} /> Carousel & Hashtags</h3>
                 <div className="db-card-section">
                   <div className="db-card-section-lbl">Narrativa Carousel Social</div>
                   <div className="db-carousel-slides">

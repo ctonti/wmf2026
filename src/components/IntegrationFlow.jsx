@@ -17,13 +17,15 @@ export default function IntegrationFlow({ active }) {
     inputs: [
       { id: 'pim', label: 'PIM', desc: 'Dati Tecnici', xPct: 0.15, yPct: 0.22 },
       { id: 'dam', label: 'DAM', desc: 'Asset Visual', xPct: 0.15, yPct: 0.50 },
-      { id: 'erp', label: 'ERP / CRM', desc: 'Listini & Stock', xPct: 0.15, yPct: 0.78 }
+      { id: 'analytics', label: 'ANALYTICS', desc: 'Data & Insights', xPct: 0.15, yPct: 0.78 }
     ],
     core: { id: 'core', label: 'CONTENT MACHINE', desc: 'CORE ENGINE', xPct: 0.5, yPct: 0.5 },
     outputs: [
-      { id: 'ecom', label: 'E-COMMERCE', desc: 'Shopify / Magento', xPct: 0.85, yPct: 0.22 },
-      { id: 'wall', label: 'VISUAL WALL', desc: 'Proiezione WMF', xPct: 0.85, yPct: 0.50 },
-      { id: 'api', label: 'API GATEWAY', desc: 'Headless Delivery', xPct: 0.85, yPct: 0.78 }
+      { id: 'shopify', label: 'SHOPIFY', desc: 'E-Commerce', xPct: 0.85, yPct: 0.12 },
+      { id: 'meta', label: 'META ADV', desc: 'Paid Advertising', xPct: 0.85, yPct: 0.32 },
+      { id: 'cms', label: 'CMS', desc: 'Web Publishing', xPct: 0.85, yPct: 0.50 },
+      { id: 'social', label: 'SOCIAL', desc: 'Organic Content', xPct: 0.85, yPct: 0.68 },
+      { id: 'amazon', label: 'AMAZON DSP', desc: 'Programmatic', xPct: 0.85, yPct: 0.88 }
     ]
   };
 
@@ -80,7 +82,7 @@ export default function IntegrationFlow({ active }) {
 
             setTimeout(() => {
               if (active && Math.random() < 0.75) {
-                const outNodes = ['ecom', 'wall', 'api'];
+                const outNodes = ['shopify', 'meta', 'cms', 'social', 'amazon'];
                 const target = outNodes[Math.floor(Math.random() * outNodes.length)];
                 spawnPulse('core', target, '#00aeff');
               }
@@ -91,15 +93,15 @@ export default function IntegrationFlow({ active }) {
       }
 
       if (Math.random() < 0.025) {
-        const inputs = ['pim', 'dam', 'erp'];
+        const inputs = ['pim', 'dam', 'analytics'];
         const source = inputs[Math.floor(Math.random() * inputs.length)];
 
-        if (source === 'erp') {
+        if (source === 'analytics') {
           const dir = Math.random() > 0.4 ? 1 : -1;
           if (dir === 1) {
-            spawnPulse('erp', 'core', '#00aeff');
+            spawnPulse('analytics', 'core', '#00aeff');
           } else {
-            spawnPulse('core', 'erp', '#ffffff', -1);
+            spawnPulse('core', 'analytics', '#ffffff', -1);
           }
         } else {
           spawnPulse(source, 'core', '#00aeff');
