@@ -94,6 +94,21 @@ export default function App() {
     .map(item => ({ order: item.order, ...item.data.it }));
   const editorialLangs = (editorialData.languages || []).map(l => l.code);
 
+  // Editorial steps: 6 Italian contents + 5 translations of Content 0 (it, en, es, fr, de)
+  const editorialSteps = [
+    { order: 0, lang: 'it' },
+    { order: 1, lang: 'it' },
+    { order: 2, lang: 'it' },
+    { order: 3, lang: 'it' },
+    { order: 4, lang: 'it' },
+    { order: 5, lang: 'it' },
+    { order: 0, lang: 'en' },
+    { order: 0, lang: 'es' },
+    { order: 0, lang: 'fr' },
+    { order: 0, lang: 'de' },
+    { order: 0, lang: 'it' }
+  ];
+
   // Slide Names mapping for future use/nav
   const slideNames = [
     "Copertina",
@@ -145,8 +160,16 @@ export default function App() {
     }
   }
 
-  // UC2 Editorial: simple sequential carousel (0-5)
-  const currentEditorial = (currentSlide === 18 && editorialContents[editWallStep]) ? editorialContents[editWallStep] : null;
+  // UC2 Editorial: sequential steps with translations
+  const currentStep = (currentSlide === 18 && editorialSteps[editWallStep]) ? editorialSteps[editWallStep] : null;
+  const currentEditorial = currentStep ? (() => {
+    const rawItem = editorialData.dataset.find(item => item.order === currentStep.order);
+    return rawItem ? {
+      order: rawItem.order,
+      lang: currentStep.lang,
+      ...(rawItem.data[currentStep.lang] || rawItem.data.it)
+    } : null;
+  })() : null;
 
   // Handle manual clicks
   if (manualActiveCampaign) {
@@ -307,7 +330,7 @@ export default function App() {
         setCurrentSlide(15);
       }
     } else if (currentSlide === 18) {
-      if (editWallStep < editorialContents.length - 1) {
+      if (editWallStep < editorialSteps.length - 1) {
         setEditWallStep(prev => prev + 1);
       } else {
         setEditWallStep(0);
@@ -336,7 +359,7 @@ export default function App() {
       }
     } else if (currentSlide === 19) {
       setCurrentSlide(18);
-      setEditWallStep(editorialContents.length - 1);
+      setEditWallStep(editorialSteps.length - 1);
     } else if (currentSlide > 0) {
       setCurrentSlide(prev => prev - 1);
     }
@@ -1366,11 +1389,11 @@ export default function App() {
                 <>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '8px' }}>
                     <span className="slide-tag" style={{ position: 'relative', top: 0 }}>
-                      Use Case 2 — Contenuto {editWallStep + 1}/{editorialContents.length}
+                      Use Case 2 — Contenuto {currentEditorial.order + 1}/6 ({currentEditorial.lang.toUpperCase()})
                     </span>
                     <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>
-                        #{(editWallStep + 1).toString().padStart(2, '0')} — {currentEditorial.argomento}
+                        #{(currentEditorial.order + 1).toString().padStart(2, '0')} — {currentEditorial.argomento}
                       </span>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-sec)' }}>·</span>
                       <span style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>{currentEditorial.razza}</span>
@@ -1378,7 +1401,7 @@ export default function App() {
                       <span style={{ fontSize: '0.75rem', color: '#e879f9' }}>{currentEditorial.editorial_angle}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '4px' }}>
-                      {editorialContents.map((_, i) => (
+                      {editorialSteps.map((_, i) => (
                         <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: i === editWallStep ? 'var(--accent)' : 'rgba(255,255,255,0.15)', transition: 'background 0.3s' }} />
                       ))}
                     </div>
@@ -1466,9 +1489,32 @@ export default function App() {
 
                       {/* Languages */}
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', padding: '4px 0' }}>
-                        {['\u{1F1EE}\u{1F1F9} IT', '\u{1F1EC}\u{1F1E7} EN', '\u{1F1EA}\u{1F1F8} ES', '\u{1F1EB}\u{1F1F7} FR', '\u{1F1E9}\u{1F1EA} DE', '\u{1F1F5}\u{1F1F9} PT'].map((lang) => (
-                          <span key={lang} style={{ padding: '3px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 600, background: lang.includes('IT') ? 'var(--accent)' : 'rgba(255,255,255,0.06)', color: lang.includes('IT') ? '#000' : 'var(--text-sec)', border: '1px solid var(--border)' }}>{lang}</span>
-                        ))}
+                        {[
+                          { code: 'it', flag: '🇮🇹', label: 'IT' },
+                          { code: 'en', flag: '🇬🇧', label: 'EN' },
+                          { code: 'es', flag: '🇪🇸', label: 'ES' },
+                          { code: 'fr', flag: '🇫🇷', label: 'FR' },
+                          { code: 'de', flag: '🇩🇪', label: 'DE' },
+                          { code: 'pt', flag: '🇵🇹', label: 'PT' }
+                        ].map((langItem) => {
+                          const isActive = currentEditorial.lang === langItem.code;
+                          return (
+                            <span 
+                              key={langItem.code} 
+                              style={{ 
+                                padding: '3px 8px', 
+                                borderRadius: '12px', 
+                                fontSize: '0.65rem', 
+                                fontWeight: 600, 
+                                background: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.06)', 
+                                color: isActive ? '#000' : 'var(--text-sec)', 
+                                border: '1px solid var(--border)' 
+                              }}
+                            >
+                              {langItem.flag} {langItem.label}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
